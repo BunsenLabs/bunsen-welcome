@@ -1,0 +1,3 @@
+installPage $"printer support" \
+    $"By default, CrunchBang does not come with printer support. Would you like to add printer support now?" \
+    'cb-meta-printer-support'

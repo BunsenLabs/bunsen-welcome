@@ -1,0 +1,3 @@
+installPage $"Java Support" \
+    $"By default, CrunchBang does not come with a Java Runtime Environment. Would you like to install Java support now?" \
+    'cb-meta-java'

@@ -1,0 +1,104 @@
+#!/bin/bash
+# Post installation script
+TEXTDOMAIN=bl-welcome
+
+BL_COMMON_LIBDIR='/usr/lib/bunsen/bunsen-common'
+BL_WELCOME_LIBDIR='/usr/lib/bunsen/bunsen-welcome'
+STEPS_BASIC=('apt-update' 'apt-dist-upgrade' 'install-printer-packages' 'install-java-packages' 'install-libreoffice' 'devel')
+STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
+
+createFlag() {
+    mkdir -p "$HOME/.config/bunsen"
+    touch "$HOME/.config/bunsen/bl-welcome"
+}
+
+runInTerminal() {
+    x-terminal-emulator -e 'bl-welcome'
+    exit 0
+}
+
+# prints something like -------[ step 1 of 10 ]-------
+header() {
+    local headerLength=$((76 - 4)) # 4 is for '[  ]' # but why 76???
+    local headerText=$(printf $"screen %d of %d" "$STEP" "$STEPS")
+    dashesStart=$( printf "%$(( (headerLength - ${#headerText}) / 2 ))s" )
+    dashesEnd=$( printf "%$(( (headerLength - ${#headerText}) / 2 + (headerLength - ${#headerText}) % 2 ))s" )
+    echo "  ${dashesStart// /-}[ ${headerText} ]${dashesEnd// /-}"
+}
+
+# Usage: setupPage title text prompt
+setupPage() {
+    clear
+    header
+    say
+    say "$1" # title
+    titleDelimiter=$( printf "%${#1}s" )
+    say "${titleDelimiter// /-}"
+    say "$2" # description
+    say
+    prompt "  $3"
+    return $?
+}
+
+# Common function for most install scripts. USE THIS unless you really can't.
+# Usage: installPage title text package...
+# example: installPage 'LibreOffice suite' 'This will install libreoffice' 'libreoffice'
+installPage() {
+    local title=$"INSTALL"" ${1^^}"
+    local text="$2 "$"If you choose to do this, the following packages will be installed:""
+
+    ${@:3}
+
+"$"Note: additional packages listed as dependencies will also be installed."
+
+    local prompt=$"Would you like to install"" $1?"
+
+    if setupPage "$title" "$text" "$prompt"; then
+        sudo apt-get install -y "${@:3}"
+        return 0
+    fi
+    return 1
+}
+
+if [[ $1 = '--firstrun' ]]; then # First run
+    [[ -d /live/overlay || -e $HOME/.config/bunsen/bl-welcome || ! $(groups) =~ ( |^)sudo( |$) ]] && exit 1
+    runInTerminal
+elif [[ $1 = '--open' ]]; then # Open in terminal
+    runInTerminal
+fi
+
+createFlag
+
+if [[ ! $(groups) =~ ( |^)sudo( |$) ]]; then
+    echo $"Error: Must be a member of the sudo group to run this script" >&2 # TODO 'root' user is not a member of the sudo group. Is it meant to restrict root from executing this script?
+    exit 1
+fi
+
+if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
+    echo $"Error: Failed to locate bl-include.cfg in $BL_COMMON_LIBDIR" >&2
+    exit 1
+fi
+
+# Run through steps
+STEP=1
+(( STEPS = ${#STEPS_BASIC[@]} + ${#STEPS_DEVEL[@]} + 2 )) # 2 is intro and fini
+
+. "$BL_WELCOME_LIBDIR/intro"
+clear
+connectiontest # TODO pipe this into say
+
+for curStep in "${STEPS_BASIC[@]}"; do
+    ((STEP++))
+    . "$BL_WELCOME_LIBDIR/$curStep"
+done
+
+if [[ $DEVEL ]]; then
+    for curStep in "${STEPS_DEVEL[@]}"; do
+        ((STEP++))
+        . "$BL_WELCOME_LIBDIR/$curStep"
+    done
+fi
+STEP=$STEPS
+. "$BL_WELCOME_LIBDIR/fini"
+
+exit 0

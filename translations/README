@@ -1,0 +1,11 @@
+To create a translation:
+1) Copy cb-welcome.po
+2) Edit it!
+3) When done, run this command from this directory:
+mkdir -p locale/LANGCODE/LC_MESSAGES
+msgfmt -o locale/LANGCODE/LC_MESSAGES/cb-welcome.mo YOURTRANSLATION.po
+
+where LANGCODE is something like 'en_GB' or 'de'. Don't forget to create that folder!
+4) That's it :)
+
+The whole process is explained here: http://mywiki.wooledge.org/BashFAQ/098

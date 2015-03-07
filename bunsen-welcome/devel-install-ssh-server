@@ -1,0 +1,4 @@
+# TODO it says ssh SERVER, bit client is installed as well. Also there's no point in cb-meta-ssh because ssh package does exactly the same.
+SSH_SERVER_TITLE=$"ssh"
+SSH_SERVER_TEXT=$"OpenSSH is a FREE version of the SSH connectivity tools that technical users of the Internet rely on. Would like to install OpenSSH server?"
+installPage "$SSH_SERVER_TITLE" "$SSH_SERVER_TEXT" 'cb-meta-ssh'

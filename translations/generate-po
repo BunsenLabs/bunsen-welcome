@@ -1,0 +1,11 @@
+#!/bin/bash
+
+FILE_PO='cb-welcome.po'
+
+bash --dump-po-strings ../cb-welcome > "$FILE_PO"
+
+for curFile in ../lib-cb-welcome/*; do
+    bash --dump-po-strings "$curFile" >> "$FILE_PO"
+done
+
+exit 0

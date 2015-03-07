@@ -1,0 +1,10 @@
+UPGRADE_TITLE=$"UPDATE INSTALLED PACKAGES"
+UPGRADE_TEXT=$"Would you like to update the installed packages on your system?"' '$"If you choose to do this, this script will execute the command:"'
+
+    sudo apt-get dist-upgrade'
+UPGRADE_PROMPT=$"Whould you like to update your system now?"
+
+
+if setupPage "$UPGRADE_TITLE" "$UPGRADE_TEXT" "$UPGRADE_PROMPT"; then
+    sudo apt-get dist-upgrade -y
+fi

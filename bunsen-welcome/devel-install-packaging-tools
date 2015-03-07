@@ -1,0 +1,11 @@
+DEBIAN_DEVENV_TITLE=$"debian packaging tools"
+DEBIAN_DEVENV_TEXT=$"Would you like to install a suite of packages used for developing Debian packages?"
+DEBIAN_DEVENV_PBUILDER=$"Create pbuilder environment now?"
+
+if installPage "$DEBIAN_DEVENV_TITLE" "$DEBIAN_DEVENV_TEXT" 'cb-meta-packaging'; then
+    echo 'MIRRORSITE=http://ftp.de.debian.org/debian' | sudo tee '/etc/pbuilderrc'
+    echo 'DISTRIBUTION=wheezy' | sudo tee -a '/etc/pbuilderrc'
+    echo 'COMPONENTS="main contrib non-free"' >> sudo tee -a '/etc/pbuilderrc'
+
+    prompt "  $DEBIAN_DEVENV_PBUILDER" && sudo pbuilder create
+fi
