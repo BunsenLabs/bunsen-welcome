@@ -1,45 +1,40 @@
-Source: cb-welcome
+Source: bunsen-welcome
 Section: misc
 Priority: extra
-Maintainer: Philip Newborough <corenominal@corenominal.org>
-Build-Depends: debhelper (>= 5.0.0)
-Standards-Version: 3.9.4
-Homepage: http://crunchbang.org/
+Maintainer: John Crawley <john@rafflesnagoya.com>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+Homepage: https://github.com/BunsenLabs/bunsen-welcome
+Vcs-Git: https://github.com/BunsenLabs/bunsen-welcome.git
+Vcs-Browser: https://github.com/BunsenLabs/bunsen-welcome
 
-Package: cb-welcome
+Package: bunsen-welcome
+Architecture: all
+Depends: ${misc:Depends}, bunsen-common, x-terminal-emulator
+Description: BunsenLabs welcome script.
+ Post installation script for BunsenLabs Linux,
+ to install some optional extra packages.
+
+Package: bunsen-meta-printer-support
 Architecture: all
 Depends: 
- ${shlibs:Depends}, 
- ${misc:Depends}, 
- terminator, 
- cb-pipemenus
-Description: CrunchBang welcome script.
- Optional post installation script for CrunchBang Linux.
-
-Package: cb-meta-printer-support
-Architecture: all
-Depends: 
- ${misc:Depends},
- cups, 
- cups-pdf,
- system-config-printer,
- printer-driver-hpijs
-Description: CrunchBang printer support meta package
+ ${misc:Depends}, cups, cups-pdf, system-config-printer, printer-driver-hpijs, hplip
+Description: BunsenLabs printer support meta package
  Installs various printer packages to enable printer support.
 
-Package: cb-meta-java
+Package: bunsen-meta-java
 Architecture: all
-Depends: ${misc:Depends}, openjdk-6-jre, icedtea6-plugin
-Description: CrunchBang java meta package
+Depends: ${misc:Depends}, openjdk-7-jre, icedtea-7-plugin
+Description: BunsenLabs java meta package
  Installs various java packages.
 
-Package: cb-meta-libreoffice
+Package: bunsen-meta-libreoffice
 Architecture: all
 Depends: ${misc:Depends}, libreoffice, libreoffice-gtk
-Description: CrunchBang libreoffice meta package
+Description: BunsenLabs libreoffice meta package
  Installs libreoffice and associated gtk theme.
 
-Package: cb-meta-vcs
+Package: bunsen-meta-vcs
 Architecture: all
 Depends:
  ${misc:Depends},
@@ -54,16 +49,16 @@ Depends:
  bzr,
  bzrtools,
  cvs
-Description: CrunchBang version control meta package
+Description: BunsenLabs version control meta package
  Installs various version control tools.
 
-Package: cb-meta-ssh
+Package: bunsen-meta-ssh
 Architecture: all
 Depends: ${misc:Depends}, openssh-server, openssh-client
-Description: CrunchBang ssh meta package
+Description: BunsenLabs ssh meta package
  Installs ssh server and various ssh tools.
 
-Package: cb-meta-lamp
+Package: bunsen-meta-lamp
 Architecture: all
 Depends:
  ${misc:Depends},
@@ -79,10 +74,10 @@ Depends:
  phpmyadmin,
  rsync,
  cronolog
-Description: CrunchBang lamp meta package
+Description: BunsenLabs lamp meta package
  Installs various web server tools.
 
-Package: cb-meta-packaging
+Package: bunsen-meta-packaging
 Architecture: all
 Depends:
  ${misc:Depends},
@@ -100,5 +95,5 @@ Depends:
  dpatch,
  dput,
  quilt
-Description: CrunchBang packaging meta package
+Description: BunsenLabs packaging meta package
  Installs various Debian packaging tools.

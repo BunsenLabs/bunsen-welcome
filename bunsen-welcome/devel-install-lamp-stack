@@ -14,7 +14,7 @@ LAMP_2_TEXT=$"Would you like to create a symlink within Apache's document root d
 LAMP_2_PROMPT=$"Would you like to create the symlink?"
 
 
-if installPage "$LAMP_1_TITLE" "$LAMP_1_TEXT" 'cb-meta-lamp'; then
+if installPage "$LAMP_1_TITLE" "$LAMP_1_TEXT" 'bunsen-meta-lamp'; then
     # Enable modrewrite # TODO: does this work?
     a2d='/etc/apache2/sites-available/default'
     if [[ -f $a2d ]]; then

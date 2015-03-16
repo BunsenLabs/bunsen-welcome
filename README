@@ -1,0 +1,7 @@
+bunsen-welcome
+=================
+
+This is script to run after a new install of BunsenLabs Linux.
+It offers the option to install various extra packages.
+
+Based on cb-welcome from CrunchBang Linux.
