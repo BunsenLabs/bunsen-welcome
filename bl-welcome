@@ -13,7 +13,7 @@ createFlag() {
 }
 
 runInTerminal() {
-    x-terminal-emulator -e 'bl-welcome'
+    x-terminal-emulator -e "$0"
     exit 0
 }
 
@@ -60,11 +60,19 @@ installPage() {
     return 1
 }
 
-if [[ $1 = '--firstrun' ]]; then # First run
-    [[ -d /live/overlay || -e $HOME/.config/bunsen/bl-welcome || ! $(groups) =~ ( |^)sudo( |$) ]] && exit 1
-    runInTerminal
-elif [[ $1 = '--open' ]]; then # Open in terminal
-    runInTerminal
+if ! [[ -t 0 && -t 1 && -t 2 ]]; then # not attached to terminal
+    if [[ -n $DISPLAY ]]; then
+        runInTerminal
+    else
+        echo "$0: no terminal" >&2
+        exit 1
+    fi
+fi
+
+[[ -d /live/overlay ]] && exit 0
+
+if [[ $1 = '--firstrun' ]]; then # First run, from autostart
+    [[ -e $HOME/.config/bunsen/bl-welcome ]] && exit 0
 fi
 
 createFlag
