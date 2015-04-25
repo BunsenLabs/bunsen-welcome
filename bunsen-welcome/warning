@@ -1,0 +1,23 @@
+clear
+WARNING_TITLE='A Warning'
+WARNING_TEXT=\
+'While FOSS is primarily about freedom and choice, certain choices are
+known to carry an increased risk of breaking things in BunsenLabs.
+
+Two of the riskier things are:
+ * adding Ubuntu PPAs or unknown/untrusted repos to your
+   /etc/apt/sources.list or /etc/apt/sources.list.d
+ * installing a package that wants a newer version of libc6
+
+More information on some of the riskier things, the above included,
+can be found here:
+https://wiki.debian.org/DontBreakDebian
+
+(Right click the above link and choose "Open Link" to visit the page.)
+
+Please type "I understand" to continue with this script.
+
+'
+WARNING_PROMPT=$"  Enter \"I understand\" to continue. (Q to quit) "
+WARNING_EXTRA_ARG='I understand'
+setupPage "$WARNING_TITLE" "$WARNING_TEXT" "$WARNING_PROMPT" "$WARNING_EXTRA_ARG" || exit 0

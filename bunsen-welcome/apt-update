@@ -5,11 +5,10 @@ UPDATE_TEXT=$"Before we can continue, we need to make sure your system's softwar
 UPDATE_PROMPT=$"Would you like to update your software sources?"
 
 if setupPage "$UPDATE_TITLE" "$UPDATE_TEXT" "$UPDATE_PROMPT"; then
-    if ! sudo apt-get update; then # TODO this check does not work sometimes
-        say >&2
-        say $"There was a problem during the update" >&2
-        exit 1
-    fi
+#    grep -iq '\(fail\|could not resolve\)' <<<"$apt_error" && errorExit $"There was a problem during the update." "$apt_error"
+    apt_error=$(sudo apt-get update 2>&1 >/dev/tty) && [[ -z $apt_error ]] || {
+        errorExit 'There was a problem during the update.' "$apt_error"
+    }
 else
     exit 0
 fi

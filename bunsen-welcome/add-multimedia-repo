@@ -1,0 +1,41 @@
+add_multi() {
+    grep -E '^deb +(http://www|ftp://ftp).deb-multimedia.org +jessie +(main +non-free|non-free +main) *$' /etc/apt/sources.list{,.d/*} && {
+        say 'Multimedia repositories have already been added.'
+        return 0
+    }
+    cat <<EOF | sudo tee -a /etc/apt/sources.list >/dev/null
+
+# added by bl-welcome
+# Multimedia repository
+deb http://www.deb-multimedia.org jessie main non-free
+
+EOF
+    grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list || { say 'failed to add deb-multimedia to sources.list' >&2; return 1;}
+    say $'installing deb-multimedia keyring...\n'
+    local tmpdir=$(mktemp -d)
+    wget -P "$tmpdir" http://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2014.2_all.deb
+    [[ -e "$tmpdir"/deb-multimedia-keyring_2014.2_all.deb ]] || { say 'failed to download deb-multimedia keyring' >&2; return 1;}
+    sudo dpkg -i "$tmpdir"/deb-multimedia-keyring_2014.2_all.deb || { say 'failed to install deb-multimedia keyring' >&2; return 1;}
+    rm -r "$tmpdir"
+    say $'\nupdating apt...\n'
+    local apt_error=$(sudo apt-get update 2>&1 >/dev/tty) && [[ -z $apt_error ]] || {
+        errorReturn 'There was a problem updating apt.' "$apt_error" || return 1
+    }
+#    grep -iq '\(fail\|could not resolve\)' <<<"$apt_error"
+    apt_error=''
+    say '\nupgrading packages...\n'
+    apt_error=$(sudo apt-get dist-upgrade 2>&1 >/dev/tty) && [[ -z $apt_error ]] || {
+        errorReturn 'There was a problem with dist-upgrade.' "$apt_error" || return 1
+    }
+}
+
+if setupPage $"ADD MULTIMEDIA REPOSITORY" \
+    $"The deb-multimedia repositories contain media-related packages that may be newer than those in the Debian stable repositories, or not available at all. On the other hand, packages from these repositories sometimes cause problems for some users. If in doubt, you need not add them now - you can do it later if necessary.
+
+This will add the line:
+    deb http://www.deb-multimedia.org jessie main non-free
+to /etc/apt/sources.list." \
+    $"Would you like to add the deb-multimedia repositories? " 'N'; then
+    say $'Adding deb-multimedia repositories...\n'
+    add_multi || errorExit "Errors occurred while adding deb-multimedia"
+fi

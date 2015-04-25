@@ -4,16 +4,17 @@ TEXTDOMAIN=bl-welcome
 
 BL_COMMON_LIBDIR='/usr/lib/bunsen/bunsen-common'
 BL_WELCOME_LIBDIR='/usr/lib/bunsen/bunsen-welcome'
-STEPS_BASIC=('apt-update' 'apt-dist-upgrade' 'install-printer-packages' 'install-java-packages' 'install-libreoffice' 'devel')
+
+if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
+    echo $"Error: Failed to locate bl-include.cfg in $BL_COMMON_LIBDIR" >&2
+    exit 1
+fi
+
+STEPS_BASIC=('apt-update' 'apt-upgrade' 'add-multimedia-repo' 'install-printer-packages' 'install-java-packages' 'install-libreoffice' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
-createFlag() {
-    mkdir -p "$HOME/.config/bunsen"
-    touch "$HOME/.config/bunsen/bl-welcome"
-}
-
 runInTerminal() {
-    x-terminal-emulator -e "$0"
+    x-terminal-emulator -e "$0" "$@"
     exit 0
 }
 
@@ -23,20 +24,19 @@ header() {
     local headerText=$(printf $"screen %d of %d" "$STEP" "$STEPS")
     dashesStart=$( printf "%$(( (headerLength - ${#headerText}) / 2 ))s" )
     dashesEnd=$( printf "%$(( (headerLength - ${#headerText}) / 2 + (headerLength - ${#headerText}) % 2 ))s" )
-    echo "  ${dashesStart// /-}[ ${headerText} ]${dashesEnd// /-}"
+    echo "  ${dashesStart// /-}[ ${headerText} ]${dashesEnd// /-}"$'\n'
 }
 
-# Usage: setupPage title text prompt
+# Usage: setupPage title text prompt [prompt-extra-arg]
 setupPage() {
+    sleep 2
     clear
     header
-    say
     say "$1" # title
     titleDelimiter=$( printf "%${#1}s" )
-    say "${titleDelimiter// /-}"
-    say "$2" # description
-    say
-    prompt "  $3"
+    say "${titleDelimiter// /-}"$'\n'
+    say "$2"$'\n' # description
+    prompt "  $3" "${4:-}"
     return $?
 }
 
@@ -54,17 +54,20 @@ installPage() {
     local prompt=$"Would you like to install"" $1?"
 
     if setupPage "$title" "$text" "$prompt"; then
-        sudo apt-get install -y "${@:3}"
-        return 0
+        ignore_string=$'Extracting templates from packages: 100%' # apt sends this to stderr!
+        if local apt_error=$(sudo apt-get install "${@:3}" 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string}|^$)" <<<"$apt_error"; then
+            return 0
+        else
+            if errorReturn "There were problems installing ${@:3}" "$apt_error";then
+                say '...going to next page.'
+                return 0
+            else
+                return 1
+            fi
+        fi
     fi
     return 1
 }
-
-if [[ $1 = '--firstrun' ]]; then # First run, from autostart
-    [[ -e $HOME/.config/bunsen/bl-welcome ]] && exit 0
-fi
-
-[[ -d /live/overlay ]] && exit 0
 
 if ! [[ -t 0 && -t 1 && -t 2 ]]; then # not attached to terminal
     if [[ -n $DISPLAY ]]; then
@@ -75,32 +78,44 @@ if ! [[ -t 0 && -t 1 && -t 2 ]]; then # not attached to terminal
     fi
 fi
 
-createFlag
+[[ -d /live/overlay ]] && exit 0
+
+if [[ $1 = '--firstrun' ]]; then # First run, from autostart
+    [[ -e $HOME/.config/bunsen/bl-welcome ]] && exit 0
+fi
+
+createFlag 'bl-welcome'
 
 if [[ ! $(groups) =~ ( |^)sudo( |$) ]]; then
     echo $"Error: Must be a member of the sudo group to run this script" >&2 # TODO 'root' user is not a member of the sudo group. Is it meant to restrict root from executing this script?
     exit 1
 fi
 
-if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
-    echo $"Error: Failed to locate bl-include.cfg in $BL_COMMON_LIBDIR" >&2
-    exit 1
-fi
-
 # Run through steps
+OK=true
 STEP=1
-(( STEPS = ${#STEPS_BASIC[@]} + ${#STEPS_DEVEL[@]} + 2 )) # 2 is intro and fini
-
-. "$BL_WELCOME_LIBDIR/intro"
+if [[ -e $HOME/.config/bunsen/bl-welcome-understood ]]; then
+    (( STEPS = ${#STEPS_BASIC[@]} + ${#STEPS_DEVEL[@]} + 2 )) # 2 is intro and fini
+    . "$BL_WELCOME_LIBDIR/intro"
+else
+    (( STEPS = ${#STEPS_BASIC[@]} + ${#STEPS_DEVEL[@]} + 3 )) # 3 is intro, warning and fini
+    . "$BL_WELCOME_LIBDIR/intro"
+    ((STEP++))
+    . "$BL_WELCOME_LIBDIR/warning"
+    createFlag 'bl-welcome-understood'
+fi
 clear
-connectiontest # TODO pipe this into say
+connectiontest
+clear
+
+DEVEL=false
 
 for curStep in "${STEPS_BASIC[@]}"; do
     ((STEP++))
     . "$BL_WELCOME_LIBDIR/$curStep"
 done
 
-if [[ $DEVEL ]]; then
+if $DEVEL; then
     for curStep in "${STEPS_DEVEL[@]}"; do
         ((STEP++))
         . "$BL_WELCOME_LIBDIR/$curStep"

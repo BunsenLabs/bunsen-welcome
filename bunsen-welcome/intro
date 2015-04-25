@@ -7,7 +7,7 @@ say \
   |  _  | |___| |___| |__| |_| |
   |_| |_|_____|_____|_____\___/
 
-'$"Welcome to BunsenLabs Linux! :)
+'"Hi $USER, "$"welcome to BunsenLabs Linux! :)
 
 This is an optional post-installation script, designed to help you configure your new Linux installation and get the most out of BunsenLabs.
 
@@ -18,4 +18,4 @@ You will also need a working internet connection, so if you have not done so alr
 If you do not want to run this script now, you can run it at a later date by entering the command \"bl-welcome\" in your terminal."'
 '
 
-prompt $"  Hit any key to continue, or \"q\" to quit..." Q && exit 0
+prompt $"  Hit \"Enter\" to continue, or \"q\" to quit..." Q && exit 0
