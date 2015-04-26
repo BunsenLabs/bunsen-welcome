@@ -106,7 +106,7 @@ else
 fi
 clear
 connectiontest
-clear
+#clear
 
 DEVEL=false
 
