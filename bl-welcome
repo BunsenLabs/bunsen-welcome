@@ -53,7 +53,7 @@ installPage() {
 
     local prompt=$"Would you like to install"" $1?"
 
-    if setupPage "$title" "$text" "$prompt"; then
+    if setupPage "$title" "$text" "$prompt" 'N'; then
         ignore_string=$'Extracting templates from packages: 100%' # apt sends this to stderr!
         if local apt_error=$(sudo apt-get install "${@:3}" 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string}|^$)" <<<"$apt_error"; then
             return 0
