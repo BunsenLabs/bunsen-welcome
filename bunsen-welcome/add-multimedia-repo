@@ -34,7 +34,8 @@ if setupPage $"ADD MULTIMEDIA REPOSITORY" \
 
 This will add the line:
     deb http://www.deb-multimedia.org jessie main non-free
-to /etc/apt/sources.list." \
+to /etc/apt/sources.list,
+and upgrade your packages to the newer ones in that repository" \
     $"Would you like to add the deb-multimedia repositories? " 'N'; then
     say $'Adding deb-multimedia repositories...\n'
     add_multi || errorExit "Errors occurred while adding deb-multimedia"
