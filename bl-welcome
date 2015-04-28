@@ -13,8 +13,10 @@ fi
 STEPS_BASIC=('apt-update' 'apt-upgrade' 'add-multimedia-repo' 'install-printer-packages' 'install-java-packages' 'install-libreoffice' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
+
+
 runInTerminal() {
-    x-terminal-emulator -e "$0" "$@"
+    x-terminal-emulator -T 'WELCOME!' -e "$0" "$@"
     exit 0
 }
 
@@ -30,7 +32,7 @@ header() {
 # Usage: setupPage title text prompt [prompt-extra-arg]
 setupPage() {
     sleep 2
-    clear
+    tput clear
     header
     say "$1" # title
     titleDelimiter=$( printf "%${#1}s" )
@@ -92,7 +94,6 @@ if [[ ! $(groups) =~ ( |^)sudo( |$) ]]; then
 fi
 
 # Run through steps
-OK=true
 STEP=1
 if [[ -e $HOME/.config/bunsen/bl-welcome-understood ]]; then
     (( STEPS = ${#STEPS_BASIC[@]} + ${#STEPS_DEVEL[@]} + 2 )) # 2 is intro and fini
@@ -104,9 +105,9 @@ else
     . "$BL_WELCOME_LIBDIR/warning"
     createFlag 'bl-welcome-understood'
 fi
-clear
+tput clear
 connectiontest
-#clear
+#tput clear
 
 DEVEL=false
 

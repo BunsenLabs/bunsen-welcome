@@ -1,4 +1,4 @@
-clear
+tput clear
 header
 say \
 '   _   _ _____ _     _     ___
