@@ -22,7 +22,8 @@ runInTerminal() {
 
 # prints something like -------[ step 1 of 10 ]-------
 header() {
-    local headerLength=$((76 - 4)) # 4 is for '[  ]' # but why 76???
+    width=$(tput cols)
+    local headerLength=$((width - 8)) # 8 is for '[  ]' and 2 spaces margins
     local headerText=$(printf $"screen %d of %d" "$STEP" "$STEPS")
     dashesStart=$( printf "%$(( (headerLength - ${#headerText}) / 2 ))s" )
     dashesEnd=$( printf "%$(( (headerLength - ${#headerText}) / 2 + (headerLength - ${#headerText}) % 2 ))s" )
@@ -49,15 +50,17 @@ installPage() {
     local title=$"INSTALL"" ${1^^}"
     local text="$2 "$"If you choose to do this, the following packages will be installed:""
 
-    ${@:3}
+    ${*:3}
 
 "$"Note: additional packages listed as dependencies will also be installed."
 
     local prompt=$"Would you like to install"" $1?"
 
     if setupPage "$title" "$text" "$prompt" 'N'; then
-        ignore_string=$'Extracting templates from packages: 100%' # apt sends this to stderr!
-        if local apt_error=$(sudo apt-get install "${@:3}" 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string}|^$)" <<<"$apt_error"; then
+        ignore_string1=$'Extracting templates from packages: 100%' # apt sends this to stderr!
+        ignore_string2=$'Retrieving bug reports... Done' # apt-listbugs sends this to stderr!
+        ignore_string3=$'Parsing Found/Fixed information... Done' # apt-listbugs sends this to stderr!
+        if local apt_error=$(sudo apt-get install "${@:3}" 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string1}|${ignore_string2}|${ignore_string3}|^$)" <<<"$apt_error"; then
             return 0
         else
             if errorReturn "There were problems installing ${@:3}" "$apt_error";then
@@ -89,7 +92,7 @@ fi
 createFlag 'bl-welcome'
 
 if [[ ! $(groups) =~ ( |^)sudo( |$) ]]; then
-    echo $"Error: Must be a member of the sudo group to run this script" >&2 # TODO 'root' user is not a member of the sudo group. Is it meant to restrict root from executing this script?
+    echo $"Error: Must be a member of the sudo group to run this script" >&2
     exit 1
 fi
 

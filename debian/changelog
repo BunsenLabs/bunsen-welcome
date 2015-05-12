@@ -1,9 +1,10 @@
-bunsen-welcome (0.07-1) UNRELEASED; urgency=low
+bunsen-welcome (0.07-1) unstable; urgency=low
 
   * Add warning message and deb-multimedia repos option.
   * Add stronger error checking.
+  * Ignore fake errors from apt and apt-listbugs.
 
- -- John Crawley <john@rafflesnagoya.com>  Sat, 25 Apr 2015 14:59:49 +0900
+ -- John Crawley <john@rafflesnagoya.com>  Tue, 12 May 2015 15:24:49 +0900
 
 bunsen-welcome (0.06-1) unstable; urgency=low
 
