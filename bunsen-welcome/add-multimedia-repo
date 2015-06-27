@@ -24,9 +24,9 @@ EOF
     grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list || { say 'failed to add deb-multimedia to sources.list' >&2; return 1;}
     say $'installing deb-multimedia keyring...\n'
     local tmpdir=$(mktemp -d)
-    wget -P "$tmpdir" http://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2014.2_all.deb
-    [[ -e "$tmpdir"/deb-multimedia-keyring_2014.2_all.deb ]] || { say 'failed to download deb-multimedia keyring' >&2; return 1;}
-    sudo dpkg -i "$tmpdir"/deb-multimedia-keyring_2014.2_all.deb || { say 'failed to install deb-multimedia keyring' >&2; return 1;}
+    wget -P "$tmpdir" http://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2015.6_all.deb
+    [[ -e "$tmpdir"/deb-multimedia-keyring_2015.6_all.deb ]] || { say 'failed to download deb-multimedia keyring' >&2; return 1;}
+    sudo dpkg -i "$tmpdir"/deb-multimedia-keyring_2015.6_all.deb || { say 'failed to install deb-multimedia keyring' >&2; return 1;}
     rm -r "$tmpdir"
     say $'\nupdating apt...\n'
     local apt_error=$(sudo apt-get update 2>&1 >/dev/tty) && [[ -z $apt_error ]] || {
