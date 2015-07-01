@@ -1,3 +1,10 @@
+bunsen-welcome (0.07-3) unstable; urgency=low
+
+  * Set C locale for checking of error messages.
+  * Refactor logic of some sections and fix bugs.
+
+ -- John Crawley <john@rafflesnagoya.com>  Wed, 01 Jul 2015 16:56:43 +0900
+
 bunsen-welcome (0.07-2) unstable; urgency=low
 
   * Update deb-multimedia-keyring to latest version

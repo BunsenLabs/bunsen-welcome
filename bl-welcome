@@ -1,5 +1,8 @@
 #!/bin/bash
 # Post installation script
+unset LANGUAGE
+export LANG=C.UTF-8
+
 TEXTDOMAIN=bl-welcome
 
 BL_COMMON_LIBDIR='/usr/lib/bunsen/bunsen-common'
@@ -56,18 +59,17 @@ installPage() {
 
     local prompt=$"Would you like to install"" $1?"
 
-    if setupPage "$title" "$text" "$prompt" 'N'; then
-        ignore_string1=$'Extracting templates from packages: 100%' # apt sends this to stderr!
-        ignore_string2=$'Retrieving bug reports... Done' # apt-listbugs sends this to stderr!
-        ignore_string3=$'Parsing Found/Fixed information... Done' # apt-listbugs sends this to stderr!
-        if local apt_error=$(sudo apt-get install "${@:3}" 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string1}|${ignore_string2}|${ignore_string3}|^$)" <<<"$apt_error"; then
+    if setupPage "$title" "$text" "$prompt" 'N'
+    then
+        ignore_string1='Extracting templates from packages: 100%' # apt sends this to stderr!
+        ignore_string2='Retrieving bug reports... Done' # apt-listbugs sends this to stderr!
+        ignore_string3='Parsing Found/Fixed information... Done' # apt-listbugs sends this to stderr!
+        if local apt_error=$(sudo apt-get install "${@:3}" 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string1}|${ignore_string2}|${ignore_string3}|^$)" <<<"$apt_error"
+        then
             return 0
         else
-            if errorReturn "There were problems installing ${@:3}" "$apt_error";then
+            if errorExit "There were problems installing ${@:3}" "$apt_error";then
                 say '...going to next page.'
-                return 0
-            else
-                return 1
             fi
         fi
     fi
