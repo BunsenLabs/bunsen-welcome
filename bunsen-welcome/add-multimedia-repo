@@ -9,18 +9,6 @@ ADD_MULTI_PROMPT=$"Would you like to add the deb-multimedia repositories? "
 ADD_MULTI_EXTRA_ARG='N'
 
 add_multi() {
-
-    if dpkg-query -W --showformat='${db:Status-Abbrev}' deb-multimedia-keyring 2>/dev/null | grep -q '^ii' ; then
-        say 'Multimedia keyring has already been installed.'
-    else
-        say $'installing deb-multimedia keyring...\n'
-        local tmpdir=$(mktemp -d)
-        wget -P "$tmpdir" http://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2015.6_all.deb
-        [[ -e "$tmpdir"/deb-multimedia-keyring_2015.6_all.deb ]] || { say 'failed to download deb-multimedia keyring' >&2; return 1;}
-        sudo dpkg -i "$tmpdir"/deb-multimedia-keyring_2015.6_all.deb || { say 'failed to install deb-multimedia keyring' >&2; return 1;}
-        rm -r "$tmpdir"
-    fi
-
     if grep -E '^deb +(http://www|ftp://ftp).deb-multimedia.org +jessie +(main +non-free|non-free +main) *$' /etc/apt/sources.list{,.d/*}
     then
         say 'Multimedia repositories have already been added.'
@@ -36,23 +24,40 @@ EOF
     fi
 
     say $'\nupdating apt...\n'
-    if local apt_error=$(sudo apt-get update 2>&1 >/dev/tty) && [[ -z $apt_error ]]
+    ignore_string="http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
+    if local apt_error=$(sudo apt-get update 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string}|^$)" <<<"$apt_error"
     then
         say 'Finished update'
     else
         errorExit 'There was a problem updating apt.' "$apt_error"
     fi
 
+    if dpkg-query -W --showformat='${db:Status-Abbrev}' deb-multimedia-keyring 2>/dev/null | grep -q '^ii' ; then
+        say 'Multimedia keyring has already been installed.'
+    else
+        say $'installing deb-multimedia keyring...\n'
+        say $'Please press y if asked to install deb-multimedia-keyring "without verification"\n'
+        ignore_string1='Extracting templates from packages: 100%' # apt sends this to stderr!
+        ignore_string2='Retrieving bug reports... Done' # apt-listbugs sends this to stderr!
+        ignore_string3='Parsing Found/Fixed information... Done' # apt-listbugs sends this to stderr!
+        if local apt_error=$(sudo apt-get install deb-multimedia-keyring 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string1}|${ignore_string2}|${ignore_string3}|^$)" <<<"$apt_error"
+        then
+            say 'Multimedia keyring successfully installed.'
+        else
+            errorExit "There were problems installing deb-multimedia-keyring" "$apt_error"
+        fi
+    fi
+
     apt_error=''
     say '\nupgrading packages...\n'
-    ignore_string1='Extracting templates from packages: 100%' # apt sends this to stderr!
-    ignore_string2='Retrieving bug reports... Done' # apt-listbugs sends this to stderr!
-    ignore_string3='Parsing Found/Fixed information... Done' # apt-listbugs sends this to stderr!
+    ignore_string1='Extracting templates from packages: 100%'
+    ignore_string2='Retrieving bug reports... Done'
+    ignore_string3='Parsing Found/Fixed information... Done'
     if apt_error=$(sudo apt-get dist-upgrade 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string1}|${ignore_string2}|${ignore_string3}|^$)" <<<"$apt_error"
     then
         say 'Finished dist-upgrade.'
     else
-        errorExit 'There was a problem with dist-upgrade.' "$apt_error"
+        errorExit 'There was a problem with dist-upgrade.' "${apt_error:-Upgrade Aborted}"
     fi
 }
 

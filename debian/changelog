@@ -1,3 +1,9 @@
+bunsen-welcome (0.07-4) unstable; urgency=low
+
+  * Rewrite add-multimedia-repo to make independent of keyring version. 
+
+ -- John Crawley <john@rafflesnagoya.com>  Wed, 08 Jul 2015 16:37:06 +0900
+
 bunsen-welcome (0.07-3) unstable; urgency=low
 
   * Set C locale for checking of error messages.
