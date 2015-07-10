@@ -1,3 +1,9 @@
+bunsen-welcome (0.07-5~git) unstable; urgency=low
+
+  * Add early evocation of sudo to avoid warning message with apt-get.
+
+ -- John Crawley <john@rafflesnagoya.com>  Fri, 10 Jul 2015 16:55:50 +0900
+
 bunsen-welcome (0.07-4) unstable; urgency=low
 
   * Rewrite add-multimedia-repo to make independent of keyring version. 

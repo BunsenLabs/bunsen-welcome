@@ -19,3 +19,16 @@ If you do not want to run this script now, you can run it at a later date by ent
 '
 
 prompt $"  Hit \"Enter\" to continue, or \"q\" to quit..." Q && exit 0
+
+say '
+Please enter your password now and it will be stored for a while.
+(You may need to enter it again later.)'
+if sudo -v
+then
+    say 'Thank you.'
+else
+    errorExit 'You do not appear to have permission to use sudo,
+which is needed in this script.
+Please make the necessary adjustments to your system and try again.'
+fi
+
