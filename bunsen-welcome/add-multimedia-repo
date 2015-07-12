@@ -9,6 +9,7 @@ ADD_MULTI_PROMPT=$"Would you like to add the deb-multimedia repositories? "
 ADD_MULTI_EXTRA_ARG='N'
 
 add_multi() {
+    shopt -s nullglob # in case there is nothing in sources.list.d/
     if grep -E '^deb +(http://www|ftp://ftp).deb-multimedia.org +jessie +(main +non-free|non-free +main) *$' /etc/apt/sources.list{,.d/*}
     then
         say 'Multimedia repositories have already been added.'
@@ -22,6 +23,7 @@ deb http://www.deb-multimedia.org jessie main non-free
 EOF
         grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list || { say 'failed to add deb-multimedia to sources.list' >&2; return 1;}
     fi
+    shopt -u nullglob
 
     say $'\nupdating apt...\n'
     ignore_string="http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
@@ -35,12 +37,11 @@ EOF
     if dpkg-query -W --showformat='${db:Status-Abbrev}' deb-multimedia-keyring 2>/dev/null | grep -q '^ii' ; then
         say 'Multimedia keyring has already been installed.'
     else
-        say $'installing deb-multimedia keyring...\n'
-        say $'Please press y if asked to install deb-multimedia-keyring "without verification"\n'
+        say $'Installing deb-multimedia keyring...\n'
         ignore_string1='Extracting templates from packages: 100%' # apt sends this to stderr!
         ignore_string2='Retrieving bug reports... Done' # apt-listbugs sends this to stderr!
         ignore_string3='Parsing Found/Fixed information... Done' # apt-listbugs sends this to stderr!
-        if local apt_error=$(sudo apt-get install deb-multimedia-keyring 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string1}|${ignore_string2}|${ignore_string3}|^$)" <<<"$apt_error"
+        if local apt_error=$(sudo apt-get install  --allow-unauthenticated deb-multimedia-keyring 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string1}|${ignore_string2}|${ignore_string3}|^$)" <<<"$apt_error"
         then
             say 'Multimedia keyring successfully installed.'
         else
@@ -49,7 +50,7 @@ EOF
     fi
 
     apt_error=''
-    say '\nupgrading packages...\n'
+    say $'\nUpgrading packages...\n'
     ignore_string1='Extracting templates from packages: 100%'
     ignore_string2='Retrieving bug reports... Done'
     ignore_string3='Parsing Found/Fixed information... Done'

@@ -12,7 +12,7 @@ if setupPage "$UPGRADE_TITLE" "$UPGRADE_TEXT" "$UPGRADE_PROMPT"; then
     then
         say 'Finished upgrade.'
     else
-        errorExit 'There was a problem during the upgrade.' "$apt_error"
+        errorExit 'There was a problem during the upgrade.' "${apt_error:-Upgrade Aborted}"
     fi
 else
     exit 0
