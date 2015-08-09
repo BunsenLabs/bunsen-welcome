@@ -1,4 +1,4 @@
-bunsen-welcome (8.1.1) bunsen-hydrogen; urgency=low
+bunsen-welcome (8.1-1) bunsen-hydrogen; urgency=low
 
   * Add step to install PAE kernel, if needed.
 
