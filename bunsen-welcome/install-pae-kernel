@@ -1,6 +1,6 @@
 INSTALL_PAE_TITLE=$"PAE Kernel"
 
-if grep -wq pae /proc/cpuinfo
+if ! grep -wq pae /proc/cpuinfo
 then
     setupPage "$INSTALL_PAE_TITLE" $"Your processor does not support PAE."
 elif dpkg -l | grep -Eq '^ *ii +linux-image-[^ ]*(amd64|pae) '
