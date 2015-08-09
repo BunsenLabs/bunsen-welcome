@@ -1,0 +1,13 @@
+INSTALL_PAE_TITLE=$"PAE Kernel"
+
+grep -wq pae /proc/cpuinfo || {
+    setupPage "$INSTALL_PAE_TITLE" $"Your processor does not support PAE."
+}
+
+dpkg -l | grep -Eq '^ *ii +linux-image-[^ ]*(amd64|pae) ' && {
+    setupPage "$INSTALL_PAE_TITLE" $"You already have a PAE enabled kernel installed"
+}
+
+installPage "$INSTALL_PAE_TITLE" \
+$"Your processor supports PAE, but you do not have a PAE enabled kernel installed. Would you like to install one now?" \
+'linux-image-686-pae'

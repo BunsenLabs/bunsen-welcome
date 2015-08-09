@@ -13,7 +13,7 @@ if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
     exit 1
 fi
 
-STEPS_BASIC=('apt-update' 'apt-upgrade' 'add-multimedia-repo' 'install-printer-packages' 'install-java-packages' 'install-libreoffice' 'devel')
+STEPS_BASIC=('apt-update' 'apt-upgrade' 'install-pae-kernel' 'add-multimedia-repo' 'install-printer-packages' 'install-java-packages' 'install-libreoffice' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 
@@ -33,7 +33,8 @@ header() {
     echo "  ${dashesStart// /-}[ ${headerText} ]${dashesEnd// /-}"$'\n'
 }
 
-# Usage: setupPage title text prompt [prompt-extra-arg]
+# Usage: setupPage title text [prompt [prompt-extra-arg]]
+# Omit prompt for noninteractive page.
 setupPage() {
     sleep 2
     tput clear
@@ -42,6 +43,7 @@ setupPage() {
     titleDelimiter=$( printf "%${#1}s" )
     say "${titleDelimiter// /-}"$'\n'
     say "$2"$'\n' # description
+    [[ $3 ]] || { sleep 2;return 0;}
     prompt "  $3" "${4:-}"
     return $?
 }
