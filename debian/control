@@ -10,7 +10,7 @@ Vcs-Browser: https://github.com/BunsenLabs/bunsen-welcome
 
 Package: bunsen-welcome
 Architecture: all
-Depends: ${misc:Depends}, bunsen-common, terminator | x-terminal-emulator
+Depends: ${misc:Depends}, bunsen-common, xterm | x-terminal-emulator
 Description: BunsenLabs welcome script.
  Post installation script for BunsenLabs Linux,
  to install some optional extra packages.
