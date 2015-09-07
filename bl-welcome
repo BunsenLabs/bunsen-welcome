@@ -78,7 +78,7 @@ installPage() {
     return 1
 }
 
-[[ -d /live/overlay ]] && exit 0
+[[ -d /live-build ]] && exit 0
 
 if [[ $1 = '--firstrun' ]]; then # First run, from autostart
     [[ -e $HOME/.config/bunsen/bl-welcome ]] && exit 0
