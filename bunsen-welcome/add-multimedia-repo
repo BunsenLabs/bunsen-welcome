@@ -1,5 +1,5 @@
 ADD_MULTI_TITLE=$"ADD MULTIMEDIA REPOSITORY"
-ADD_MULTI_TEXT=$"The deb-multimedia repositories contain media-related packages that may be newer than those in the Debian stable repositories, or not available at all. On the other hand, packages from these repositories sometimes cause problems for some users. If in doubt, you need not add them now - you can do it later if necessary.
+ADD_MULTI_TEXT=$"The third-party deb-multimedia repositories contain media-related packages that may be newer than those in the Debian repositories, or not available at all. On the other hand, packages from these repositories sometimes cause problems for some users, and are not supported by Debian in any way. Do not add these repositories unless you need some specific package unobtainable from Debian. If in doubt, you need not add them now - you can do it later if necessary, by running bl-welcome again.
 
 This will add the line:
     deb http://www.deb-multimedia.org jessie main non-free
