@@ -1,7 +1,7 @@
 Source: bunsen-welcome
 Section: misc
 Priority: extra
-Maintainer: John Crawley <john@rafflesnagoya.com>
+Maintainer: John Crawley <john@bunsenlabs.org>
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.5
 Homepage: https://github.com/BunsenLabs/bunsen-welcome
@@ -17,7 +17,7 @@ Description: BunsenLabs welcome script.
 
 Package: bunsen-meta-printer-support
 Architecture: all
-Depends: 
+Depends:
  ${misc:Depends}, cups, cups-pdf, system-config-printer, printer-driver-hpijs, hplip
 Description: BunsenLabs printer support meta package
  Installs various printer packages to enable printer support.

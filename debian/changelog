@@ -2,57 +2,57 @@ bunsen-welcome (8.2-1) bunsen-hydrogen; urgency=low
 
   * Expand warning about deb-multimedia repositories.
 
- -- John Crawley <john@rafflesnagoya.com>  Tue, 08 Sep 2015 17:30:30 +0900
+ -- John Crawley <john@bunsenlabs.org>  Tue, 08 Sep 2015 17:30:30 +0900
 
 bunsen-welcome (8.1-2) bunsen-hydrogen; urgency=low
 
   * Replace terminator with xterm in dependencies.
 
- -- John Crawley <john@rafflesnagoya.com>  Sat, 15 Aug 2015 11:17:29 +0900
+ -- John Crawley <john@bunsenlabs.org>  Sat, 15 Aug 2015 11:17:29 +0900
 
 bunsen-welcome (8.1-1) bunsen-hydrogen; urgency=low
 
   * Add step to install PAE kernel, if needed.
 
- -- John Crawley <john@rafflesnagoya.com>  Sun, 09 Aug 2015 14:40:34 +0900
+ -- John Crawley <john@bunsenlabs.org>  Sun, 09 Aug 2015 14:40:34 +0900
 
 bunsen-welcome (8.0-1) bunsen-hydrogen; urgency=low
 
   * Perform additional apt-get update before upgrading deb-multimedia.
   * Change suite to bunsen-hydrogen.
 
- -- John Crawley <john@rafflesnagoya.com>  Sat, 25 Jul 2015 13:16:50 +0900
+ -- John Crawley <john@bunsenlabs.org>  Sat, 25 Jul 2015 13:16:50 +0900
 
 bunsen-welcome (0.07-6~git) unstable; urgency=low
 
   * Add small bugfixes.
 
- -- John Crawley <john@rafflesnagoya.com>  Sun, 12 Jul 2015 14:50:43 +0900
+ -- John Crawley <john@bunsenlabs.org>  Sun, 12 Jul 2015 14:50:43 +0900
 
 bunsen-welcome (0.07-5~git) unstable; urgency=low
 
   * Add early evocation of sudo to avoid warning message with apt-get.
 
- -- John Crawley <john@rafflesnagoya.com>  Fri, 10 Jul 2015 16:55:50 +0900
+ -- John Crawley <john@bunsenlabs.org>  Fri, 10 Jul 2015 16:55:50 +0900
 
 bunsen-welcome (0.07-4) unstable; urgency=low
 
-  * Rewrite add-multimedia-repo to make independent of keyring version. 
+  * Rewrite add-multimedia-repo to make independent of keyring version.
 
- -- John Crawley <john@rafflesnagoya.com>  Wed, 08 Jul 2015 16:37:06 +0900
+ -- John Crawley <john@bunsenlabs.org>  Wed, 08 Jul 2015 16:37:06 +0900
 
 bunsen-welcome (0.07-3) unstable; urgency=low
 
   * Set C locale for checking of error messages.
   * Refactor logic of some sections and fix bugs.
 
- -- John Crawley <john@rafflesnagoya.com>  Wed, 01 Jul 2015 16:56:43 +0900
+ -- John Crawley <john@bunsenlabs.org>  Wed, 01 Jul 2015 16:56:43 +0900
 
 bunsen-welcome (0.07-2) unstable; urgency=low
 
   * Update deb-multimedia-keyring to latest version
 
- -- John Crawley <john@rafflesnagoya.com>  Sat, 27 Jun 2015 15:31:52 +0900
+ -- John Crawley <john@bunsenlabs.org>  Sat, 27 Jun 2015 15:31:52 +0900
 
 bunsen-welcome (0.07-1) unstable; urgency=low
 
@@ -60,13 +60,13 @@ bunsen-welcome (0.07-1) unstable; urgency=low
   * Add stronger error checking.
   * Ignore fake errors from apt and apt-listbugs.
 
- -- John Crawley <john@rafflesnagoya.com>  Tue, 12 May 2015 15:24:49 +0900
+ -- John Crawley <john@bunsenlabs.org>  Tue, 12 May 2015 15:24:49 +0900
 
 bunsen-welcome (0.06-1) unstable; urgency=low
 
   * Switch to dpkg-source 3.0 (quilt) format
 
- -- John Crawley <john@rafflesnagoya.com>  Tue, 10 Mar 2015 18:09:50 +0900
+ -- John Crawley <john@bunsenlabs.org>  Tue, 10 Mar 2015 18:09:50 +0900
 
 cb-welcome (0.06) unstable; urgency=low
 
