@@ -15,7 +15,8 @@ else
     promptInstall 'PAE Kernel' 'This script will install a linux kernel that supports PAE.' 'linux-image-686-pae' || say 'Continuing in spite of install problem...' 2
 fi
 
-say 'LAPTOP CHECK
+say '
+LAPTOP CHECK
 ------------
 '
 
@@ -73,6 +74,10 @@ then
 The package fdpowermon, no longer needed, will be removed." 2
     prompt $"Add backports and upgrade xfce4-power-manager?" && upgradePower
 else
-    say $"This does not seem to be a laptop computer. You can remove the battery icon package fdpowermon." 2
-    prompt $"Remove fdpowermon?" && removeFdpowermon
+    say $"This does not seem to be a laptop computer."
+    if dpkg-query -W --showformat='${db:Status-Abbrev}' fdpowermon 2>/dev/null | grep -q '^ii'
+    then
+        say "You can remove the battery icon package fdpowermon." 2
+        prompt $"Remove fdpowermon?" && removeFdpowermon
+    fi
 fi

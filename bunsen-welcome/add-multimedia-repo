@@ -12,7 +12,7 @@ add_multi() {
     shopt -s nullglob # in case there is nothing in sources.list.d/
     if grep -E '^deb +(http://www|ftp://ftp).deb-multimedia.org +jessie +(main +non-free|non-free +main) *$' /etc/apt/sources.list{,.d/*}
     then
-        say 'Multimedia repositories have already been added to sources.list.'
+        say 'Multimedia repositories have already been added to sources.list.' 2
     else
         cat <<EOF | sudo tee -a /etc/apt/sources.list.d/deb-multi.list >/dev/null
 
@@ -21,14 +21,14 @@ add_multi() {
 deb http://www.deb-multimedia.org jessie main non-free
 
 EOF
-        grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list./deb-multi.list || {
+        grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list.d/deb-multi.list || {
             say 'failed to add deb-multimedia to sources.list' >&2
             return 1
         }
     fi
     shopt -u nullglob
 
-    say $'\nupdating apt...\n'
+    say $'\nupdating apt...\n' 1
     if safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
     then
         say 'Finished update'
@@ -38,9 +38,9 @@ EOF
 
     if dpkg-query -W --showformat='${db:Status-Abbrev}' deb-multimedia-keyring 2>/dev/null | grep -q '^ii'
     then
-        say 'Multimedia keyring has already been installed.'
+        say 'Multimedia keyring has already been installed.' 2
     else
-        say $'Installing deb-multimedia keyring...\n'
+        say $'Installing deb-multimedia keyring...\n' 2
         if safeInstall --allow-unauthenticated deb-multimedia-keyring
         then
             say 'Multimedia keyring successfully installed.'
@@ -48,7 +48,7 @@ EOF
             say "Failed to install multimedia keyring."
             return 1
         fi
-        say $'\nupdating apt again...\n'
+        say $'\nupdating apt again...\n' 1
         if safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
         then
             say 'Finished update'
@@ -57,7 +57,7 @@ EOF
         fi
     fi
 
-    say $'\nUpgrading packages...\n'
+    say $'\nUpgrading packages...\n' 2
     if safeUpgrade --dist-upgrade
     then
         say 'Finished dist-upgrade.'
