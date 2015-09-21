@@ -5,15 +5,7 @@ UPGRADE_TEXT=$"Would you like to upgrade the installed packages on your system?"
 UPGRADE_PROMPT=$"Would you like to upgrade your system now?"
 
 if setupPage "$UPGRADE_TITLE" "$UPGRADE_TEXT" "$UPGRADE_PROMPT"; then
-    ignore_string1='Extracting templates from packages: 100%' # apt sends this to stderr!
-    ignore_string2='Retrieving bug reports... Done' # apt-listbugs sends this to stderr!
-    ignore_string3='Parsing Found/Fixed information... Done' # apt-listbugs sends this to stderr!
-    if apt_error=$(sudo apt-get upgrade 2>&1 >/dev/tty) &&  ! grep -iqEv "(${ignore_string1}|${ignore_string2}|${ignore_string3}|^$)" <<<"$apt_error"
-    then
-        say 'Finished upgrade.'
-    else
-        errorExit 'There was a problem during the upgrade.' "${apt_error:-Upgrade Aborted}"
-    fi
+    safeUpgrade
 else
     exit 0
 fi

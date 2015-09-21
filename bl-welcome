@@ -1,7 +1,5 @@
 #!/bin/bash
 # Post installation script
-unset LANGUAGE
-export LANG=C.UTF-8
 
 TEXTDOMAIN=bl-welcome
 
@@ -13,17 +11,10 @@ if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
     exit 1
 fi
 
-STEPS_BASIC=('apt-update' 'apt-upgrade' 'install-pae-kernel' 'add-multimedia-repo' 'install-printer-packages' 'install-java-packages' 'install-libreoffice' 'devel')
+STEPS_BASIC=('apt-update' 'apt-upgrade' 'system-tweaks' 'install-libreoffice' 'install-printer-packages' 'install-java-packages' 'add-multimedia-repo' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
-
-
-runInTerminal() {
-    x-terminal-emulator -T 'WELCOME!' -e "$0" "$@"
-    exit 0
-}
-
-# prints something like -------[ step 1 of 10 ]-------
+# prints something like: -------[ screen 1 of 10 ]-------
 header() {
     width=$(tput cols)
     local headerLength=$((width - 8)) # 8 is for '[  ]' and 2 spaces margins
@@ -41,8 +32,8 @@ setupPage() {
     header
     say "$1" # title
     titleDelimiter=$( printf "%${#1}s" )
-    say "${titleDelimiter// /-}"$'\n'
-    say "$2"$'\n' # description
+    say "${titleDelimiter// /-}"$'\n' # make dashed underline
+    say "$2"$'\n' # text
     [[ $3 ]] || { sleep 2;return 0;}
     prompt "  $3" "${4:-}"
     return $?
@@ -63,35 +54,23 @@ installPage() {
 
     if setupPage "$title" "$text" "$prompt" 'N'
     then
-        ignore_string1='Extracting templates from packages: 100%' # apt sends this to stderr!
-        ignore_string2='Retrieving bug reports... Done' # apt-listbugs sends this to stderr!
-        ignore_string3='Parsing Found/Fixed information... Done' # apt-listbugs sends this to stderr!
-        if local apt_error=$(sudo apt-get install "${@:3}" 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string1}|${ignore_string2}|${ignore_string3}|^$)" <<<"$apt_error"
+        if safeInstall "${@:3}"
         then
             return 0
         else
-            if errorExit "There were problems installing ${@:3}" "$apt_error";then
-                say '...going to next page.'
-            fi
+            say '...going to next page.'
         fi
     fi
     return 1
 }
 
-[[ -d /var/lib/live ]] && exit 0
+[[ -d /lib/live ]] && exit 0
 
 if [[ $1 = '--firstrun' ]]; then # First run, from autostart
     [[ -e $HOME/.config/bunsen/bl-welcome ]] && exit 0
 fi
 
-if ! [[ -t 0 && -t 1 && -t 2 ]]; then # not attached to terminal
-    if [[ -n $DISPLAY ]]; then
-        runInTerminal "$@"
-    else
-        echo "$0: no terminal" >&2
-        exit 1
-    fi
-fi
+terminalCheck -T 'WELCOME!'
 
 createFlag 'bl-welcome'
 

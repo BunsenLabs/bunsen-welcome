@@ -1,10 +1,10 @@
-ADD_MULTI_TITLE=$"ADD MULTIMEDIA REPOSITORY"
+ADD_MULTI_TITLE=$"Deb-Multimedia Repository"
 ADD_MULTI_TEXT=$"The third-party deb-multimedia repositories contain media-related packages that may be newer than those in the Debian repositories, or not available at all. On the other hand, packages from these repositories sometimes cause problems for some users, and are not supported by Debian in any way. Do not add these repositories unless you need some specific package unobtainable from Debian. If in doubt, you need not add them now - you can do it later if necessary, by running bl-welcome again.
 
 This will add the line:
     deb http://www.deb-multimedia.org jessie main non-free
-to /etc/apt/sources.list,
-and upgrade your packages to the newer ones in that repository."
+to /etc/apt/sources.list.d/deb-multi.list,
+and upgrade your installed packages to the newer ones in that repository."
 ADD_MULTI_PROMPT=$"Would you like to add the deb-multimedia repositories? "
 ADD_MULTI_EXTRA_ARG='N'
 
@@ -14,63 +14,67 @@ add_multi() {
     then
         say 'Multimedia repositories have already been added to sources.list.'
     else
-        cat <<EOF | sudo tee -a /etc/apt/sources.list >/dev/null
+        cat <<EOF | sudo tee -a /etc/apt/sources.list.d/deb-multi.list >/dev/null
 
 # added by bl-welcome
 # Multimedia repository
 deb http://www.deb-multimedia.org jessie main non-free
 
 EOF
-        grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list || { say 'failed to add deb-multimedia to sources.list' >&2; return 1;}
+        grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list./deb-multi.list || {
+            say 'failed to add deb-multimedia to sources.list' >&2
+            return 1
+        }
     fi
     shopt -u nullglob
 
     say $'\nupdating apt...\n'
-    ignore_string="http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
-    if local apt_error=$(sudo apt-get update 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string}|^$)" <<<"$apt_error"
+    if safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
     then
         say 'Finished update'
     else
-        errorExit 'There was a problem updating apt.' "$apt_error"
+        say 'Continuing in spite of update problem...'
     fi
 
-    if dpkg-query -W --showformat='${db:Status-Abbrev}' deb-multimedia-keyring 2>/dev/null | grep -q '^ii' ; then
+    if dpkg-query -W --showformat='${db:Status-Abbrev}' deb-multimedia-keyring 2>/dev/null | grep -q '^ii'
+    then
         say 'Multimedia keyring has already been installed.'
     else
         say $'Installing deb-multimedia keyring...\n'
-        ignore_string1='Extracting templates from packages: 100%' # apt sends this to stderr!
-        ignore_string2='Retrieving bug reports... Done' # apt-listbugs sends this to stderr!
-        ignore_string3='Parsing Found/Fixed information... Done' # apt-listbugs sends this to stderr!
-        if local apt_error=$(sudo apt-get install  --allow-unauthenticated deb-multimedia-keyring 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string1}|${ignore_string2}|${ignore_string3}|^$)" <<<"$apt_error"
+        if safeInstall --allow-unauthenticated deb-multimedia-keyring
         then
             say 'Multimedia keyring successfully installed.'
         else
-            errorExit "There were problems installing deb-multimedia-keyring" "$apt_error"
+            say "Failed to install multimedia keyring."
+            return 1
         fi
         say $'\nupdating apt again...\n'
-        ignore_string="http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
-        if local apt_error=$(sudo apt-get update 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string}|^$)" <<<"$apt_error"
+        if safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
         then
             say 'Finished update'
         else
-            errorExit 'There was a problem updating apt.' "$apt_error"
+            say 'Continuing in spite of update problem...'
         fi
     fi
 
-    apt_error=''
     say $'\nUpgrading packages...\n'
-    ignore_string1='Extracting templates from packages: 100%'
-    ignore_string2='Retrieving bug reports... Done'
-    ignore_string3='Parsing Found/Fixed information... Done'
-    if apt_error=$(sudo apt-get dist-upgrade 2>&1 >/dev/tty) && ! grep -iqEv "(${ignore_string1}|${ignore_string2}|${ignore_string3}|^$)" <<<"$apt_error"
+    if safeUpgrade --dist-upgrade
     then
         say 'Finished dist-upgrade.'
     else
-        errorExit 'There was a problem with dist-upgrade.' "${apt_error:-Upgrade Aborted}"
+        say 'dist-upgrade failed'
+        return 1
     fi
 }
 
 if setupPage "$ADD_MULTI_TITLE" "$ADD_MULTI_TEXT" "$ADD_MULTI_PROMPT" "$ADD_MULTI_EXTRA_ARG"; then
     say $'Adding deb-multimedia repositories...\n'
-    add_multi || errorExit "Errors occurred while adding deb-multimedia" 'Failed to add keyring.'
+    if add_multi
+    then
+        say "Successfully added deb-multimedia repositories and upgraded packages."
+    else
+        say "Failed to add deb-multimedia repositories.
+
+...going to next page."
+    fi
 fi
