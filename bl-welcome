@@ -14,11 +14,11 @@ fi
 STEPS_BASIC=('apt-update' 'apt-upgrade' 'system-tweaks' 'install-libreoffice' 'install-printer-packages' 'install-java-packages' 'add-multimedia-repo' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
-# prints something like: -------[ screen 1 of 10 ]-------
+# prints something like: -------[ page 1 of 10 ]-------
 header() {
     width=$(tput cols)
     local headerLength=$((width - 8)) # 8 is for '[  ]' and 2 spaces margins
-    local headerText=$(printf $"screen %d of %d" "$STEP" "$STEPS")
+    local headerText=$(printf $"page %d of %d" "$STEP" "$STEPS")
     dashesStart=$( printf "%$(( (headerLength - ${#headerText}) / 2 ))s" )
     dashesEnd=$( printf "%$(( (headerLength - ${#headerText}) / 2 + (headerLength - ${#headerText}) % 2 ))s" )
     echo "  ${dashesStart// /-}[ ${headerText} ]${dashesEnd// /-}"$'\n'
@@ -30,11 +30,12 @@ setupPage() {
     sleep 2
     tput clear
     header
-    say "$1" # title
-    titleDelimiter=$( printf "%${#1}s" )
-    say "${titleDelimiter// /-}"$'\n' # make dashed underline
-    say "$2"$'\n' # text
-    [[ $3 ]] || { sleep 2;return 0;}
+    say "$1
+${1//?/-}
+
+$2
+"
+    [[ $3 ]] || { sleep 1;return 0;}
     prompt "  $3" "${4:-}"
     return $?
 }
@@ -58,7 +59,7 @@ installPage() {
         then
             return 0
         else
-            say '...going to next page.'
+            say '...going to next page.' 1
         fi
     fi
     return 1
@@ -91,9 +92,9 @@ else
     . "$BL_WELCOME_LIBDIR/warning"
     createFlag 'bl-welcome-understood'
 fi
+sleep 2
 tput clear
 connectiontest
-#tput clear
 
 DEVEL=false
 

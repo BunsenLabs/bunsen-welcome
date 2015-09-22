@@ -20,13 +20,22 @@ LAPTOP CHECK
 ------------
 '
 
+removeFdpowermon() {
+    safeRemove fdpowermon || say 'Continuing in spite of removal problem...' 2
+    say $'Commenting out fdpowermon from autostart file...\n' 1
+    local autostart=$HOME/.config/openbox/autostart
+    local autostart_bkp="$HOME/.config/openbox/autostart~bl-welcome-$( date +%FT%T )~"
+    mv "$autostart" "$autostart_bkp"
+    sed '/fdpowermon/s/^/#/' "$autostart_bkp" > "$autostart"
+}
+
 upgradePower() {
     shopt -s nullglob # in case there is nothing in sources.list.d/
     if grep -E '^deb +http://pkg.bunsenlabs.org/debian +jessie-backports +main *$' /etc/apt/sources.list{,.d/*}
     then
-        say 'BunsenLabs backports have already been added to apt sources.'
+        say 'BunsenLabs backports have already been added to apt sources.' 2
     else
-        say 'Adding BunsenLabs backports to apt sources.'
+        say $'Adding BunsenLabs backports to apt sources...\n' 1
         cat <<EOF | sudo tee -a /etc/apt/sources.list.d/bunsen-jessie-backports.list >/dev/null
 
 # added by bl-welcome
@@ -35,7 +44,7 @@ deb http://pkg.bunsenlabs.org/debian jessie-backports main
 
 EOF
         grep -q '^deb http://pkg.bunsenlabs.org/debian jessie-backports main' /etc/apt/sources.list./bunsen-jessie-backports.list || {
-            say 'failed to add BunsenLabs backports to apt sources.' >&2
+            say 'failed to add BunsenLabs backports to apt sources.' 2 >&2
             return 1
         }
     fi
@@ -46,7 +55,7 @@ EOF
     then
         say 'Finished update'
     else
-        say 'Continuing in spite of update problem...'
+        say 'Continuing in spite of update problem...' 2
     fi
 
     say $'Upgrading xfce4-power-manager...\n'
@@ -54,30 +63,24 @@ EOF
     then
         say 'xfce4-power-manager successfully upgraded.'
     else
-        say "Failed to upgrade xfce4-power-manager."
+        say "Failed to upgrade xfce4-power-manager." 2
         return 1
     fi
-}
 
-removeFdpowermon() {
-    safeRemove fdpowermon || say 'Continuing in spite of removal problem...'
-    say 'Commenting out fdpowermon from autostart file...' 1
-    local autostart=$HOME/.config/openbox/autostart
-    local autostart_bkp="$HOME/.config/openbox/autostart~bl-welcome-$( date +%FT%T )~"
-    mv "$autostart" "$autostart_bkp"
-    sed '/fdpowermon/s/^/#/' "$autostart_bkp" > "$autostart"
+    say $'Removing fdpowermon...\n'
+    removeFdpowermon
 }
 
 if sudo laptop-detect
 then
     say $"This seems to be a laptop computer. It is possible to add the BunsenLabs backports repository and upgrade xfce4-power-manager from there. This will add an improved battery icon to the system tray.
-The package fdpowermon, no longer needed, will be removed." 2
-    prompt $"Add backports and upgrade xfce4-power-manager?" && upgradePower
+The package fdpowermon, no longer needed, will be removed." 1
+    prompt $"Add backports, upgrade xfce4-power-manager?" && upgradePower
 else
     say $"This does not seem to be a laptop computer."
     if dpkg-query -W --showformat='${db:Status-Abbrev}' fdpowermon 2>/dev/null | grep -q '^ii'
     then
-        say "You can remove the battery icon package fdpowermon." 2
+        say "You can remove the battery icon package fdpowermon." 1
         prompt $"Remove fdpowermon?" && removeFdpowermon
     fi
 fi

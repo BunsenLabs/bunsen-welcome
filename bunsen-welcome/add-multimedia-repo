@@ -22,7 +22,7 @@ deb http://www.deb-multimedia.org jessie main non-free
 
 EOF
         grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list.d/deb-multi.list || {
-            say 'failed to add deb-multimedia to sources.list' >&2
+            say 'failed to add deb-multimedia to sources.list' 2 >&2
             return 1
         }
     fi
@@ -33,19 +33,19 @@ EOF
     then
         say 'Finished update'
     else
-        say 'Continuing in spite of update problem...'
+        say 'Continuing in spite of update problem...' 2
     fi
 
     if dpkg-query -W --showformat='${db:Status-Abbrev}' deb-multimedia-keyring 2>/dev/null | grep -q '^ii'
     then
         say 'Multimedia keyring has already been installed.' 2
     else
-        say $'Installing deb-multimedia keyring...\n' 2
+        say $'Installing deb-multimedia keyring...\n' 1
         if safeInstall --allow-unauthenticated deb-multimedia-keyring
         then
             say 'Multimedia keyring successfully installed.'
         else
-            say "Failed to install multimedia keyring."
+            say "Failed to install multimedia keyring." 2
             return 1
         fi
         say $'\nupdating apt again...\n' 1
@@ -53,16 +53,16 @@ EOF
         then
             say 'Finished update'
         else
-            say 'Continuing in spite of update problem...'
+            say 'Continuing in spite of update problem...' 2
         fi
     fi
 
-    say $'\nUpgrading packages...\n' 2
+    say $'\nUpgrading packages...\n' 1
     if safeUpgrade --dist-upgrade
     then
         say 'Finished dist-upgrade.'
     else
-        say 'dist-upgrade failed'
+        say 'dist-upgrade failed' 2
         return 1
     fi
 }
