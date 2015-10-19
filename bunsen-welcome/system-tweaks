@@ -36,14 +36,14 @@ upgradePower() {
         say 'BunsenLabs backports have already been added to apt sources.' 2
     else
         say $'Adding BunsenLabs backports to apt sources...\n' 1
-        cat <<EOF | sudo tee -a /etc/apt/sources.list.d/bunsen-jessie-backports.list >/dev/null
+        cat <<EOF | sudo tee /etc/apt/sources.list.d/bunsen-jessie-backports.list >/dev/null
 
 # added by bl-welcome
 # BunsenLabs backports
 deb http://pkg.bunsenlabs.org/debian jessie-backports main
 
 EOF
-        grep -q '^deb http://pkg.bunsenlabs.org/debian jessie-backports main' /etc/apt/sources.list./bunsen-jessie-backports.list || {
+        grep -q '^deb http://pkg.bunsenlabs.org/debian jessie-backports main' /etc/apt/sources.list.d/bunsen-jessie-backports.list || {
             say 'failed to add BunsenLabs backports to apt sources.' 2 >&2
             return 1
         }
