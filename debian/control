@@ -18,7 +18,7 @@ Description: BunsenLabs welcome script.
 Package: bunsen-meta-printer-support
 Architecture: all
 Depends:
- ${misc:Depends}, cups, cups-pdf, system-config-printer, printer-driver-hpijs, hplip
+ ${misc:Depends}, cups, printer-driver-cups-pdf, system-config-printer, printer-driver-hpijs, hplip
 Description: BunsenLabs printer support meta package
  Installs various printer packages to enable printer support.
 
@@ -63,6 +63,7 @@ Architecture: all
 Depends:
  ${misc:Depends},
  apache2,
+ apache2-utils,
  mysql-server,
  php5,
  php-pear,

@@ -1,0 +1,12 @@
+installPage $"Flash Browser Plugin" \
+    $"Some web pages use the proprietary Adobe Flash format to play audio or video.\
+ This package will download the Flash Player from Adobe.\
+ It is unfree software which sometimes causes problems, and it is recommended not to install it if you do not need to.
+
+However, while an increasing number of websites, for example Youtube, support alternative technologies, unfortunately sometimes Flash is the only option.
+
+ WARNING: Installing this Debian package causes the
+ Adobe Flash Player to be downloaded from www.adobe.com.
+ The End User License Agreement of the Adobe Flash Player
+ is available at www.adobe.com." \
+    'flashplugin-nonfree'

@@ -11,7 +11,23 @@ if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
     exit 1
 fi
 
-STEPS_BASIC=('apt-update' 'apt-upgrade' 'system-tweaks' 'install-libreoffice' 'install-printer-packages' 'install-java-packages' 'add-multimedia-repo' 'devel')
+log_dir="$HOME/.cache/bl-welcome"
+mkdir -p "$log_dir"
+logfile="$log_dir"/bl-welcome.log
+
+log() {
+    echo "
+$1
+" >> "$logfile"
+}
+
+warnlog() {
+    echo "######## WARNING ########
+$1
+------------------------------------------------" >> "$logfile"
+}
+
+STEPS_BASIC=('apt-update' 'apt-upgrade' 'system-tweaks' 'install-libreoffice' 'install-printer-packages' 'install-java-packages' 'install-flashplugin' 'add-multimedia-repo' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 # prints something like: -------[ page 1 of 10 ]-------
@@ -45,7 +61,7 @@ $2
 # example: installPage 'LibreOffice suite' 'This will install libreoffice' 'libreoffice'
 installPage() {
     local title=$"INSTALL"" ${1^^}"
-    local text="$2 "$"If you choose to do this, the following packages will be installed:""
+    local text="$2"$'\n\n'$"If you choose to do this, the following packages will be installed:""
 
     ${*:3}
 
@@ -72,6 +88,10 @@ if [[ $1 = '--firstrun' ]]; then # First run, from autostart
 fi
 
 terminalCheck -T 'WELCOME!'
+
+exec > >( tee -a "$logfile" ) 2>&1
+
+log "Starting bl-welcome for $USER at $(date)"
 
 createFlag 'bl-welcome'
 

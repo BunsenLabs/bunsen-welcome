@@ -1,31 +1,55 @@
 ADD_MULTI_TITLE=$"Deb-Multimedia Repository"
-ADD_MULTI_TEXT=$"The third-party deb-multimedia repositories contain media-related packages that may be newer than those in the Debian repositories, or not available at all. On the other hand, packages from these repositories sometimes cause problems for some users, and are not supported by Debian in any way. Do not add these repositories unless you need some specific package unobtainable from Debian. If in doubt, you need not add them now - you can do it later if necessary, by running bl-welcome again.
+ADD_MULTI_TEXT=$"The third-party deb-multimedia repositories contain media-related packages that may be newer than those in the Debian repositories, or not available at all.\
+ On the other hand, packages from these repositories can cause problems for some users, and are not supported by Debian in any way.\
+ Do not add these repositories unless you need some specific package unobtainable from Debian.\
+ If in doubt, you need not add them now - you can do it later if necessary, by running bl-welcome again.
 
 This will add the line:
     deb http://www.deb-multimedia.org jessie main non-free
-to /etc/apt/sources.list.d/deb-multi.list,
-and upgrade your installed packages to the newer ones in that repository."
+to /etc/apt/sources.list.d/deb-multi.list, with apt-pinning of 100,
+allowing you to upgrade or install packages using that repository."
 ADD_MULTI_PROMPT=$"Would you like to add the deb-multimedia repositories? "
 ADD_MULTI_EXTRA_ARG='N'
 
 add_multi() {
-    shopt -s nullglob # in case there is nothing in sources.list.d/
-    if grep -E '^deb +(http://www|ftp://ftp).deb-multimedia.org +jessie +(main +non-free|non-free +main) *$' /etc/apt/sources.list{,.d/*}
+    shopt -s nullglob # in case there is nothing in preferences.d/ or sources.list.d/
+
+    if grep -Eq 'Pin:.*(deb-multimedia\.org\>|Unofficial Multimedia Packages)' /etc/apt/preferences{,.d/*} 2>/dev/null
     then
-        say 'Multimedia repositories have already been added to sources.list.' 2
+        say 'Apt pinning has already been added for deb-multimedia.' 2
     else
-        cat <<EOF | sudo tee -a /etc/apt/sources.list.d/deb-multi.list >/dev/null
+        pinning='# added by bl-welcome
+# Multimedia repository pinning
+Package: *
+Pin: origin *.deb-multimedia.org
+Pin-Priority: 100
 
-# added by bl-welcome
-# Multimedia repository
-deb http://www.deb-multimedia.org jessie main non-free
-
-EOF
-        grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list.d/deb-multi.list || {
-            say 'failed to add deb-multimedia to sources.list' 2 >&2
+Package: *
+Pin: release o=Unofficial Multimedia Packages
+Pin-Priority: 100
+'
+        cat <<<"$pinning" | sudo tee /etc/apt/preferences.d/deb-multi-pin >/dev/null
+        [[ $(</etc/apt/preferences.d/deb-multi-pin)$'\n' = $pinning ]] || {
+            say 'Failed to pin deb-multimedia.' pause >&2
             return 1
         }
     fi
+
+    if grep -Eq '^deb +(http://www|ftp://ftp).deb-multimedia.org +jessie +(main +non-free|non-free +main) *$' /etc/apt/sources.list{,.d/*}
+    then
+        say 'Multimedia repositories have already been added to sources.list.' 2
+    else
+        multirepo='# added by bl-welcome
+# Multimedia repository
+deb http://www.deb-multimedia.org jessie main non-free
+'
+        cat <<<"$multirepo" | sudo tee -a /etc/apt/sources.list.d/deb-multi.list >/dev/null
+        grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list.d/deb-multi.list || {
+            say 'failed to add deb-multimedia to sources.list' pause >&2
+            return 1
+        }
+    fi
+
     shopt -u nullglob
 
     say $'\nupdating apt...\n' 1
@@ -33,7 +57,7 @@ EOF
     then
         say 'Finished update'
     else
-        say 'Continuing in spite of update problem...' 2
+        say 'Continuing in spite of update problem...' 2 >&2
     fi
 
     if dpkg-query -W --showformat='${db:Status-Abbrev}' deb-multimedia-keyring 2>/dev/null | grep -q '^ii'
@@ -45,7 +69,7 @@ EOF
         then
             say 'Multimedia keyring successfully installed.'
         else
-            say "Failed to install multimedia keyring." 2
+            say "Failed to install multimedia keyring." pause >&2
             return 1
         fi
         say $'\nupdating apt again...\n' 1
@@ -53,17 +77,8 @@ EOF
         then
             say 'Finished update'
         else
-            say 'Continuing in spite of update problem...' 2
+            say 'Continuing in spite of update problem...' 2 >&2
         fi
-    fi
-
-    say $'\nUpgrading packages...\n' 1
-    if safeUpgrade --dist-upgrade
-    then
-        say 'Finished dist-upgrade.'
-    else
-        say 'dist-upgrade failed' 2
-        return 1
     fi
 }
 
@@ -71,10 +86,12 @@ if setupPage "$ADD_MULTI_TITLE" "$ADD_MULTI_TEXT" "$ADD_MULTI_PROMPT" "$ADD_MULT
     say $'Adding deb-multimedia repositories...\n'
     if add_multi
     then
-        say "Successfully added deb-multimedia repositories and upgraded packages."
+        say "Successfully added deb-multimedia repositories.\
+ You can add or upgrade packages with the command:
+ 'sudo apt-get install -t jessie <packagename>'" 'pause'
     else
         say "Failed to add deb-multimedia repositories.
 
-...going to next page."
+...going to next page." 2
     fi
 fi

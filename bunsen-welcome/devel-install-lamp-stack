@@ -18,9 +18,10 @@ if installPage "$LAMP_1_TITLE" "$LAMP_1_TEXT" 'bunsen-meta-lamp'; then
     # Enable modrewrite # TODO: does this work?
     a2d='/etc/apache2/sites-available/default'
     if [[ -f $a2d ]]; then
-        sudo sed -i '9,14 s/AllowOverride None/AllowOverride All/' "$a2d"
+#        sudo sed -i '9,14 s/AllowOverride None/AllowOverride All/' "$a2d"
+        sudo sed -i '\|<Directory /var/www/>|,\|</Directory>| s/AllowOverride None/AllowOverride All/' "$a2d"
         sudo a2enmod rewrite
-        sudo /etc/init.d/apache2 restart
+        sudo systemctl restart apache2
     fi
 
     if setupPage "$LAMP_2_TITLE" "$LAMP_2_TEXT" "$LAMP_2_PROMPT"; then

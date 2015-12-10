@@ -44,7 +44,7 @@ deb http://pkg.bunsenlabs.org/debian jessie-backports main
 
 EOF
         grep -q '^deb http://pkg.bunsenlabs.org/debian jessie-backports main' /etc/apt/sources.list.d/bunsen-jessie-backports.list || {
-            say 'failed to add BunsenLabs backports to apt sources.' 2 >&2
+            say 'failed to add BunsenLabs backports to apt sources.' pause >&2
             return 1
         }
     fi

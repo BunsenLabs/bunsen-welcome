@@ -1,3 +1,17 @@
+bunsen-welcome (8.5-1) bunsen-hydrogen; urgency=medium
+
+  * Add logging of messages to ~/.cache/bl-welcome/bl-welcome.log
+
+ -- John Crawley <john@bunsenlabs.org>  Thu, 10 Dec 2015 17:06:27 +0900
+
+bunsen-welcome (8.4-1) bunsen-hydrogen; urgency=medium
+
+  * Add option to install flashplugin-nonfree.
+  * Set apt pinning of deb-multimedia repo to 100.
+  * Add minor bugfixes.
+
+ -- John Crawley <john@bunsenlabs.org>  Thu, 10 Dec 2015 15:00:22 +0900
+
 bunsen-welcome (8.3.1-1) bunsen-hydrogen; urgency=high
 
   * Fix bug in bunsen-welcome/system-tweaks.
