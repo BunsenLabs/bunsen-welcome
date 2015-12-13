@@ -1,5 +1,5 @@
 UPGRADE_TITLE=$"UPGRADE INSTALLED PACKAGES"
-UPGRADE_TEXT=$"Would you like to upgrade the installed packages on your system?"' '$"If you choose to do this, this script will execute the command:"'
+UPGRADE_TEXT=$"We now need to upgrade the installed packages on your system."' '$"If you choose to do this, this script will execute the command:"'
 
     sudo apt-get upgrade'
 UPGRADE_PROMPT=$"Would you like to upgrade your system now?"
@@ -7,5 +7,7 @@ UPGRADE_PROMPT=$"Would you like to upgrade your system now?"
 if setupPage "$UPGRADE_TITLE" "$UPGRADE_TEXT" "$UPGRADE_PROMPT"; then
     safeUpgrade
 else
+    say 'It was necessary to upgrade in order to continue the script.
+Exiting...' 2
     exit 0
 fi

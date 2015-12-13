@@ -37,7 +37,6 @@ upgradePower() {
     else
         say $'Adding BunsenLabs backports to apt sources...\n' 1
         cat <<EOF | sudo tee /etc/apt/sources.list.d/bunsen-jessie-backports.list >/dev/null
-
 # added by bl-welcome
 # BunsenLabs backports
 deb http://pkg.bunsenlabs.org/debian jessie-backports main
@@ -47,16 +46,10 @@ EOF
             say 'failed to add BunsenLabs backports to apt sources.' pause >&2
             return 1
         }
+        say $'\nupdating apt...\n'
+        safeUpdate || say 'Continuing in spite of update problem...' 2
     fi
     shopt -u nullglob
-
-    say $'\nupdating apt...\n'
-    if safeUpdate
-    then
-        say 'Finished update'
-    else
-        say 'Continuing in spite of update problem...' 2
-    fi
 
     say $'Upgrading xfce4-power-manager...\n'
     if safeInstall --target-release=jessie-backports xfce4-power-manager
@@ -75,7 +68,7 @@ if sudo laptop-detect
 then
     say $"This seems to be a laptop computer. It is possible to add the BunsenLabs backports repository and upgrade xfce4-power-manager from there. This will add an improved battery icon to the system tray.
 The package fdpowermon, no longer needed, will be removed." 1
-    prompt $"Add backports, upgrade xfce4-power-manager?" && upgradePower
+    prompt $"Add Bunsenlabs backports, upgrade xfce4-power-manager?" && upgradePower
 else
     say $"This does not seem to be a laptop computer."
     if dpkg-query -W --showformat='${db:Status-Abbrev}' fdpowermon 2>/dev/null | grep -q '^ii'

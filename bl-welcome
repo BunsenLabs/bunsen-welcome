@@ -27,7 +27,7 @@ $1
 ------------------------------------------------" >> "$logfile"
 }
 
-STEPS_BASIC=('apt-update' 'apt-upgrade' 'system-tweaks' 'install-libreoffice' 'install-printer-packages' 'install-java-packages' 'install-flashplugin' 'add-multimedia-repo' 'devel')
+STEPS_BASIC=('apt-update' 'apt-upgrade' 'system-tweaks' 'install-libreoffice' 'install-printer-packages' 'install-java-packages' 'install-flashplugin' 'add-debian-backports' 'add-multimedia-repo' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 # prints something like: -------[ page 1 of 10 ]-------
@@ -35,15 +35,15 @@ header() {
     width=$(tput cols)
     local headerLength=$((width - 8)) # 8 is for '[  ]' and 2 spaces margins
     local headerText=$(printf $"page %d of %d" "$STEP" "$STEPS")
-    dashesStart=$( printf "%$(( (headerLength - ${#headerText}) / 2 ))s" )
-    dashesEnd=$( printf "%$(( (headerLength - ${#headerText}) / 2 + (headerLength - ${#headerText}) % 2 ))s" )
+    local dashesStart=$( printf "%$(( (headerLength - ${#headerText}) / 2 ))s" )
+    local dashesEnd=$( printf "%$(( (headerLength - ${#headerText}) / 2 + (headerLength - ${#headerText}) % 2 ))s" )
     echo "  ${dashesStart// /-}[ ${headerText} ]${dashesEnd// /-}"$'\n'
 }
 
 # Usage: setupPage title text [prompt [prompt-extra-arg]]
 # Omit prompt for noninteractive page.
 setupPage() {
-    sleep 2
+    sleep 1
     tput clear
     header
     say "$1

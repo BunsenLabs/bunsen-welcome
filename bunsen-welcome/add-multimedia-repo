@@ -12,53 +12,76 @@ ADD_MULTI_PROMPT=$"Would you like to add the deb-multimedia repositories? "
 ADD_MULTI_EXTRA_ARG='N'
 
 add_multi() {
+    local dmo_priority=100 # deb-multimedia will be pinned at this value
+
     shopt -s nullglob # in case there is nothing in preferences.d/ or sources.list.d/
-
-    if grep -Eq 'Pin:.*(deb-multimedia\.org\>|Unofficial Multimedia Packages)' /etc/apt/preferences{,.d/*} 2>/dev/null
-    then
-        say 'Apt pinning has already been added for deb-multimedia.' 2
-    else
-        pinning='# added by bl-welcome
-# Multimedia repository pinning
-Package: *
-Pin: origin *.deb-multimedia.org
-Pin-Priority: 100
-
-Package: *
-Pin: release o=Unofficial Multimedia Packages
-Pin-Priority: 100
-'
-        cat <<<"$pinning" | sudo tee /etc/apt/preferences.d/deb-multi-pin >/dev/null
-        [[ $(</etc/apt/preferences.d/deb-multi-pin)$'\n' = $pinning ]] || {
-            say 'Failed to pin deb-multimedia.' pause >&2
-            return 1
-        }
-    fi
 
     if grep -Eq '^deb +(http://www|ftp://ftp).deb-multimedia.org +jessie +(main +non-free|non-free +main) *$' /etc/apt/sources.list{,.d/*}
     then
         say 'Multimedia repositories have already been added to sources.list.' 2
     else
-        multirepo='# added by bl-welcome
+        local dmo_repo='# added by bl-welcome
 # Multimedia repository
 deb http://www.deb-multimedia.org jessie main non-free
 '
-        cat <<<"$multirepo" | sudo tee -a /etc/apt/sources.list.d/deb-multi.list >/dev/null
+        cat <<< "$dmo_repo" | sudo tee -a /etc/apt/sources.list.d/deb-multi.list >/dev/null
         grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list.d/deb-multi.list || {
-            say 'failed to add deb-multimedia to sources.list' pause >&2
+            say 'Failed to add deb-multimedia to sources.list.' pause >&2
             return 1
         }
+    fi
+
+    if grep -Eq 'Pin:.*(deb-multimedia\.org\>|Unofficial Multimedia Packages)' /etc/apt/preferences{,.d/*} 2>/dev/null
+    then
+        say 'Apt pinning has already been added for deb-multimedia.' 2
+    else
+        local pinning="# added by bl-welcome
+# Multimedia repository pinning
+Package: *
+Pin: origin *.deb-multimedia.org
+Pin-Priority: $dmo_priority
+
+Package: *
+Pin: release o=Unofficial Multimedia Packages
+Pin-Priority: $dmo_priority
+"
+        cat <<< "$pinning" | sudo tee /etc/apt/preferences.d/deb-multi-pin >/dev/null
     fi
 
     shopt -u nullglob
 
     say $'\nupdating apt...\n' 1
-    if safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
+    if ! safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
     then
-        say 'Finished update'
-    else
         say 'Continuing in spite of update problem...' 2 >&2
     fi
+
+    local dmo_regex='[./]((deb(ian)?-)(multimedia|marillat)|marillat)[. /]?'
+    local dmo_pins=($(apt-cache policy  | sed -nr "/$dmo_regex/s/^[[:space:]]+([0-9]+)[[:space:]]+(http|ftp):.*$/\1/p"))
+    for i in "${dmo_pins[@]}"
+    do
+        [[ $i = $dmo_priority ]] || {
+            say 'Failed to pin deb-multimedia correctly.' 2 >&2
+            if prompt 'Remove deb-multimedia from apt sources and preferences?'
+            then
+                local removed=true
+                sudo rm /etc/apt/preferences.d/deb-multi-pin || removed=false
+                sudo rm /etc/apt/sources.list.d/deb-multi.list || removed=false
+                if $removed
+                    then
+                        say '...removed.'
+                        say $'\nupdating apt again...\n' 1
+                        if ! safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
+                        then
+                            say 'There was an update problem...' 2 >&2
+                        fi
+                else
+                    say 'Failed to completely remove deb-multimedia files.' 3 >&2
+                fi
+            fi
+            return 1
+        }
+    done
 
     if dpkg-query -W --showformat='${db:Status-Abbrev}' deb-multimedia-keyring 2>/dev/null | grep -q '^ii'
     then
@@ -73,10 +96,8 @@ deb http://www.deb-multimedia.org jessie main non-free
             return 1
         fi
         say $'\nupdating apt again...\n' 1
-        if safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
+        if ! safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
         then
-            say 'Finished update'
-        else
             say 'Continuing in spite of update problem...' 2 >&2
         fi
     fi
@@ -88,7 +109,7 @@ if setupPage "$ADD_MULTI_TITLE" "$ADD_MULTI_TEXT" "$ADD_MULTI_PROMPT" "$ADD_MULT
     then
         say "Successfully added deb-multimedia repositories.\
  You can add or upgrade packages with the command:
- 'sudo apt-get install -t jessie <packagename>'" 'pause'
+ sudo apt-get install -t jessie <packagename>" 'pause'
     else
         say "Failed to add deb-multimedia repositories.
 
