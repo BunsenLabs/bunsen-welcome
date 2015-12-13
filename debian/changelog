@@ -1,3 +1,10 @@
+bunsen-welcome (8.6-1) bunsen-hydrogen; urgency=medium
+
+  * Add page to enable Debian backports.
+  * Add improvements to code and user messages.
+
+ -- John Crawley <john@bunsenlabs.org>  Sun, 13 Dec 2015 14:47:07 +0900
+
 bunsen-welcome (8.5-1) bunsen-hydrogen; urgency=medium
 
   * Add logging of messages to ~/.cache/bl-welcome/bl-welcome.log
