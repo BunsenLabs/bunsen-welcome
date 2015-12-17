@@ -15,7 +15,9 @@ You will now be presented with a series of options. You will need your administr
 
 You will also need a working internet connection, so if you have not done so already, please configure your internet connection.
 
-If you do not want to run this script now, you can run it at a later date by entering the command \"bl-welcome\" in your terminal."'
+If you do not want to run this script now, you can run it at a later date by entering the command \"bl-welcome\" in your terminal.
+
+(Messages will be saved to ""$logfile"')
 '
 
 prompt $"  Hit \"Enter\" to continue, or \"q\" to quit..." Q && exit 0

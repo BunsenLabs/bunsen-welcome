@@ -11,7 +11,7 @@ if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
     exit 1
 fi
 
-log_dir="$HOME/.cache/bl-welcome"
+log_dir="$HOME/.cache/bunsen-welcome"
 mkdir -p "$log_dir"
 logfile="$log_dir"/bl-welcome.log
 
