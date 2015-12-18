@@ -1,3 +1,10 @@
+bunsen-welcome (8.6.1-1) bunsen-hydrogen; urgency=low
+
+  * bl-welcome: Change log directory name to ~/.cache/bunsen-welcome.
+  * intro: Add mention of log file.
+
+ -- John Crawley <john@bunsenlabs.org>  Fri, 18 Dec 2015 10:55:12 +0900
+
 bunsen-welcome (8.6-1) bunsen-hydrogen; urgency=medium
 
   * Add page to enable Debian backports.
