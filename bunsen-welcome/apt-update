@@ -1,4 +1,4 @@
-UPDATE_TITLE=$"UPDATE SOFTWARE SOURCES"
+UPDATE_TITLE=$"update software sources"
 UPDATE_TEXT=$"Before we can continue, we need to make sure your system's software sources are up-to-date."' '$"This script will now execute the command:"'
 
     sudo apt-get update'

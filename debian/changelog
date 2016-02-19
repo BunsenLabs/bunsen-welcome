@@ -1,3 +1,11 @@
+bunsen-welcome (8.7-1) bunsen-hydrogen; urgency=medium
+
+  * Add Pepperflash option to Flash Plugin page.
+  * Add check for possible missing components in apt/sources.list.
+  * Add checks to avoid redundant options being offered.
+
+ -- John Crawley <john@bunsenlabs.org>  Fri, 19 Feb 2016 14:06:00 +0900
+
 bunsen-welcome (8.6.1-1) bunsen-hydrogen; urgency=low
 
   * bl-welcome: Change log directory name to ~/.cache/bunsen-welcome.

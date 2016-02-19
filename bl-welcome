@@ -11,6 +11,12 @@ if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
     exit 1
 fi
 
+# default url for added backports etc.
+default_mirror='http://httpredir.debian.org/debian'
+
+# matches most debian mirrors
+debian_mirror_regex='(http|ftp)://([[:alnum:]_-]+\.)+([[:alnum:]]+)(/[[:alnum:]._-]+)*/?'
+
 log_dir="$HOME/.cache/bunsen-welcome"
 mkdir -p "$log_dir"
 logfile="$log_dir"/bl-welcome.log
@@ -27,7 +33,7 @@ $1
 ------------------------------------------------" >> "$logfile"
 }
 
-STEPS_BASIC=('apt-update' 'apt-upgrade' 'system-tweaks' 'install-libreoffice' 'install-printer-packages' 'install-java-packages' 'install-flashplugin' 'add-debian-backports' 'add-multimedia-repo' 'devel')
+STEPS_BASIC=('check-repos' 'apt-update' 'apt-upgrade' 'system-tweaks' 'install-libreoffice' 'install-printer-packages' 'install-java-packages' 'add-debian-backports' 'install-flashplugin' 'add-multimedia-repo' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 # prints something like: -------[ page 1 of 10 ]-------
@@ -46,7 +52,7 @@ setupPage() {
     sleep 1
     tput clear
     header
-    say "$1
+    say "${1^^}
 ${1//?/-}
 
 $2
@@ -56,18 +62,33 @@ $2
     return $?
 }
 
+# returns success if all packages are already installed
+allInstalled() {
+    local pkg=
+    for pkg in "$@"
+    do
+        [[ $(dpkg-query --show --showformat='${db:Status-Abbrev;2}' "$pkg" 2>/dev/null) = ii ]] || return 1
+    done
+    return 0
+}
+
 # Common function for most install scripts. USE THIS unless you really can't.
 # Usage: installPage title text package...
 # example: installPage 'LibreOffice suite' 'This will install libreoffice' 'libreoffice'
 installPage() {
-    local title=$"INSTALL"" ${1^^}"
-    local text="$2"$'\n\n'$"If you choose to do this, the following packages will be installed:""
+    local title=$"install"" $1"
+    local text="$1 has already been installed."
+    allInstalled "${@:3}" && {
+        setupPage "$title" "$text"
+        return 0
+    }
+    text="$2"$'\n\n'$"If you choose to do this, the following packages will be installed:""
 
     ${*:3}
 
 "$"Note: additional packages listed as dependencies will also be installed."
 
-    local prompt=$"Would you like to install"" $1?"
+    local prompt=$"Would you like to install"" ${1}?"
 
     if setupPage "$title" "$text" "$prompt" 'N'
     then

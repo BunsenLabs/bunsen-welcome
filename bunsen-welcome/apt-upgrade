@@ -1,4 +1,4 @@
-UPGRADE_TITLE=$"UPGRADE INSTALLED PACKAGES"
+UPGRADE_TITLE=$"upgrade installed packages"
 UPGRADE_TEXT=$"We now need to upgrade the installed packages on your system."' '$"If you choose to do this, this script will execute the command:"'
 
     sudo apt-get upgrade'

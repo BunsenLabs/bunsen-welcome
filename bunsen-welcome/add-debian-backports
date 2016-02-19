@@ -1,4 +1,3 @@
-readonly BACKPORTS_URL='http://httpredir.debian.org/debian'
 ADD_BACKPORTS_TITLE=$"Debian Backports"
 ADD_BACKPORTS_TEXT=$"Debian backports are packages taken from the next Debian release (called \"testing\"), adjusted and recompiled for usage on Debian stable.\
  If you enable this repository you will be able to upgrade some programs to newer versions, or install some programs not available in Debian stable.
@@ -8,45 +7,54 @@ However, backports cannot be tested as extensively as Debian stable, and are pro
 
 This will add the line:
 
- deb $BACKPORTS_URL jessie-backports main contrib non-free
+ deb $default_mirror jessie-backports main contrib non-free
 
 to /etc/apt/sources.list.d/debian-jessie-backports.list,
 allowing you to upgrade or install packages using that repository."
 ADD_BACKPORTS_PROMPT=$"Would you like to enable the Debian Backports repositories?"
 ADD_BACKPORTS_EXTRA_ARG='N'
 
-add_backports() {
+haveBackports() {
     shopt -s nullglob # in case there is nothing in sources.list.d/
-    if grep -E "^deb +$BACKPORTS_URL +jessie-backports +main( *| .*)\$" /etc/apt/sources.list{,.d/*}
+    grep -qE "^deb +$debian_mirror_regex +jessie-backports +main( *| .*)\$" /etc/apt/sources.list{,.d/*}
+    local retval=$?
+    shopt -u nullglob
+    return $retval
+}
+addBackports() {
+    if haveBackports
     then
         say 'Debian backports have already been added to apt sources.' 2
     else
         say $'Adding Debian backports to apt sources...\n' 1
         local bp_repo="# added by bl-welcome
 # Debian backports
-deb $BACKPORTS_URL jessie-backports main contrib non-free
+deb $default_mirror jessie-backports main contrib non-free
 
 "
         cat <<< "$bp_repo" | sudo tee /etc/apt/sources.list.d/debian-jessie-backports.list >/dev/null
-        grep -q "^deb $BACKPORTS_URL jessie-backports main contrib non-free\$" /etc/apt/sources.list.d/debian-jessie-backports.list || {
+        grep -q "^deb $default_mirror jessie-backports main contrib non-free\$" /etc/apt/sources.list.d/debian-jessie-backports.list || {
             say 'Failed to add Debian backports to apt sources.' pause >&2
             return 1
         }
         say $'\nupdating apt...\n'
         safeUpdate || say 'Continuing in spite of update problem...' 2
     fi
-    shopt -u nullglob
 }
 
-
-if setupPage "$ADD_BACKPORTS_TITLE" "$ADD_BACKPORTS_TEXT" "$ADD_BACKPORTS_PROMPT" "$ADD_BACKPORTS_EXTRA_ARG"; then
-    say $'Adding Debian backports...\n'
-    if add_backports
-    then
-        say "Successfully added Debian backports.\
+if haveBackports
+then
+    setupPage "$ADD_BACKPORTS_TITLE" $"Debian backports have already been added to apt sources."
+else
+    if setupPage "$ADD_BACKPORTS_TITLE" "$ADD_BACKPORTS_TEXT" "$ADD_BACKPORTS_PROMPT" "$ADD_BACKPORTS_EXTRA_ARG"; then
+        say $'Adding Debian backports...\n'
+        if add_backports
+        then
+            say "Successfully added Debian backports.\
  You can add or upgrade packages with the command:
  sudo apt-get install -t jessie-backports <packagename>" pause
-    else
-        say "...going to next page." 2
+        else
+            say "...going to next page." 2
+        fi
     fi
 fi

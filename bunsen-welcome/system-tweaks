@@ -1,4 +1,4 @@
-setupPage $"SYSTEM TWEAKS" $"Checking your system for possible improvements..."
+setupPage $"system tweaks" $"Checking your system for possible improvements..."
 
 say 'PAE KERNEL
 ----------
@@ -21,7 +21,7 @@ LAPTOP CHECK
 '
 
 removeFdpowermon() {
-    safeRemove fdpowermon || say 'Continuing in spite of removal problem...' 2
+    safeRemove fdpowermon fdpowermon-icons || say 'Continuing in spite of removal problem...' 2
     say $'Commenting out fdpowermon from autostart file...\n' 1
     local autostart=$HOME/.config/openbox/autostart
     local autostart_bkp="$HOME/.config/openbox/autostart~bl-welcome-$( date +%FT%T )~"
@@ -71,7 +71,7 @@ The package fdpowermon, no longer needed, will be removed." 1
     prompt $"Add Bunsenlabs backports, upgrade xfce4-power-manager?" && upgradePower
 else
     say $"This does not seem to be a laptop computer."
-    if dpkg-query -W --showformat='${db:Status-Abbrev}' fdpowermon 2>/dev/null | grep -q '^ii'
+    if [[ $(dpkg-query --show --showformat='${db:Status-Abbrev;2}' fdpowermon 2>/dev/null) = ii ]]
     then
         say "You can remove the battery icon package fdpowermon." 1
         prompt $"Remove fdpowermon?" && removeFdpowermon
