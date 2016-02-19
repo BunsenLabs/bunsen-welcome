@@ -48,13 +48,13 @@ then
 else
     if setupPage "$ADD_BACKPORTS_TITLE" "$ADD_BACKPORTS_TEXT" "$ADD_BACKPORTS_PROMPT" "$ADD_BACKPORTS_EXTRA_ARG"; then
         say $'Adding Debian backports...\n'
-        if add_backports
+        if addBackports
         then
             say "Successfully added Debian backports.\
  You can add or upgrade packages with the command:
  sudo apt-get install -t jessie-backports <packagename>" pause
         else
-            say "...going to next page." 2
+            say "Failed to add backports, going to next page." 3
         fi
     fi
 fi

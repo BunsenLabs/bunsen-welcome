@@ -70,7 +70,7 @@ then
 The package fdpowermon, no longer needed, will be removed." 1
     prompt $"Add Bunsenlabs backports, upgrade xfce4-power-manager?" && upgradePower
 else
-    say $"This does not seem to be a laptop computer."
+    say $"This does not seem to be a laptop computer." 1
     if [[ $(dpkg-query --show --showformat='${db:Status-Abbrev;2}' fdpowermon 2>/dev/null) = ii ]]
     then
         say "You can remove the battery icon package fdpowermon." 1

@@ -6,30 +6,30 @@ install_flash_intro=$"Some web pages use the proprietary Adobe Flash format to p
  This page will download and install a Flash Player from Adobe or Google.\
  It is unfree software which sometimes causes problems, and it is recommended not to install it if you do not need to.
 
-However, while an increasing number of websites, for example Youtube, support alternative technologies, unfortunately sometimes Flash is the only option.
+However, while an increasing number of websites, for example Youtube, support alternative technologies, sometimes Flash is the only option.
 
-There are two options:
-1) The Adobe Flash Player - browser plugin.
+There are two choices:
+1) The Adobe Flash Player - browser plugin, package flashplugin-nonfree.
 This stopped at version 11.2, but is still usable, although less safe.
-This option will install the package flashplugin-nonfree.
 
  NOTE: Installing this Debian package causes the
  Adobe Flash Player to be downloaded from www.adobe.com.
  The End User License Agreement of the Adobe Flash Player
  is available at www.adobe.com.
 
-2) The Pepper Flash Player - browser plugin from Google.
+2) The Pepper Flash Player - browser plugin from Google, packages
+browser-plugin-freshplayer-pepperflash and pepperflashplugin-nonfree
 This is more recent (though still non-free) software,
 but to use it with Iceweasel requires enabling the Debian Backports repository.
-This option will install the packages
-browser-plugin-freshplayer-pepperflash and pepperflashplugin-nonfree.
 
  NOTE: This package will download Chrome from Google,
  and unpack it to make the included Pepper Flash Player available
  for use with Chromium or Iceweasel.
  The end user license agreement is available at Google."
-pepper_note_backports=$"NOTE: to install the Pepper Flash Player it will be necessary
-to enable the Debian Backports repository."
+
+pepper_note_backports=$" NOTE: in order to install the Pepper Flash Player
+ the Debian Backports repository will be enabled."
+
 installFlashplugin() {
     local choice=
     local need_backports=false
@@ -60,7 +60,8 @@ installFlashplugin() {
 or the Adobe Flash Player?
 
 Press 'p' for Pepper or 'a' for Adobe,
-any other key to cancel."
+any other key to cancel.
+"
         local REPLY
         read -r -p ' "p" for Pepperflash, "a" for Adobe: '
         case ${REPLY^} in

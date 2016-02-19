@@ -18,7 +18,7 @@ then
 else
     say $"A normal BunsenLabs setup uses the 'contrib' and 'non-free' components of the Debian repositories,\
  but they seem to be missing from your apt sources list. Without them you will be unable to install some packages,\
- for example the Flash Plugins. Would you like to add 'contrib' and 'non-free' to your sources list?"
+ for example the Flash Plugins. Would you like to add 'contrib' and 'non-free' to your sources list?"$'\n'
     if prompt 'enable "contrib" and "non-free"?' Y
     then
         addSources
