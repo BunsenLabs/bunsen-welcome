@@ -16,7 +16,7 @@ ADD_BACKPORTS_EXTRA_ARG='N'
 
 haveBackports() {
     shopt -s nullglob # in case there is nothing in sources.list.d/
-    grep -qE "^deb +$debian_mirror_regex +jessie-backports +main( *| .*)\$" /etc/apt/sources.list{,.d/*}
+    grep -E "^deb +$debian_mirror_regex +jessie-backports +main( *| .*)\$" /etc/apt/sources.list{,.d/*} | grep -qv 'bunsen'
     local retval=$?
     shopt -u nullglob
     return $retval
@@ -47,7 +47,6 @@ then
     setupPage "$ADD_BACKPORTS_TITLE" $"Debian backports have already been added to apt sources."
 else
     if setupPage "$ADD_BACKPORTS_TITLE" "$ADD_BACKPORTS_TEXT" "$ADD_BACKPORTS_PROMPT" "$ADD_BACKPORTS_EXTRA_ARG"; then
-        say $'Adding Debian backports...\n'
         if addBackports
         then
             say "Successfully added Debian backports.\

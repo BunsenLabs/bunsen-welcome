@@ -31,7 +31,7 @@ removeFdpowermon() {
 
 upgradePower() {
     shopt -s nullglob # in case there is nothing in sources.list.d/
-    if grep -E '^deb +http://pkg.bunsenlabs.org/debian +jessie-backports +main *$' /etc/apt/sources.list{,.d/*}
+    if grep -E '^deb +http://pkg.bunsenlabs.org/debian +jessie-backports +main( *| .*)$' /etc/apt/sources.list{,.d/*}
     then
         say 'BunsenLabs backports have already been added to apt sources.' 2
     else
