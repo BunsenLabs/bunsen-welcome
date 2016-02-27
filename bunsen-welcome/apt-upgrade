@@ -5,7 +5,18 @@ UPGRADE_TEXT=$"We now need to upgrade the installed packages on your system."' '
 UPGRADE_PROMPT=$"Would you like to upgrade your system now?"
 
 if setupPage "$UPGRADE_TITLE" "$UPGRADE_TEXT" "$UPGRADE_PROMPT"; then
+    bw_version=$(checkVersion 'bunsen-welcome')
+    log "Current version of bunsen-welcome: $bw_version"
     safeUpgrade
+    bw_new_version=$(checkVersion 'bunsen-welcome')
+    [[ $bw_new_version != $bw_version ]] && {
+        log "bunsen-welcome: upgraded to $bw_new_version"
+        say "The package 'bunsen-welcome' has been upgraded.
+This script might have changed, so it will be restarted.
+Please wait a moment..." 4
+        exec >/dev/tty 2>&1 # so terminalCheck() doesn't open a new terminal
+        exec "$0"
+    }
 else
     say 'It was necessary to upgrade in order to continue the script.
 Exiting...' 2

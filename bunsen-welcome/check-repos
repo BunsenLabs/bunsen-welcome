@@ -1,13 +1,13 @@
 # check for missing 'contrib non-free' in apt sources
 
 haveSources() {
-    grep -qE "^deb +$debian_mirror_regex +jessie +main +(contrib +non-free|non-free +contrib) *\$" /etc/apt/sources.list
+    grep -qP "^deb +(?=.*debian)$mirror_regex +jessie(?=.*main)(?=.*contrib)(?=.*non-free)( +[a-z-]+){1,3} *$" /etc/apt/sources.list
 }
 
 addSources() {
     local bkp_list=/etc/apt/sources.list~bl-welcome-$(date +%y%m%dT%T)~
     sudo mv /etc/apt/sources.list "$bkp_list"
-    sed -r "s#$debian_mirror_regex +jessie +main *\$#& contrib non-free#" "$bkp_list" | sudo tee /etc/apt/sources.list >/dev/null
+    sed -r "/debian/ s/(${mirror_regex//\//\\/} +jessie)( +[a-z-]+){0,3} *\$/\1 main contrib non-free/" "$bkp_list" | sudo tee /etc/apt/sources.list >/dev/null
 }
 
 setupPage $"Check Repositories" $"Checking apt sources list for possible missing components..."

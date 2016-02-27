@@ -7,15 +7,16 @@ BL_COMMON_LIBDIR='/usr/lib/bunsen/bunsen-common'
 BL_WELCOME_LIBDIR='/usr/lib/bunsen/bunsen-welcome'
 
 if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
-    echo $"Error: Failed to locate bl-include.cfg in $BL_COMMON_LIBDIR" >&2
+    echo $"Error: Failed to source bl-include.cfg in $BL_COMMON_LIBDIR" >&2
     exit 1
 fi
 
-# default url for added backports etc.
+# default url for added Debian backports etc.
 default_mirror='http://httpredir.debian.org/debian'
 
-# matches most debian mirrors
-debian_mirror_regex='(http|ftp)://([[:alnum:]_-]+\.)+([[:alnum:]]+)(/[[:alnum:]._-]+)*/?'
+# matches most mirrors
+# add (?=.*debian) at beginning to insist on 'debian' somewhere (needs PCRE)
+mirror_regex='(http|ftp)://([[:alnum:]_-]+\.)+[[:alnum:]]+(/[[:alnum:]._-]+)*/?'
 
 log_dir="$HOME/.cache/bunsen-welcome"
 mkdir -p "$log_dir"
@@ -38,7 +39,7 @@ STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'd
 
 # prints something like: -------[ page 1 of 10 ]-------
 header() {
-    width=$(tput cols)
+    local width=$(tput cols 2>/dev/tty)
     local headerLength=$((width - 8)) # 8 is for '[  ]' and 2 spaces margins
     local headerText=$(printf $"page %d of %d" "$STEP" "$STEPS")
     local dashesStart=$( printf "%$(( (headerLength - ${#headerText}) / 2 ))s" )
@@ -62,12 +63,30 @@ $2
     return $?
 }
 
+# outputs pin value and origin repo url if package is installed.
+# returns 1 if package is not installed
+# Usage: checkOrigin package
+checkOrigin() {
+    apt-cache policy $1 | sed -nr '/\*\*\*/ {n;s/^[ \t]*([0-9]+[ \t]+[^ \t]+).*$/\1/p;q0};${q1}'
+}
+
+# outputs version of installed package
+# returns 1 if package is not installed
+# Usage: checkVersion package
+checkVersion() {
+    # dpkg is simpler but apt-cache + sed is faster
+    #dpkg-query --show --showformat='${Version}' $1 2>/dev/null
+    apt-cache policy $1 | sed -nr '/\*\*\*/ {s/^[ \t]*\*\*\*[ \t]+([0-9a-z:.+~-]+)[ \t]+.*$/\1/p;q0};${q1}'
+    }
+
 # returns success if all packages are already installed
+# Usage: allInstalled package [package...]
 allInstalled() {
     local pkg=
     for pkg in "$@"
     do
-        [[ $(dpkg-query --show --showformat='${db:Status-Abbrev;2}' "$pkg" 2>/dev/null) = ii ]] || return 1
+        #[[ $(dpkg-query --show --showformat='${db:Status-Abbrev;2}' "$pkg" 2>/dev/null) = ii ]] || return 1
+        checkVersion "$pkg" >/dev/null || return 1
     done
     return 0
 }

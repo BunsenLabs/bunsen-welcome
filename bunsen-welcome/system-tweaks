@@ -31,7 +31,7 @@ removeFdpowermon() {
 
 upgradePower() {
     shopt -s nullglob # in case there is nothing in sources.list.d/
-    if grep -E '^deb +http://pkg.bunsenlabs.org/debian +jessie-backports +main( *| .*)$' /etc/apt/sources.list{,.d/*}
+    if grep -qE '^deb +http://pkg.bunsenlabs.org/debian +jessie-backports +main( *| .*)$' /etc/apt/sources.list{,.d/*}
     then
         say 'BunsenLabs backports have already been added to apt sources.' 2
     else
@@ -60,20 +60,28 @@ EOF
         return 1
     fi
 
-    say $'Removing fdpowermon...\n'
-    removeFdpowermon
+    allInstalled fdpowermon && {
+        say $'Removing fdpowermon...\n'
+        removeFdpowermon
+    }
 }
 
 if sudo laptop-detect
 then
-    say $"This seems to be a laptop computer. It is possible to add the BunsenLabs backports repository and upgrade xfce4-power-manager from there. This will add an improved battery icon to the system tray.
+    say $"This seems to be a laptop computer."
+    if [[ $(checkOrigin xfce4-power-manager) = *bunsenlabs.org* ]]
+    then
+        say 'xfce4-power-manager'$" has already been upgraded to the BunsenLabs backports version."
+    else
+        say $"It is possible to add the BunsenLabs backports repository and upgrade xfce4-power-manager from there. This will add an improved battery icon to the system tray.
 The package fdpowermon, no longer needed, will be removed." 1
-    prompt $"Add Bunsenlabs backports, upgrade xfce4-power-manager?" && upgradePower
+        prompt $"Add Bunsenlabs backports, upgrade xfce4-power-manager?" && upgradePower
+    fi
 else
     say $"This does not seem to be a laptop computer." 1
-    if [[ $(dpkg-query --show --showformat='${db:Status-Abbrev;2}' fdpowermon 2>/dev/null) = ii ]]
+    if allInstalled fdpowermon
     then
-        say "You can remove the battery icon package fdpowermon." 1
+        say $"You can remove the battery icon package fdpowermon." 1
         prompt $"Remove fdpowermon?" && removeFdpowermon
     fi
 fi

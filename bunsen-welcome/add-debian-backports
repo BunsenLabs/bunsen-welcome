@@ -14,19 +14,19 @@ allowing you to upgrade or install packages using that repository."
 ADD_BACKPORTS_PROMPT=$"Would you like to enable the Debian Backports repositories?"
 ADD_BACKPORTS_EXTRA_ARG='N'
 
-haveBackports() {
+haveDebianBackports() {
     shopt -s nullglob # in case there is nothing in sources.list.d/
-    grep -E "^deb +$debian_mirror_regex +jessie-backports +main( *| .*)\$" /etc/apt/sources.list{,.d/*} | grep -qv 'bunsen'
+    grep -Pq '^deb +(?!.*bunsenlabs\.org)(?=.*debian)'"$mirror_regex"' +jessie-backports(?=.*main)(?=.*contrib)(?=.*non-free)( +[a-z-]+){1,3} *$' /etc/apt/sources.list{,.d/*}
     local retval=$?
     shopt -u nullglob
     return $retval
 }
-addBackports() {
-    if haveBackports
+addDebianBackports() {
+    if haveDebianBackports
     then
         say 'Debian backports have already been added to apt sources.' 2
     else
-        say $'Adding Debian backports to apt sources...\n' 1
+        say $'\nAdding Debian backports to apt sources...\n' 1
         local bp_repo="# added by bl-welcome
 # Debian backports
 deb $default_mirror jessie-backports main contrib non-free
@@ -42,12 +42,12 @@ deb $default_mirror jessie-backports main contrib non-free
     fi
 }
 
-if haveBackports
+if haveDebianBackports
 then
     setupPage "$ADD_BACKPORTS_TITLE" $"Debian backports have already been added to apt sources."
 else
     if setupPage "$ADD_BACKPORTS_TITLE" "$ADD_BACKPORTS_TEXT" "$ADD_BACKPORTS_PROMPT" "$ADD_BACKPORTS_EXTRA_ARG"; then
-        if addBackports
+        if addDebianBackports
         then
             say "Successfully added Debian backports.\
  You can add or upgrade packages with the command:
