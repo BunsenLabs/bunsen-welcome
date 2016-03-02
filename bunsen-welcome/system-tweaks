@@ -1,3 +1,15 @@
+#############
+# temporary fix to avoid breaking 'add-debian-backports'
+[[ $- = *u* ]] || {
+    log "bw-welcome has not set -o nounset"
+    say "The package 'bunsen-welcome' has been upgraded.
+This script has changed, so it will have to be restarted.
+Please wait a moment..." 4
+    exec >/dev/tty 2>&1 # so terminalCheck() doesn't open a new terminal
+    exec "$0"
+}
+#############
+
 setupPage $"system tweaks" $"Checking your system for possible improvements..."
 
 say 'PAE KERNEL

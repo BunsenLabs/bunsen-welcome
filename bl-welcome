@@ -1,6 +1,8 @@
 #!/bin/bash
 # Post installation script
 
+set -o nounset # do not accept unset variables
+
 TEXTDOMAIN=bl-welcome
 
 BL_COMMON_LIBDIR='/usr/lib/bunsen/bunsen-common'
@@ -24,17 +26,17 @@ logfile="$log_dir"/bl-welcome.log
 
 log() {
     echo "
-$1
+${1-}
 " >> "$logfile"
 }
 
 warnlog() {
     echo "######## WARNING ########
-$1
+${1-}
 ------------------------------------------------" >> "$logfile"
 }
 
-STEPS_BASIC=('check-repos' 'apt-update' 'apt-upgrade' 'system-tweaks' 'install-libreoffice' 'install-printer-packages' 'install-java-packages' 'add-debian-backports' 'install-flashplugin' 'add-multimedia-repo' 'devel')
+STEPS_BASIC=('check-repos' 'apt-update' 'apt-upgrade' 'system-tweaks' 'install-images-extra' 'install-libreoffice' 'install-printer-packages' 'install-java-packages' 'add-debian-backports' 'install-flashplugin' 'add-multimedia-repo' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 # prints something like: -------[ page 1 of 10 ]-------
@@ -58,7 +60,7 @@ ${1//?/-}
 
 $2
 "
-    [[ $3 ]] || { sleep 1;return 0;}
+    [[ ${3-} ]] || { sleep 1;return 0;}
     prompt "  $3" "${4:-}"
     return $?
 }
@@ -123,7 +125,7 @@ installPage() {
 
 [[ -d /lib/live ]] && exit 0
 
-if [[ $1 = '--firstrun' ]]; then # First run, from autostart
+if [[ ${1-} = '--firstrun' ]]; then # First run, from autostart
     [[ -e $HOME/.config/bunsen/bl-welcome ]] && exit 0
 fi
 

@@ -1,3 +1,13 @@
+bunsen-welcome (8.9-1) bunsen-hydrogen; urgency=high
+
+  * bl-welcome: Add option to install bunsen-images-extra,
+     do not accept unset variables.
+  * system-tweaks: Test for old version of bunsen-welcome during upgrade.
+     (Fixes corrupted backports apt sources bug.)
+  * debian/control: Raise dependency on bunsen-common to >= 8.7.1-1.
+
+ -- John Crawley <john@bunsenlabs.org>  Wed, 02 Mar 2016 11:17:05 +0900
+
 bunsen-welcome (8.8-1) bunsen-hydrogen; urgency=medium
 
   * Restart script if bunsen-welcome is upgraded while running.
