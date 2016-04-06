@@ -1,9 +1,3 @@
-bunsen-welcome (8.10-1) bunsen-hydrogen; urgency=medium
-
-  * Change includes path to /usr/lib/bunsen/welcome.
-
- -- John Crawley <john@bunsenlabs.org>  Mon, 04 Apr 2016 17:41:17 +0900
-
 bunsen-welcome (8.9-1) bunsen-hydrogen; urgency=high
 
   * bl-welcome: Add option to install bunsen-images-extra,
