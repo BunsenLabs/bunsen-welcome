@@ -1,13 +1,13 @@
 UPGRADE_TITLE=$"upgrade installed packages"
 UPGRADE_TEXT=$"We now need to upgrade the installed packages on your system."' '$"If you choose to do this, this script will execute the command:"'
 
-    sudo apt-get upgrade'
+    sudo apt-get upgrade --with-new-pkgs'
 UPGRADE_PROMPT=$"Would you like to upgrade your system now?"
 
 if setupPage "$UPGRADE_TITLE" "$UPGRADE_TEXT" "$UPGRADE_PROMPT"; then
     bw_version=$(checkVersion 'bunsen-welcome')
     log "Current version of bunsen-welcome: $bw_version"
-    safeUpgrade
+    safeUpgrade --with-new-pkgs
     bw_new_version=$(checkVersion 'bunsen-welcome')
     [[ $bw_new_version != $bw_version ]] && {
         log "bunsen-welcome: upgraded to $bw_new_version"
