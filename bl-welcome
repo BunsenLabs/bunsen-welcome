@@ -37,7 +37,7 @@ ${1-}
 }
 
 STEPS_BASIC=('check-repos' 'apt-update' 'apt-upgrade' 'system-tweaks' 'install-images-extra' 'install-java-packages' 'add-debian-backports' 'add-bunsen-backports' 'install-flashplugin' 'devel')
-STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
+STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 # prints something like: -------[ page 1 of 10 ]-------
 header() {
