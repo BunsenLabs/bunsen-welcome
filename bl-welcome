@@ -36,8 +36,8 @@ ${1-}
 ------------------------------------------------" >> "$logfile"
 }
 
-STEPS_BASIC=('check-repos' 'apt-update' 'apt-upgrade' 'system-tweaks' 'install-images-extra' 'install-libreoffice' 'install-printer-packages' 'install-java-packages' 'add-debian-backports' 'install-flashplugin' 'add-multimedia-repo' 'devel')
-STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-ssh-server' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
+STEPS_BASIC=('check-repos' 'apt-update' 'apt-upgrade' 'system-tweaks' 'install-images-extra' 'install-java-packages' 'add-debian-backports' 'add-bunsen-backports' 'install-flashplugin' 'devel')
+STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 # prints something like: -------[ page 1 of 10 ]-------
 header() {
@@ -109,8 +109,8 @@ log "Starting bl-welcome for $USER at $(date)"
 
 createFlag 'bl-welcome'
 
-if [[ ! $(groups) =~ ( |^)sudo( |$) ]]; then
-    echo $"Error: Must be a member of the sudo group to run this script" >&2
+if [[ $( id -u ) -eq 0 ]]; then
+    echo $"Error: This script should not be run directly by root." >&2
     exit 1
 fi
 
