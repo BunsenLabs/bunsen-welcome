@@ -1,0 +1,2 @@
+`pt_br` translation contributed by teixeirazeus in
+https://github.com/teixeirazeus/bunsen-welcome.
