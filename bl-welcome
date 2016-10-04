@@ -109,8 +109,8 @@ log "Starting bl-welcome for $USER at $(date)"
 
 createFlag 'bl-welcome'
 
-if [[ ! $(groups) =~ ( |^)sudo( |$) ]]; then
-    echo $"Error: Must be a member of the sudo group to run this script" >&2
+if [[ $( id -u ) -eq 0 ]]; then
+    echo $"Error: This script should not be run directly by root." >&2
     exit 1
 fi
 
