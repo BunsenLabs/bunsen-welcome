@@ -1,3 +1,9 @@
+bunsen-welcome (8.11.1-1) bunsen-hydrogen; urgency=high
+
+  * bl-welcome: remove broken bunsen-backports and flashplugin entries.
+
+ -- John Crawley <john@bunsenlabs.org>  Tue, 01 Nov 2016 18:16:11 +0900
+
 bunsen-welcome (8.11-1) bunsen-hydrogen; urgency=medium
 
   * Replace user groups test with non-root test.
