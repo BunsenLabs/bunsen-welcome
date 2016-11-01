@@ -2,87 +2,94 @@
 # as it uses the addDebianBackports() and haveDebianBackports() functions.
 
 install_flash_title=$"Flash Browser Plugin"
-install_flash_intro1=$"Some web pages use the proprietary Adobe Flash format to play audio or video.\
- This page will download and install a Flash Player from Adobe or Google.\
+chromium_flash_pkgs=('bunsen-pepperflash' 'chromium')
+firefox_flash_pkgs=('bunsen-pepperflash' 'firefox' 'browser-plugin-freshplayer-pepperflash')
+old_flash_pkgs=('flashplugin-nonfree' 'pepperflashplugin-nonfree')
+
+installFlashplugin() {
+    local intro1=$"Some web pages use the proprietary Adobe Flash format to play audio or video.\
+ This page will download and install a Flash Player from Adobe.\
  It is unfree software which sometimes causes problems, and it is recommended not to install it if you do not need to.
 
 However, while an increasing number of websites, for example Youtube, support alternative technologies, sometimes Flash is the only option.
 "
-adobe_intro=$"The Adobe Flash Player - browser plugin, package: flashplugin-nonfree.
-This stopped at version 11.2, but is still usable, although less safe.
+    local intro2=$"The flash plugin will be downloaded and configured by bunsen-pepperflash,\
+ which will download the PPAPI (\"pepperflash\") plugin directly from Adobe, and check for updates every day.\
+ Chromium will be able to use the downloaded plugin immediately, but Mozilla browsers will need browser-plugin-freshplayer-pepperflash too.
+"
 
- NOTE: Installing this Debian package causes the
- Adobe Flash Player to be downloaded from www.adobe.com.
- The End User License Agreement of the Adobe Flash Player
- is available at www.adobe.com."
+    local chromium_intro=$"The safest option is to install Chromium and use it for Flash content only, continuing to use Firefox for everything else.\
+ Chromium runs flash in a \"sandbox\" which keeps it somewhat isolated from the rest of the system.
+"
 
-pepper_intro=$"The Pepper Flash Player - browser plugin from Google,
-packages: browser-plugin-freshplayer-pepperflash, pepperflashplugin-nonfree
-This is more recent (though still non-free) software.
+    local firefox_intro=$"You can also use Firefox for Flash content along with your other web browsing.\
+ Firefox is not able to \"sandbox\" flash content, so is somewhat less secure, but this option might be more convenient for some people.
+The extra package browser-plugin-freshplayer-pepperflash will be installed.
+"
 
- NOTE: This package will download Chrome from Google,
- and unpack it to make the included Pepper Flash Player available
- for use with Chromium or Iceweasel.
- The end user license agreement is available at Google."
+    local freshplayer_note_backports=$" NOTE: in order to install browser-plugin-freshplayer-pepperflash the Debian Backports repository will have to be enabled."
 
-pepper_note_backports=$" NOTE: in order to install the Pepper Flash Player
- the Debian Backports repository will be enabled."
+    local pkgs_to_install=()
+    local pkgs_to_remove=()
 
-installFlashplugin() {
-    local choice=
+    setupPage "$install_flash_title" "$intro1" $"Would you like to install a Flash Browser Plugin?" 'N' || return 0
+
     local need_backports=false
-    local remove_adobe=false
-    local title="$install_flash_title"
-    local text="$install_flash_intro1"
-    local prompt_arg=Y
     haveDebianBackports || {
-        pepper_intro+=$'\n\n'"$pepper_note_backports"
-        prompt_arg=N
+        firefox_intro+=$'\n'"$freshplayer_note_backports"
         need_backports=true
     }
-    if allInstalled 'flashplugin-nonfree'
-    then
-        text+=$'\n\n'$"You have the old Adobe Flash Plugin installed.\
- Would you like to replace it with the newer Pepper Flash Plugin from Google?
 
-$pepper_intro
-"
+    say "$intro2
+There are two options:
 
-        if setupPage "$title" "$text" $"Replace Adobe Flash Player with Pepperflash?" "$prompt_arg"
-        then
-            choice=pepper
-            remove_adobe=true
-        else
-            return 0
-        fi
-    else
-        setupPage "$title" "$text" $"Would you like to install a Flash Browser Plugin?" 'N' || return 0
-        say "There are two choices:
-1) $adobe_intro
+1) $chromium_intro
+2) $firefox_intro
+Would you like to use Chromium for Flash (safer)
+or use the Pepperflash plugin with Firefox?
 
-2) $pepper_intro
-
-Would you like to install the Pepper Flash Player
-(recommended, but needs the Debian Backports to be enabled)
-or the Adobe Flash Player?
-
-Press 'p' for Pepper or 'a' for Adobe,
+Press 'c' for Chromium or 'f' for Firefox,
 any other key to cancel.
 "
-        local REPLY
-        read -r -p ' "P" for Pepperflash, "A" for Adobe: '
-        case ${REPLY^} in
-        P)
-            choice=pepper;;
-        A)
-            choice=adobe;;
-        *)
-            say $"Cancelled, going on to next page..." 2
-            return 0;;
-        esac
+    local REPLY
+    read -r -p ' "C" for Chromium, "F" for Firefox: '
+    case ${REPLY^} in
+    C)
+        choice=chromium;;
+    F)
+        choice=firefox;;
+    *)
+        say $"Cancelled, going on to next page..." 2
+        return 0;;
+    esac
+
+    echo $'\n'
+
+    for pkg in "${old_flash_pkgs[@]}"
+    do
+        allInstalled "$pkg" && pkgs_to_remove+=("$pkg")
+    done
+    if [[ ${#pkgs_to_remove[@]} -gt 0 ]]
+    then
+        say $"These packages are no longer needed, and will be removed:
+${pkgs_to_remove[*]}"
+        if prompt $"Is this OK?" Y
+        then
+            say "${pkgs_to_remove[*]} will be uninstalled."
+        else
+            say "...going to next page."
+            return 0
+        fi
     fi
+
     case "$choice" in
-    pepper)
+    chromium)
+        for pkg in "${chromium_flash_pkgs[@]}"
+        do
+            allInstalled "$pkg" || pkgs_to_install+=("$pkg")
+        done
+        ;;
+    firefox)
         if $need_backports
         then
             if addDebianBackports
@@ -93,33 +100,48 @@ any other key to cancel.
                 return 1
             fi
         fi
-        if safeInstall 'browser-plugin-freshplayer-pepperflash' 'pepperflashplugin-nonfree'
-        then
-            say 'Sucessfully installed browser-plugin-freshplayer-pepperflash and pepperflashplugin-nonfree.' 2
-        else
-            say '...going to next page.' 2
-            return 1
-        fi
-        if $remove_adobe
-        then
-            safeRemove 'flashplugin-nonfree' || { say 'Continuing in spite of removal problem...' 2; return 1;}
-        fi
-        ;;
-    adobe)
-        if safeInstall 'flashplugin-nonfree'
-        then
-            say 'Sucessfully installed flashplugin-nonfree.' 2
-        else
-            say '...going to next page.' 2
-            return 1
-        fi
+        for pkg in "${firefox_flash_pkgs[@]}"
+        do
+            allInstalled "$pkg" || pkgs_to_install+=("$pkg")
+        done
         ;;
     esac
-}
 
-if allInstalled 'browser-plugin-freshplayer-pepperflash' 'pepperflashplugin-nonfree'
+    [[ ${#pkgs_to_install[@]} -gt 0 ]] || {
+        say "No packages selected for install." 2
+        return 1
+    }
+
+    if safeRemove "${pkgs_to_remove[@]}"
+    then
+        say "Sucessfully removed: ${pkgs_to_remove[*]}" 2
+    else
+        say '...going to next page.' 2
+        return 1
+    fi
+
+    say $"These packages will be installed:
+${pkgs_to_install[*]}"
+    if prompt $"Is this OK?" Y
+    then
+        if safeInstall "${pkgs_to_install[@]}"
+        then
+            say "Flash setup complete." 2
+        else
+            say '...going to next page.' 2
+            return 1
+        fi
+    else
+        say '...going to next page.'
+        return 0
+    fi
+}
+if allInstalled "${firefox_flash_pkgs[@]}"
 then
-    setupPage "$install_flash_title" $"You already have the Pepper Flash Player installed and enabled for Iceweasel."
+    setupPage "$install_flash_title" $"You already have a Flash Plugin installed and configured for Firefox."
+elif allInstalled "${chromium_flash_pkgs[@]}"
+then
+    setupPage "$install_flash_title" $"You already have a Flash Plugin installed and configured for Chromium."
 else
     installFlashplugin
 fi
