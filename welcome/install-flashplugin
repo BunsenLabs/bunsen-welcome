@@ -3,7 +3,7 @@
 
 install_flash_title=$"Flash Browser Plugin"
 chromium_flash_pkgs=('bunsen-pepperflash' 'chromium')
-firefox_flash_pkgs=('bunsen-pepperflash' 'firefox' 'browser-plugin-freshplayer-pepperflash')
+firefox_flash_pkgs=('bunsen-pepperflash' 'firefox-esr' 'browser-plugin-freshplayer-pepperflash')
 old_flash_pkgs=('flashplugin-nonfree' 'pepperflashplugin-nonfree')
 
 installFlashplugin() {
@@ -15,7 +15,7 @@ However, while an increasing number of websites, for example Youtube, support al
 "
     local intro2=$"The flash plugin will be downloaded and configured by bunsen-pepperflash,\
  which will download the PPAPI (\"pepperflash\") plugin directly from Adobe, and check for updates every day.\
- Chromium will be able to use the downloaded plugin immediately, but Mozilla browsers will need browser-plugin-freshplayer-pepperflash too.
+ Configuration files will be installed for Chromium and Firefox.
 "
 
     local chromium_intro=$"The safest option is to install Chromium and use it for Flash content only, continuing to use Firefox for everything else.\
@@ -23,11 +23,11 @@ However, while an increasing number of websites, for example Youtube, support al
 "
 
     local firefox_intro=$"You can also use Firefox for Flash content along with your other web browsing.\
- Firefox is not able to \"sandbox\" flash content, so is somewhat less secure, but this option might be more convenient for some people.
+ Firefox is not able to \"sandbox\" flash content, so is less secure, but this option might be more convenient for some people.
 The extra package browser-plugin-freshplayer-pepperflash will be installed.
 "
 
-    local freshplayer_note_backports=$" NOTE: in order to install browser-plugin-freshplayer-pepperflash the Debian Backports repository will have to be enabled."
+    local freshplayer_note_backports=$"NOTE: in order to install browser-plugin-freshplayer-pepperflash the Debian Backports repository will have to be enabled."
 
     local pkgs_to_install=()
     local pkgs_to_remove=()
@@ -45,6 +45,7 @@ There are two options:
 
 1) $chromium_intro
 2) $firefox_intro
+
 Would you like to use Chromium for Flash (safer)
 or use the Pepperflash plugin with Firefox?
 
@@ -73,7 +74,7 @@ any other key to cancel.
     then
         say $"These packages are no longer needed, and will be removed:
 ${pkgs_to_remove[*]}"
-        if prompt $"Is this OK?" Y
+        if prompt $"Continue?" Y
         then
             say "${pkgs_to_remove[*]} will be uninstalled."
         else
@@ -112,7 +113,7 @@ ${pkgs_to_remove[*]}"
         return 1
     }
 
-    if safeRemove "${pkgs_to_remove[@]}"
+    [[ ${#pkgs_to_remove[@]} -gt 0 ]] && if safeRemove "${pkgs_to_remove[@]}"
     then
         say "Sucessfully removed: ${pkgs_to_remove[*]}" 2
     else
@@ -122,11 +123,11 @@ ${pkgs_to_remove[*]}"
 
     say $"These packages will be installed:
 ${pkgs_to_install[*]}"
-    if prompt $"Is this OK?" Y
+    if prompt $"Continue?" Y
     then
-        if safeInstall "${pkgs_to_install[@]}"
+        if safeInstall "${pkgs_to_install[@]}" "${old_flash_pkgs[@]/%/-}"
         then
-            say "Flash setup complete." 2
+            say "Flash setup complete." 4
         else
             say '...going to next page.' 2
             return 1
