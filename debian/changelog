@@ -1,3 +1,9 @@
+bunsen-welcome (8.12-1) bunsen-hydrogen; urgency=medium
+
+  * Rewrite flash install page to use bunsen-pepperflash package.
+
+ -- John Crawley <john@bunsenlabs.org>  Fri, 11 Nov 2016 13:03:17 +0900
+
 bunsen-welcome (8.11-1) bunsen-hydrogen; urgency=medium
 
   * Replace user groups test with non-root test.
