@@ -3,7 +3,7 @@
 
 install_flash_title=$"Flash Browser Plugin"
 chromium_flash_pkgs=('bunsen-pepperflash' 'chromium')
-firefox_flash_pkgs=('bunsen-pepperflash' 'firefox-esr' 'browser-plugin-freshplayer-pepperflash')
+firefox_flash_pkgs=('bunsen-pepperflash' 'browser-plugin-freshplayer-pepperflash')
 old_flash_pkgs=('flashplugin-nonfree' 'pepperflashplugin-nonfree')
 
 installFlashplugin() {
