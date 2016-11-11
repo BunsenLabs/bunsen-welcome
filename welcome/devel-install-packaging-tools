@@ -7,5 +7,5 @@ if installPage "$DEBIAN_DEVENV_TITLE" "$DEBIAN_DEVENV_TEXT" 'bunsen-meta-packagi
     echo 'DISTRIBUTION=jessie' | sudo tee -a '/etc/pbuilderrc'
     echo 'COMPONENTS="main contrib non-free"' | sudo tee -a '/etc/pbuilderrc'
 
-    prompt "  $DEBIAN_DEVENV_PBUILDER" && sudo pbuilder create
+#    prompt "  $DEBIAN_DEVENV_PBUILDER" && sudo pbuilder create
 fi

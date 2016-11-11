@@ -74,7 +74,7 @@ any other key to cancel.
     then
         say $"These packages are no longer needed, and will be removed:
 ${pkgs_to_remove[*]}"
-        if prompt $"Continue?" Y
+        if prompt $"  Continue?" Y
         then
             say "${pkgs_to_remove[*]} will be uninstalled."
         else
@@ -123,7 +123,7 @@ ${pkgs_to_remove[*]}"
 
     say $"These packages will be installed:
 ${pkgs_to_install[*]}"
-    if prompt $"Continue?" Y
+    if prompt $"  Continue?" Y
     then
         if safeInstall "${pkgs_to_install[@]}" "${old_flash_pkgs[@]/%/-}"
         then
