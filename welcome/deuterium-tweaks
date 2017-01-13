@@ -78,8 +78,8 @@ update_audio(){
     do
         [[ -f $i ]] || errorExit "Failed to find $i. Please fix this before running bl-welcome again."
     done
-    #safeRemove --purge volti xfce4-volumed || { say 'Removing packages failed!' 4; return 1;}
-    #safeInstall volumeicon-alsa || { say 'Failed to install volumeicon-alsa!' 4; return 1;}
+    safeRemove --purge volti xfce4-volumed || { say 'Removing packages failed!' 4; return 1;}
+    safeInstall volumeicon-alsa || { say 'Failed to install volumeicon-alsa!' 4; return 1;}
     say "Updating $autostart..."
     local oldblock='## Start the Conky session (the default conkyrc will run if no sessions have been set)
 (sleep 2s; bl-conky-session --autostart) &
