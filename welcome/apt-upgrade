@@ -13,7 +13,7 @@ if setupPage "$UPGRADE_TITLE" "$UPGRADE_TEXT" "$UPGRADE_PROMPT"; then
         log "bunsen-welcome: upgraded to $bw_new_version"
         say "The package 'bunsen-welcome' has been upgraded.
 This script might have changed, so it will be restarted.
-Please wait a moment..." 4
+Please wait a moment..." 6
         exec >/dev/tty 2>&1 # so terminalCheck() doesn't open a new terminal
         exec "$0"
     }
