@@ -1,3 +1,9 @@
+bunsen-welcome (8.14-1) bunsen-hydrogen; urgency=medium
+
+  * Version bump for deuterium merge
+
+ -- John Crawley <john@bunsenlabs.org>  Mon, 16 Jan 2017 17:39:18 +0900
+
 bunsen-welcome (8.13-2) bunsen-hydrogen; urgency=medium
 
   * Update dependency on bunsen-common, add bunsen-configs.
