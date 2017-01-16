@@ -37,6 +37,13 @@ deb $default_mirror jessie-backports main contrib non-free
             say 'Failed to add Debian backports to apt sources.' pause >&2
             return 1
         }
+        if grep -q 'jessie-backports' /etc/apt/sources.list
+        then
+            say $'\ncommenting out obsolete backports entries in /etc/apt/sources.list...'
+            local bkp_list=/etc/apt/sources.list~bl-welcome-$(date +%y%m%dT%T)~
+            sudo cp /etc/apt/sources.list "$bkp_list"
+            sed '/jessie-backports/ s/^/#/' "$bkp_list" | sudo tee /etc/apt/sources.list >/dev/null
+        fi
         say $'\nupdating apt...\n'
         safeUpdate || say 'Continuing in spite of update problem...' 2
     fi

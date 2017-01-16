@@ -1,3 +1,21 @@
+bunsen-welcome (8.13-2) bunsen-hydrogen; urgency=medium
+
+  * Update dependency on bunsen-common, add bunsen-configs.
+
+ -- John Crawley <john@bunsenlabs.org>  Sat, 14 Jan 2017 15:55:25 +0900
+
+bunsen-welcome (8.13-1) bunsen-hydrogen; urgency=medium
+
+  * Add "deuterium tweaks" page to fix compositing and audio issues.
+
+ -- John Crawley <john@bunsenlabs.org>  Fri, 13 Jan 2017 18:07:00 +0900
+
+bunsen-welcome (8.12-1) bunsen-hydrogen; urgency=medium
+
+  * Rewrite flash install page to use bunsen-pepperflash package.
+
+ -- John Crawley <john@bunsenlabs.org>  Fri, 11 Nov 2016 13:03:17 +0900
+
 bunsen-welcome (8.11.1-1) bunsen-hydrogen; urgency=high
 
   * bl-welcome: remove broken bunsen-backports and flashplugin entries.

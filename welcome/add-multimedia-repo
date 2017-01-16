@@ -61,10 +61,11 @@ Pin-Priority: $dmo_priority
     fi
 
     local dmo_regex='[./]((deb(ian)?-)(multimedia|marillat)|marillat)[. /]?'
+##FIXME need to ignore "translation" entries - or pin them ##
     local dmo_pins=($(apt-cache policy  | sed -nr "/$dmo_regex/s/^[[:space:]]+([0-9]+)[[:space:]]+(http|ftp):.*$/\1/p"))
     for i in "${dmo_pins[@]}"
     do
-        [[ $i = $dmo_priority ]] || {
+        [[ $i = "$dmo_priority" ]] || {
             say 'Failed to pin deb-multimedia correctly.' 2 >&2
             if prompt 'Remove deb-multimedia from apt sources and preferences?'
             then

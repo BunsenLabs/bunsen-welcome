@@ -6,8 +6,8 @@ haveSources() {
 
 addSources() {
     local bkp_list=/etc/apt/sources.list~bl-welcome-$(date +%y%m%dT%T)~
-    sudo mv /etc/apt/sources.list "$bkp_list"
-    sed -r "/debian/ s/(${mirror_regex//\//\\/} +jessie)( +[a-z-]+){0,3} *\$/\1 main contrib non-free/" "$bkp_list" | sudo tee /etc/apt/sources.list >/dev/null
+    sudo cp /etc/apt/sources.list "$bkp_list"
+    sed -r "/debian/ s/(${mirror_regex//\//\\/} +jessie(|\/updates|-updates))( +[a-z-]+){0,3} *\$/\1 main contrib non-free/" "$bkp_list" | sudo tee /etc/apt/sources.list >/dev/null
 }
 
 setupPage $"Check Repositories" $"Checking apt sources list for possible missing components..."

@@ -12,6 +12,9 @@ Please wait a moment..." 4
 
 setupPage $"system tweaks" $"Checking your system for possible improvements..."
 
+autostart="$HOME/.config/openbox/autostart"
+autostart_bkp="${autostart}~bl-welcome-$( date +%FT%T )~"
+
 say 'PAE KERNEL
 ----------
 '
@@ -35,10 +38,9 @@ LAPTOP CHECK
 removeFdpowermon() {
     safeRemove fdpowermon fdpowermon-icons || say 'Continuing in spite of removal problem...' 2
     say $'Commenting out fdpowermon from autostart file...\n' 1
-    local autostart=$HOME/.config/openbox/autostart
-    local autostart_bkp="$HOME/.config/openbox/autostart~bl-welcome-$( date +%FT%T )~"
-    mv "$autostart" "$autostart_bkp"
-    sed '/fdpowermon/s/^/#/' "$autostart_bkp" > "$autostart"
+    [[ -f $autostart ]] || errorExit "Failed to find $autostart. Please fix this before running bl-welcome again."
+    cp "$autostart" "$autostart_bkp"
+    sed -i '/fdpowermon/s/^/#/' "$autostart"
 }
 
 upgradePower() {
