@@ -29,7 +29,7 @@ replace_block(){
         say "Recent startup configuration has changed slightly. Would you like to apply the latest changes to your openbox autostart file?"
         prompt "Update $autostart with latest configs?" || return 0
         say "updating $filepath..."
-        cat <<< "${file_content/"$oldblock"/"$newblock"}" > "$filepath"
+        cat <<< "${file_content/"$oldblock"/$'## EDITED BY BL-WELCOME\n'"$newblock"}" > "$filepath"
         ;;
     *)
         say "$filepath seems to have been edited."
@@ -46,8 +46,7 @@ update_comp(){
 
 ## Start the tint2 session (the default tint2 will run if no sessions have been set)
 (sleep 2s; bl-tint2-session) &'
-    local newblock='## EDITED BY BL-WELCOME
-## Compton
+    local newblock='## Compton
 ## NOTE: composition must be started before tint2
 bl-compositor --start
 
@@ -89,8 +88,7 @@ update_audio(){
 
 ## Volume keys daemon
 xfce4-volumed &'
-    local newblock='## EDITED BY BL-WELCOME
-## Start PulseAudio
+    local newblock='## Start PulseAudio
 ## (This replaces /etc/xdg/autostart/pulseaudio.desktop
 ## which is disabled by ~/.config/autostart/pulseaudio.desktop.)
 ## NOTE: PulseAudio must be started before volumeicon
