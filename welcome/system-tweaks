@@ -21,13 +21,18 @@ say 'PAE KERNEL
 
 if ! grep -wq pae /proc/cpuinfo
 then
-    say $"Your processor does not support PAE."
+    say $"Your processor does not support PAE." 2
 elif dpkg -l | grep -Eq '^ *ii +linux-image-[^ ]*(amd64|pae) '
 then
-    say $"You already have a PAE enabled kernel installed."
+    say $"You already have a PAE enabled kernel installed." 2
 else
-    say $"Your processor supports PAE, but you do not have a PAE enabled kernel installed. Would you like to install one now?" 2
-    promptInstall 'PAE Kernel' 'This script will install a linux kernel that supports PAE.' 'linux-image-686-pae' || say 'Continuing in spite of install problem...' 2
+    say $"Your processor supports PAE, but you do not have a PAE enabled kernel installed."
+    if  prompt "Would you like to install one now?"
+    then
+        promptInstall 'PAE Kernel' 'This script will install a linux kernel that supports PAE.' 'linux-image-686-pae' || say 'Continuing in spite of install problem...' 2
+    else
+        say 'continuing...' 2
+    fi
 fi
 
 say '

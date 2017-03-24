@@ -1,3 +1,9 @@
+bunsen-welcome (8.14.2-1) bunsen-hydrogen; urgency=low
+
+  * welcome/system-tweaks: improve pae kernel dialogue.
+
+ -- John Crawley <john@bunsenlabs.org>  Fri, 24 Mar 2017 11:03:05 +0900
+
 bunsen-welcome (8.14.1-1) bunsen-hydrogen; urgency=high
 
   * deuterium-tweaks: fix bug in parsing of openbox/autostart
