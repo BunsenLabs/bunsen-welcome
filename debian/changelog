@@ -1,3 +1,10 @@
+bunsen-welcome (8.14.3-1) bunsen-hydrogen; urgency=medium
+
+  * bl-welcome: change base url to deb.debian.org,
+     remove ftp from test regex.
+
+ -- John Crawley <john@bunsenlabs.org>  Thu, 27 Apr 2017 13:18:05 +0900
+
 bunsen-welcome (8.14.2-1) bunsen-hydrogen; urgency=low
 
   * welcome/system-tweaks: improve pae kernel dialogue.
