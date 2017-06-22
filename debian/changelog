@@ -1,3 +1,14 @@
+bunsen-welcome (9.0-1) helium; urgency=high
+
+  * Version update for Helium.
+  * Replace Jessie with Stretch in various files.
+  * Remove some obsolete script pages.
+  * Temporarily remove bunsen-backports page.
+  * Remove some obsolete metapackages
+  * Rewrite flash page.
+
+ -- John Crawley <john@bunsenlabs.org>  Thu, 22 Jun 2017 17:08:17 +0900
+
 bunsen-welcome (8.14.3-1) bunsen-hydrogen; urgency=medium
 
   * bl-welcome: change base url to deb.debian.org,

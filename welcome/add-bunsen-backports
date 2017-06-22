@@ -7,16 +7,16 @@ However, BunsenLabs backports are not tested extensively, and are provided on an
 
 This will add the line:
 
- deb http://pkg.bunsenlabs.org/debian jessie-backports main
+ deb http://pkg.bunsenlabs.org/debian stretch-backports main
 
-to /etc/apt/sources.list.d/bunsen-jessie-backports.list,
+to /etc/apt/sources.list.d/bunsen-stretch-backports.list,
 allowing you to upgrade or install packages using that repository."
 ADD_BL_BACKPORTS_PROMPT=$"Would you like to enable the BunsenLabs Backports repositories?"
 ADD_BL_BACKPORTS_EXTRA_ARG='N'
 
 haveBunsenBackports() {
     shopt -s nullglob # in case there is nothing in sources.list.d/
-    grep -qE '^deb +http://pkg.bunsenlabs.org/debian +jessie-backports +main( *| .*)$' /etc/apt/sources.list{,.d/*}
+    grep -qE '^deb +http://pkg.bunsenlabs.org/debian +stretch-backports +main( *| .*)$' /etc/apt/sources.list{,.d/*}
     local retval=$?
     shopt -u nullglob
     return $retval
@@ -29,11 +29,11 @@ addBunsenBackports() {
         say $'\nAdding BunsenLabs backports to apt sources...\n' 1
         local bp_repo="# added by bl-welcome
 # BunsenLabs backports
-deb http://pkg.bunsenlabs.org/debian jessie-backports main
+deb http://pkg.bunsenlabs.org/debian stretch-backports main
 
 "
-        cat <<< "$bp_repo" | sudo tee /etc/apt/sources.list.d/bunsen-jessie-backports.list >/dev/null
-        grep -q '^deb http://pkg.bunsenlabs.org/debian jessie-backports main' /etc/apt/sources.list.d/bunsen-jessie-backports.list || {
+        cat <<< "$bp_repo" | sudo tee /etc/apt/sources.list.d/bunsen-stretch-backports.list >/dev/null
+        grep -q '^deb http://pkg.bunsenlabs.org/debian stretch-backports main' /etc/apt/sources.list.d/bunsen-stretch-backports.list || {
             say 'Failed to add BunsenLabs backports to apt sources.' pause >&2
             return 1
         }
@@ -51,7 +51,7 @@ else
         then
             say "Successfully added BunsenLabs backports.\
  You can add or upgrade packages with the command:
- sudo apt-get install -t jessie-backports <packagename>" pause
+ sudo apt-get install -t stretch-backports <packagename>" pause
         else
             say "Failed to add backports, going to next page." 3
         fi

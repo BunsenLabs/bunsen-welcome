@@ -1,6 +1,3 @@
-# NOTE this page should be sourced AFTER add-debian-backports
-# as it uses the addDebianBackports() and haveDebianBackports() functions.
-
 install_flash_title=$"Flash Browser Plugin"
 chromium_flash_pkgs=('bunsen-pepperflash' 'chromium')
 firefox_flash_pkgs=('bunsen-pepperflash' 'browser-plugin-freshplayer-pepperflash')
@@ -9,9 +6,9 @@ old_flash_pkgs=('flashplugin-nonfree' 'pepperflashplugin-nonfree')
 installFlashplugin() {
     local intro1=$"Some web pages use the proprietary Adobe Flash format to play audio or video.\
  This page will download and install a Flash Player from Adobe.\
- It is unfree software which sometimes causes problems, and it is recommended not to install it if you do not need to.
+ It is unfree software which sometimes causes problems, and it is recommended NOT to install it if you do not need to.
 
-However, while an increasing number of websites, for example Youtube, support alternative technologies, sometimes Flash is the only option.
+However, while an increasing number of websites, support alternative technologies, occasionally Flash is the only option.
 "
     local intro2=$"The flash plugin will be downloaded and configured by bunsen-pepperflash,\
  which will download the PPAPI (\"pepperflash\") plugin directly from Adobe, and check for updates every day.\
@@ -27,18 +24,10 @@ However, while an increasing number of websites, for example Youtube, support al
 The extra package browser-plugin-freshplayer-pepperflash will be installed.
 "
 
-    local freshplayer_note_backports=$"NOTE: in order to install browser-plugin-freshplayer-pepperflash the Debian Backports repository will have to be enabled."
-
     local pkgs_to_install=()
     local pkgs_to_remove=()
 
     setupPage "$install_flash_title" "$intro1" $"Would you like to install a Flash Browser Plugin?" 'N' || return 0
-
-    local need_backports=false
-    haveDebianBackports || {
-        firefox_intro+=$'\n'"$freshplayer_note_backports"
-        need_backports=true
-    }
 
     say "$intro2
 There are two options:
@@ -91,16 +80,6 @@ ${pkgs_to_remove[*]}"
         done
         ;;
     firefox)
-        if $need_backports
-        then
-            if addDebianBackports
-            then
-                say $'Sucessfully added Debian Backports.\n'
-            else
-                say "...going to next page." 2
-                return 1
-            fi
-        fi
         for pkg in "${firefox_flash_pkgs[@]}"
         do
             allInstalled "$pkg" || pkgs_to_install+=("$pkg")

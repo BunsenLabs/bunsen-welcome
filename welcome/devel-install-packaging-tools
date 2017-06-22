@@ -3,8 +3,8 @@ DEBIAN_DEVENV_TEXT=$"Would you like to install a suite of packages used for deve
 DEBIAN_DEVENV_PBUILDER=$"Create pbuilder environment now?"
 
 if installPage "$DEBIAN_DEVENV_TITLE" "$DEBIAN_DEVENV_TEXT" 'bunsen-meta-packaging'; then
-    echo 'MIRRORSITE=http://httpredir.debian.org/debian' | sudo tee '/etc/pbuilderrc'
-    echo 'DISTRIBUTION=jessie' | sudo tee -a '/etc/pbuilderrc'
+    echo "MIRRORSITE=${default_mirror}" | sudo tee '/etc/pbuilderrc'
+    echo 'DISTRIBUTION=stretch' | sudo tee -a '/etc/pbuilderrc'
     echo 'COMPONENTS="main contrib non-free"' | sudo tee -a '/etc/pbuilderrc'
 
 #    prompt "  $DEBIAN_DEVENV_PBUILDER" && sudo pbuilder create
