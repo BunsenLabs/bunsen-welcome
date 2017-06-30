@@ -4,27 +4,40 @@ LAMP_1_TEXT=$"Would you like to install Apache2 webserver with PHP scripting sup
 
 # LAMP part 2
 LAMP_2_TITLE=$"INSTALL LAMP STACK - CONTINUED"
-LAMP_2_TEXT=$"Would you like to create a symlink within Apache's document root directory to a directory within your home directory? If you do this, you will be able to access your web development documents from the address:""
+LAMP_2_TEXT=$"Would you like to allow .htaccess files under /var/www/html, enable modrewrite and create a symlink within the webroot directory to a directory within your home directory?
+If you do this, you will be able to access your web development documents from the address:""
 
   http://localhost/$USER/
 
 "$"The file path will be: ""$HOME/htdocs
 
 "$"Note: if this system is used by multiple users, you may want to consider using apache2's 'userdir' module instead."
-LAMP_2_PROMPT=$"Would you like to create the symlink?"
+LAMP_2_PROMPT=$"Would you like to do the configuration?"
 
+configureApache() {
+    a2d='/etc/apache2/sites-available/000-default.conf'
+    allow_override='<Directory "/var/www/html">
+AllowOverride All
+</Directory>
+</VirtualHost>
+'
+    if [[ -f $a2d ]]; then
+        say "allowing .htaccess under /var/www/html in $a2d"
+        sudo sed -i "s/</VirtualHost>/${allow_override}/" "$a2d" || { say "failed to edit $a2d"; return 1;}
+        say "enabling modrewrite"
+        sudo a2enmod rewrite || { say 'failed: sudo a2enmod rewrite'; return 1;}
+        sudo systemctl restart apache2 || { say 'failed: sudo systemctl restart apache2'; return 1;}
+    fi
+    say 'making symlink'
+    mkdir -p "$HOME/htdocs" || { say "failed to create directory $HOME/htdocs"; return 1;}
+    sudo ln -s "$HOME/htdocs" "/var/www/html/$USER" || { say "failed to create symlink"; return 1;}
+
+}
 
 if installPage "$LAMP_1_TITLE" "$LAMP_1_TEXT" 'bunsen-meta-lamp'; then
-    # Enable modrewrite
-    a2d='/etc/apache2/sites-available/default'
-    if [[ -f $a2d ]]; then
-        sudo sed -i '\|<Directory /var/www/>|,\|</Directory>| s/AllowOverride None/AllowOverride All/' "$a2d"
-        sudo a2enmod rewrite
-        sudo systemctl restart apache2
-    fi
-
     if setupPage "$LAMP_2_TITLE" "$LAMP_2_TEXT" "$LAMP_2_PROMPT"; then
-        mkdir -p "$HOME/htdocs"
-        sudo ln -s "$HOME/htdocs" "/var/www/$USER"
+        configureApache || say "Configuring the default site for Apache2 failed. Check $logfile for hints." pause
     fi
+else
+    say 'Installing the lamp stack failed.'
 fi

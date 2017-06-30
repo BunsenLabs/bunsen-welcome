@@ -13,6 +13,14 @@ if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
     exit 1
 fi
 
+# usage: source_page pagename
+sourcePage() {
+	if ! . "$BL_WELCOME_LIBDIR/$1"; then
+		echo $"Error: Failed to source $1 in $BL_WELCOME_LIBDIR" >&2
+		exit 1
+	fi
+}
+
 # default url for added Debian backports etc.
 default_mirror='http://deb.debian.org/debian'
 
@@ -118,12 +126,12 @@ fi
 STEP=1
 if [[ -e $HOME/.config/bunsen/bl-welcome-understood ]]; then
     (( STEPS = ${#STEPS_BASIC[@]} + ${#STEPS_DEVEL[@]} + 2 )) # 2 is intro and fini
-    . "$BL_WELCOME_LIBDIR/intro"
+    sourcePage intro
 else
     (( STEPS = ${#STEPS_BASIC[@]} + ${#STEPS_DEVEL[@]} + 3 )) # 3 is intro, warning and fini
-    . "$BL_WELCOME_LIBDIR/intro"
+    sourcePage intro
     ((STEP++))
-    . "$BL_WELCOME_LIBDIR/warning"
+    sourcePage warning
     createFlag 'bl-welcome-understood'
 fi
 sleep 2
@@ -134,16 +142,16 @@ DEVEL=false
 
 for curStep in "${STEPS_BASIC[@]}"; do
     ((STEP++))
-    . "$BL_WELCOME_LIBDIR/$curStep"
+    sourcePage "$curStep"
 done
 
 if $DEVEL; then
     for curStep in "${STEPS_DEVEL[@]}"; do
         ((STEP++))
-        . "$BL_WELCOME_LIBDIR/$curStep"
+        sourcePage "$curStep"
     done
 fi
 STEP=$STEPS
-. "$BL_WELCOME_LIBDIR/fini"
+sourcePage fini
 
 exit 0

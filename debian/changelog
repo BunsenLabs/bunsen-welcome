@@ -1,3 +1,15 @@
+bunsen-welcome (9.0.1-1) helium; urgency=medium
+
+  * lamp-stack: update apache configuration editing.
+
+ -- John Crawley <john@bunsenlabs.org>  Fri, 30 Jun 2017 17:06:02 +0900
+
+bunsen-welcome (9.0-2) helium; urgency=medium
+
+  * bunsen-meta-lamp: change dependencies on php5* to php*
+
+ -- John Crawley <john@bunsenlabs.org>  Sun, 25 Jun 2017 15:24:45 +0900
+
 bunsen-welcome (9.0-1) helium; urgency=high
 
   * Version update for Helium.
