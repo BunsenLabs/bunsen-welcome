@@ -32,7 +32,7 @@ addDebianBackports() {
 deb $default_mirror stretch-backports main contrib non-free
 
 "
-        cat <<< "$bp_repo" | sudo tee /etc/apt/sources.list.d/debian-stretch-backports.list >/dev/null
+        sudo tee <<< "$bp_repo" /etc/apt/sources.list.d/debian-stretch-backports.list >/dev/null
         grep -q "^deb $default_mirror stretch-backports main contrib non-free\$" /etc/apt/sources.list.d/debian-stretch-backports.list || {
             say 'Failed to add Debian backports to apt sources.' pause >&2
             return 1

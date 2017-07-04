@@ -18,7 +18,7 @@ replace_block(){
     case "$file_content" in
     *"$newblock"*"$oldblock"*|*"$oldblock"*"$newblock"*)
         say "$filepath might be corrupted."
-        [[ $ref_file ]] && say " Please compare it with $ref_file and edit necessary." 4
+        [[ $ref_file ]] && say " Please compare it with $ref_file and edit if necessary." 4
         return 1
         ;;
     *"$newblock"*)

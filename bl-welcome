@@ -13,12 +13,12 @@ if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
     exit 1
 fi
 
-# usage: source_page pagename
 sourcePage() {
-	if ! . "$BL_WELCOME_LIBDIR/$1"; then
-		echo $"Error: Failed to source $1 in $BL_WELCOME_LIBDIR" >&2
-		exit 1
-	fi
+    if [[ ! -r "$BL_WELCOME_LIBDIR/$1" ]]; then
+        echo $"Error: Unable to read $1 in $BL_WELCOME_LIBDIR" >&2
+        exit 1
+    fi
+    . "$BL_WELCOME_LIBDIR/$1"
 }
 
 # default url for added Debian backports etc.
@@ -76,12 +76,14 @@ $2
 # Common function for most install scripts. USE THIS unless you really can't.
 # Usage: installPage title text package...
 # example: installPage 'LibreOffice suite' 'This will install libreoffice' 'libreoffice'
+# Returns 0 if installation suceeds, 2 if package(s) already installed
+# or install declined, 1 if there was an error.
 installPage() {
     local title=$"install"" $1"
     local text="$1 has already been installed."
     allInstalled "${@:3}" && {
         setupPage "$title" "$text"
-        return 0
+        return 2
     }
     text="$2"$'\n\n'$"If you choose to do this, the following packages will be installed:""
 
@@ -99,6 +101,8 @@ installPage() {
         else
             say '...going to next page.' 1
         fi
+    else
+        return 2
     fi
     return 1
 }

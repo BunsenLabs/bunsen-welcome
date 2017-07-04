@@ -16,28 +16,39 @@ LAMP_2_PROMPT=$"Would you like to do the configuration?"
 
 configureApache() {
     a2d='/etc/apache2/sites-available/000-default.conf'
-    allow_override='<Directory "/var/www/html">
-AllowOverride All
-</Directory>
+    search='</VirtualHost>'
+    replace='    <Directory "/var/www/html">
+        AllowOverride All
+    </Directory>
 </VirtualHost>
 '
     if [[ -f $a2d ]]; then
         say "allowing .htaccess under /var/www/html in $a2d"
-        sudo sed -i "s/</VirtualHost>/${allow_override}/" "$a2d" || { say "failed to edit $a2d"; return 1;}
+        file_content="$(<"$a2d")"
+        case "$file_content" in
+        *"$replace"*)
+            say "$a2d: already edited." 3
+            ;;
+        *"$search"*)
+            say "configuring $a2d..." 2
+            sudo tee <<< "${file_content/"$search"/$'## EDITED BY BL-WELCOME\n'"$replace"}" "$a2d" >/dev/null || { say "failed to edit $a2d" 4; return 1;}
+            ;;
+        *)
+            say "$search not found in $a2d. Please check with a text editor."
+            ;;
+        esac
         say "enabling modrewrite"
-        sudo a2enmod rewrite || { say 'failed: sudo a2enmod rewrite'; return 1;}
-        sudo systemctl restart apache2 || { say 'failed: sudo systemctl restart apache2'; return 1;}
+        sudo a2enmod rewrite || { say 'failed: sudo a2enmod rewrite' 4; return 1;}
+        sudo systemctl restart apache2 || { say 'failed: sudo systemctl restart apache2' 4; return 1;}
     fi
     say 'making symlink'
-    mkdir -p "$HOME/htdocs" || { say "failed to create directory $HOME/htdocs"; return 1;}
-    sudo ln -s "$HOME/htdocs" "/var/www/html/$USER" || { say "failed to create symlink"; return 1;}
+    mkdir -p "$HOME/htdocs" || { say "failed to create directory $HOME/htdocs" 4; return 1;}
+    sudo ln -s "$HOME/htdocs" "/var/www/html/$USER" || { say "failed to create symlink" 4; return 1;}
 
 }
 
 if installPage "$LAMP_1_TITLE" "$LAMP_1_TEXT" 'bunsen-meta-lamp'; then
-    if setupPage "$LAMP_2_TITLE" "$LAMP_2_TEXT" "$LAMP_2_PROMPT"; then
+    if setupPage "$LAMP_2_TITLE" "$LAMP_2_TEXT" "$LAMP_2_PROMPT" 'N'; then
         configureApache || say "Configuring the default site for Apache2 failed. Check $logfile for hints." pause
     fi
-else
-    say 'Installing the lamp stack failed.'
 fi

@@ -1,3 +1,12 @@
+bunsen-welcome (9.0.2-1) helium; urgency=medium
+
+  * bl-welcome: sourcePage(): debug source test.
+  * bl-welcome: installPage(): adjust return values.
+  * devel-install-lamp-stack: debug text replacement.
+  * Do some code refactoring.
+
+ -- John Crawley <john@bunsenlabs.org>  Tue, 04 Jul 2017 15:39:19 +0900
+
 bunsen-welcome (9.0.1-1) helium; urgency=medium
 
   * lamp-stack: update apache configuration editing.

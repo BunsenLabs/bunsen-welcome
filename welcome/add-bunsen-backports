@@ -32,7 +32,7 @@ addBunsenBackports() {
 deb http://pkg.bunsenlabs.org/debian stretch-backports main
 
 "
-        cat <<< "$bp_repo" | sudo tee /etc/apt/sources.list.d/bunsen-stretch-backports.list >/dev/null
+        sudo tee <<< "$bp_repo" /etc/apt/sources.list.d/bunsen-stretch-backports.list >/dev/null
         grep -q '^deb http://pkg.bunsenlabs.org/debian stretch-backports main' /etc/apt/sources.list.d/bunsen-stretch-backports.list || {
             say 'Failed to add BunsenLabs backports to apt sources.' pause >&2
             return 1
