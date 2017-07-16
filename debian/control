@@ -15,36 +15,11 @@ Description: BunsenLabs welcome script
  Post installation script for BunsenLabs Linux,
  to install some optional extra packages.
 
-Package: bunsen-meta-printer-support
-Architecture: all
-Depends:
- ${misc:Depends}, cups, printer-driver-cups-pdf, system-config-printer, printer-driver-hpijs, hplip
-Description: BunsenLabs printer support meta package
- Installs various printer packages to enable printer support.
-
 Package: bunsen-meta-java
 Architecture: all
 Depends: ${misc:Depends}, openjdk-8-jre, icedtea-8-plugin
 Description: BunsenLabs java meta package
  Installs various java packages.
-
-Package: bunsen-meta-vcs
-Architecture: all
-Depends:
- ${misc:Depends},
- git,
- git-gui,
- git-cvs,
- git-svn,
- git-email,
- mercurial,
- subversion,
- subversion-tools,
- bzr,
- bzrtools,
- cvs
-Description: BunsenLabs version control meta package
- Installs various version control tools.
 
 Package: bunsen-meta-lamp
 Architecture: all
@@ -66,6 +41,12 @@ Depends:
 Description: BunsenLabs lamp meta package
  Installs various web server tools.
 
+Package: bunsen-meta-libreoffice
+Architecture: all
+Depends: ${misc:Depends}, libreoffice, libreoffice-gtk
+Description: BunsenLabs libreoffice meta package
+ Installs libreoffice and associated gtk theme.
+
 Package: bunsen-meta-packaging
 Architecture: all
 Depends:
@@ -86,3 +67,34 @@ Depends:
  quilt
 Description: BunsenLabs packaging meta package
  Installs various Debian packaging tools.
+
+Package: bunsen-meta-printer-support
+Architecture: all
+Depends:
+ ${misc:Depends}, cups, printer-driver-cups-pdf, system-config-printer, printer-driver-hpijs, hplip
+Description: BunsenLabs printer support meta package
+ Installs various printer packages to enable printer support.
+
+Package: bunsen-meta-ssh
+Architecture: all
+Depends: ${misc:Depends}, openssh-server, openssh-client
+Description: BunsenLabs ssh meta package
+ Installs ssh server and various ssh tools.
+
+Package: bunsen-meta-vcs
+Architecture: all
+Depends:
+ ${misc:Depends},
+ git,
+ git-gui,
+ git-cvs,
+ git-svn,
+ git-email,
+ mercurial,
+ subversion,
+ subversion-tools,
+ bzr,
+ bzrtools,
+ cvs
+Description: BunsenLabs version control meta package
+ Installs various version control tools.
