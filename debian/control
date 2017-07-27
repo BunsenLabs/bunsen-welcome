@@ -43,7 +43,7 @@ Description: BunsenLabs lamp meta package
 
 Package: bunsen-meta-libreoffice
 Architecture: all
-Depends: ${misc:Depends}, libreoffice, libreoffice-gtk
+Depends: ${misc:Depends}, libreoffice, libreoffice-gtk2, libreoffice-systray
 Description: BunsenLabs libreoffice meta package
  Installs libreoffice and associated gtk theme.
 
