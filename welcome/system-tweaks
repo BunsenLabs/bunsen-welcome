@@ -14,7 +14,8 @@ elif dpkg -l | grep -Eq '^ *ii +linux-image-[^ ]*(amd64|pae) '
 then
     say $"You already have a PAE enabled kernel installed." 2
 else
-    say $"Your processor supports PAE, but you do not have a PAE enabled kernel installed."
+    say $"Your processor supports PAE, but you do not have a PAE enabled kernel installed.\
+ Depending on your hardware, a PAE kernel might, or might not, improve performance."
     if  prompt "Would you like to install one now?"
     then
         promptInstall 'PAE Kernel' 'This script will install a linux kernel that supports PAE.' 'linux-image-686-pae' || say 'Continuing in spite of install problem...' 2
