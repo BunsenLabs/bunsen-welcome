@@ -1,3 +1,9 @@
+bunsen-welcome (9.2-1) helium; urgency=medium
+
+  * Add Dropbox install page.
+
+ -- John Crawley <john@bunsenlabs.org>  Tue, 14 Nov 2017 18:04:46 +0900
+
 bunsen-welcome (9.1-1) helium; urgency=medium
 
   * bl-welcome: Add bunsen-backports step.
