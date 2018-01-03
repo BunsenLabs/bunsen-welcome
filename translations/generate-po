@@ -1,10 +1,10 @@
 #!/bin/bash
 
-FILE_PO='cb-welcome.po'
+FILE_PO='bl-welcome.po'
 
-bash --dump-po-strings ../cb-welcome > "$FILE_PO"
+bash --dump-po-strings ../bl-welcome > "$FILE_PO"
 
-for curFile in ../lib-cb-welcome/*; do
+for curFile in ../welcome/*; do
     bash --dump-po-strings "$curFile" >> "$FILE_PO"
 done
 

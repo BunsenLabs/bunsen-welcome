@@ -1,0 +1,311 @@
+#: ../bl-welcome:12
+msgid "Error: Failed to source bl-include.cfg in $BL_COMMON_LIBDIR"
+msgstr ""
+#: ../bl-welcome:18
+msgid "Error: Unable to read $1 in $BL_WELCOME_LIBDIR"
+msgstr ""
+#: ../bl-welcome:54
+msgid "page %d of %d"
+msgstr ""
+#: ../bl-welcome:82
+msgid "install"
+msgstr ""
+#: ../bl-welcome:88
+msgid "If you choose to do this, the following packages will be installed:"
+msgstr ""
+#: ../bl-welcome:92
+msgid "Note: additional packages listed as dependencies will also be installed."
+msgstr ""
+#: ../bl-welcome:94
+msgid "Would you like to install"
+msgstr ""
+#: ../bl-welcome:125
+msgid "Error: This script should not be run directly by root."
+msgstr ""
+#: ../welcome/add-bunsen-backports:1
+msgid "BunsenLabs Backports"
+msgstr ""
+#: ../welcome/add-bunsen-backports:2
+msgid ""
+"BunsenLabs backports are packages taken from other Debian or Debian-based releases, or other sources such as GitHub, adjusted and recompiled for usage on Debian stable. If you enable this repository you will be able to upgrade some programs to newer versions, or install some programs not available in Debian stable.\n"
+"\n"
+"However, BunsenLabs backports are not tested extensively, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. It is therefore recommended to consider carefully whether you need a backported package before choosing to install it.\n"
+"\n"
+"This will add the line:\n"
+"\n"
+" deb http://pkg.bunsenlabs.org/debian stretch-backports main\n"
+"\n"
+"to /etc/apt/sources.list.d/bunsen-stretch-backports.list,\n"
+"allowing you to upgrade or install packages using that repository."
+msgstr ""
+#: ../welcome/add-bunsen-backports:14
+msgid "Would you like to enable the BunsenLabs Backports repositories?"
+msgstr ""
+#: ../welcome/add-bunsen-backports:47
+msgid "BunsenLabs backports have already been added to apt sources."
+msgstr ""
+#: ../welcome/add-debian-backports:1
+msgid "Debian Backports"
+msgstr ""
+#: ../welcome/add-debian-backports:2
+msgid ""
+"Debian backports are packages taken from the next Debian release (called \\\"testing\\\"), adjusted and recompiled for usage on Debian stable. If you enable this repository you will be able to upgrade some programs to newer versions, or install some programs not available in Debian stable.\n"
+"\n"
+"However, backports cannot be tested as extensively as Debian stable, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. It is therefore recommended to only select single backported packages that fit your needs, and not use all available backports.\n"
+"\n"
+"This will add the line:\n"
+"\n"
+" deb $default_mirror stretch-backports main contrib non-free\n"
+"\n"
+"to /etc/apt/sources.list.d/debian-stretch-backports.list,\n"
+"allowing you to upgrade or install packages using that repository."
+msgstr ""
+#: ../welcome/add-debian-backports:14
+msgid "Would you like to enable the Debian Backports repositories?"
+msgstr ""
+#: ../welcome/add-debian-backports:54
+msgid "Debian backports have already been added to apt sources."
+msgstr ""
+#: ../welcome/add-multimedia-repo:1
+msgid "Deb-Multimedia Repository"
+msgstr ""
+#: ../welcome/add-multimedia-repo:2
+msgid ""
+"The third-party deb-multimedia repositories contain media-related packages that may be newer than those in the Debian repositories, or not available at all. On the other hand, packages from these repositories can cause problems for some users, and are not supported by Debian in any way. Do not add these repositories unless you need some specific package unobtainable from Debian. If in doubt, you need not add them now - you can do it later if necessary, by running bl-welcome again.\n"
+"\n"
+"This will add the line:\n"
+"    deb http://www.deb-multimedia.org jessie main non-free\n"
+"to /etc/apt/sources.list.d/deb-multi.list, with apt-pinning of 100,\n"
+"allowing you to upgrade or install packages using that repository."
+msgstr ""
+#: ../welcome/add-multimedia-repo:11
+msgid "Would you like to add the deb-multimedia repositories? "
+msgstr ""
+#: ../welcome/add-multimedia-repo:113
+msgid "The deb-multimedia repository has already been added."
+msgstr ""
+#: ../welcome/apt-update:1
+msgid "update software sources"
+msgstr ""
+#: ../welcome/apt-update:2
+msgid "Before we can continue, we need to make sure your system's software sources are up-to-date."
+msgstr ""
+#: ../welcome/apt-update:2
+msgid "This script will now execute the command:"
+msgstr ""
+#: ../welcome/apt-update:5
+msgid "Would you like to update your software sources?"
+msgstr ""
+#: ../welcome/apt-upgrade:1
+msgid "upgrade installed packages"
+msgstr ""
+#: ../welcome/apt-upgrade:2
+msgid "We now need to upgrade the installed packages on your system."
+msgstr ""
+#: ../welcome/apt-upgrade:2
+msgid "If you choose to do this, this script will execute the command:"
+msgstr ""
+#: ../welcome/apt-upgrade:5
+msgid "Would you like to upgrade your system now?"
+msgstr ""
+#: ../welcome/check-repos:13
+msgid "Check Repositories"
+msgstr ""
+#: ../welcome/check-repos:13
+msgid "Checking apt sources list for possible missing components..."
+msgstr ""
+#: ../welcome/check-repos:17
+msgid "OK - all components found."
+msgstr ""
+#: ../welcome/check-repos:19
+msgid "A normal BunsenLabs setup uses the 'contrib' and 'non-free' components of the Debian repositories, but they seem to be missing from your apt sources list. Without them you will be unable to install some packages, for example the Flash Plugins. Would you like to add 'contrib' and 'non-free' to your sources list?"
+msgstr ""
+#: ../welcome/check-repos:27
+msgid "Fixed!"
+msgstr ""
+#: ../welcome/check-repos:29
+msgid ""
+"Editing sources list failed. This script will exit.\n"
+"Please open /etc/apt/sources.list in a text editor and check the entries before running bl-welcome again."
+msgstr ""
+#: ../welcome/check-repos:34
+msgid "Continuing anyway..."
+msgstr ""
+#: ../welcome/deuterium-tweaks:1
+msgid "Deuterium tweaks"
+msgstr ""
+#: ../welcome/deuterium-tweaks:1
+msgid "Checking your system for other possible improvements..."
+msgstr ""
+#: ../welcome/devel:1
+msgid "INSTALL DEVELOPMENT PACKAGES"
+msgstr ""
+#: ../welcome/devel:2
+msgid "The remaining screens will offer you the chance to install less commonly used packages used for developing software."
+msgstr ""
+#: ../welcome/devel:3
+msgid "Would you like to view these options/screens?"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:2
+msgid "LAMP stack"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:3
+msgid "Would you like to install Apache2 webserver with PHP scripting support and MySQL database server?"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:6
+msgid "INSTALL LAMP STACK - CONTINUED"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:7
+msgid ""
+"Would you like to allow .htaccess files under /var/www/html, enable modrewrite and create a symlink within the webroot directory to a directory within your home directory?\n"
+"If you do this, you will be able to access your web development documents from the address:"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:12
+msgid "The file path will be: "
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:14
+msgid "Note: if this system is used by multiple users, you may want to consider using apache2's 'userdir' module instead."
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:15
+msgid "Would you like to do the configuration?"
+msgstr ""
+#: ../welcome/devel-install-packaging-tools:1
+msgid "debian packaging tools"
+msgstr ""
+#: ../welcome/devel-install-packaging-tools:2
+msgid "Would you like to install a suite of packages used for developing Debian packages?"
+msgstr ""
+#: ../welcome/devel-install-packaging-tools:3
+msgid "Create pbuilder environment now?"
+msgstr ""
+#: ../welcome/devel-install-ssh-server:1
+msgid "ssh"
+msgstr ""
+#: ../welcome/devel-install-ssh-server:2
+msgid "OpenSSH is a FREE version of the SSH connectivity tools that technical users of the Internet rely on. Would you like to install OpenSSH?"
+msgstr ""
+#: ../welcome/devel-install-version-control-tools:1
+msgid "version control tools"
+msgstr ""
+#: ../welcome/devel-install-version-control-tools:2
+msgid "Would you like to install some commonly used version control tools?"
+msgstr ""
+#: ../welcome/install-dropbox:1
+msgid "Dropbox"
+msgstr ""
+#: ../welcome/install-dropbox:46
+msgid "  Install python-gpgme?"
+msgstr ""
+#: ../welcome/install-flashplugin:1
+msgid "Flash Browser Plugin"
+msgstr ""
+#: ../welcome/install-flashplugin:7
+msgid ""
+"Some web pages use the proprietary Adobe Flash format to play audio or video. This page will download and install a Flash Player from Adobe. It is unfree software which sometimes causes problems, and it is recommended NOT to install it if you do not need to.\n"
+"\n"
+"However, while an increasing number of websites, support alternative technologies, occasionally Flash is the only option.\n"
+""
+msgstr ""
+#: ../welcome/install-flashplugin:13
+msgid ""
+"The flash plugin will be downloaded and configured by bunsen-pepperflash, which will download the PPAPI (\\\"pepperflash\\\") plugin directly from Adobe, and check for updates every day. Configuration files will be installed for Chromium and Firefox.\n"
+""
+msgstr ""
+#: ../welcome/install-flashplugin:18
+msgid ""
+"The safest option is to install Chromium and use it for Flash content only, continuing to use Firefox for everything else. Chromium runs flash in a \\\"sandbox\\\" which keeps it somewhat isolated from the rest of the system.\n"
+""
+msgstr ""
+#: ../welcome/install-flashplugin:22
+msgid ""
+"You can also use Firefox for Flash content along with your other web browsing. Firefox is not able to \\\"sandbox\\\" flash content, so is less secure, but this option might be more convenient for some people.\n"
+"The extra package browser-plugin-freshplayer-pepperflash will be installed.\n"
+""
+msgstr ""
+#: ../welcome/install-flashplugin:30
+msgid "Would you like to install a Flash Browser Plugin?"
+msgstr ""
+#: ../welcome/install-flashplugin:52
+msgid "Cancelled, going on to next page..."
+msgstr ""
+#: ../welcome/install-flashplugin:64
+msgid ""
+"These packages are no longer needed, and will be removed:\n"
+"${pkgs_to_remove[*]}"
+msgstr ""
+#: ../welcome/install-flashplugin:66
+msgid "  Continue?"
+msgstr ""
+#: ../welcome/install-flashplugin:103
+msgid ""
+"These packages will be installed:\n"
+"${pkgs_to_install[*]}"
+msgstr ""
+#: ../welcome/install-flashplugin:105
+msgid "  Continue?"
+msgstr ""
+#: ../welcome/install-flashplugin:121
+msgid "You already have a Flash Plugin installed and configured for Firefox."
+msgstr ""
+#: ../welcome/install-flashplugin:124
+msgid "You already have a Flash Plugin installed and configured for Chromium."
+msgstr ""
+#: ../welcome/install-images-extra:1
+msgid "Bunsen Extra Images"
+msgstr ""
+#: ../welcome/install-images-extra:2
+msgid "By default, BunsenLabs comes with a minimal set of background images. Would you like to install the larger collection of wallpapers etc. from the BunsenLabs Extra Images package? (It will be an 90MB download.)"
+msgstr ""
+#: ../welcome/install-java-packages:1
+msgid "Java Support"
+msgstr ""
+#: ../welcome/install-java-packages:2
+msgid "By default, BunsenLabs does not come with a Java Runtime Environment. Would you like to install Java support now?"
+msgstr ""
+#: ../welcome/install-libreoffice:1
+msgid "LibreOffice Suite"
+msgstr ""
+#: ../welcome/install-libreoffice:2
+msgid "By default, BunsenLabs comes with LibreOffice Writer only. Would you like to install the full LibreOffice suite?"
+msgstr ""
+#: ../welcome/install-printer-packages:1
+msgid "printer support"
+msgstr ""
+#: ../welcome/install-printer-packages:2
+msgid "By default, BunsenLabs does not come with printer support. Would you like to add printer support now?"
+msgstr ""
+#: ../welcome/intro:10
+msgid ""
+"welcome to BunsenLabs Linux! :)\n"
+"\n"
+"This is an optional post-installation script, designed to help you configure your new Linux installation and get the most out of BunsenLabs.\n"
+"\n"
+"You will now be presented with a series of options. You will need your password, so please have it ready.\n"
+"\n"
+"You will also need a working internet connection, so if you have not done so already, please configure your internet connection.\n"
+"\n"
+"If you do not want to run this script now, you can run it at a later date by entering the command \\\"bl-welcome\\\" in your terminal.\n"
+"\n"
+"(Messages will be saved to "
+msgstr ""
+#: ../welcome/intro:23
+msgid "  Hit \\\"Enter\\\" to continue, or \\\"q\\\" to quit..."
+msgstr ""
+#: ../welcome/system-tweaks:1
+msgid "system tweaks"
+msgstr ""
+#: ../welcome/system-tweaks:1
+msgid "Checking your system for possible improvements..."
+msgstr ""
+#: ../welcome/system-tweaks:12
+msgid "Your processor does not support PAE."
+msgstr ""
+#: ../welcome/system-tweaks:15
+msgid "You already have a PAE enabled kernel installed."
+msgstr ""
+#: ../welcome/system-tweaks:17
+msgid "Your processor supports PAE, but you do not have a PAE enabled kernel installed. Depending on your hardware, a PAE kernel might, or might not, improve performance."
+msgstr ""
+#: ../welcome/warning:20
+msgid "  Enter \\\"I understand\\\" to continue. (Q to quit) "
+msgstr ""
