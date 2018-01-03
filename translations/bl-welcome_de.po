@@ -1,0 +1,361 @@
+#: ../bl-welcome:12
+msgid "Error: Failed to source bl-include.cfg in $BL_COMMON_LIBDIR"
+msgstr "Fehler: Die Quelle bl-include.cfg in $BL_COMMON_LIBDIR konnte nicht gefunden werden"
+#: ../bl-welcome:18
+msgid "Error: Unable to read $1 in $BL_WELCOME_LIBDIR"
+msgstr "Fehler: $1 kann in $BL_WELCOME_LIBDIR nicht gelesen werden"
+#: ../bl-welcome:54
+msgid "page %d of %d"
+msgstr "Seite %d von %d"
+#: ../bl-welcome:82
+msgid "install"
+msgstr "Installieren"
+#: ../bl-welcome:88
+msgid "If you choose to do this, the following packages will be installed:"
+msgstr "Wenn du das wählst werden folgende Pakete installiert:"
+#: ../bl-welcome:92
+msgid "Note: additional packages listed as dependencies will also be installed."
+msgstr "Hinweis: zusätzliche, als Abhängigkeiten gelistete, Pakete werden ebenfalls installiert."
+#: ../bl-welcome:94
+msgid "Would you like to install"
+msgstr "Möchtest du das installieren:"
+#: ../bl-welcome:125
+msgid "Error: This script should not be run directly by root."
+msgstr "Fehler: Dieses Skript sollte nicht direkt als root ausgeführt werden."
+#: ../welcome/add-bunsen-backports:1
+msgid "BunsenLabs Backports"
+msgstr "BunsenLabs Backports"
+#: ../welcome/add-bunsen-backports:2
+msgid ""
+"BunsenLabs backports are packages taken from other Debian or Debian-based releases, or other sources such as GitHub, adjusted and recompiled for usage on Debian stable. If you enable this repository you will be able to upgrade some programs to newer versions, or install some programs not available in Debian stable.\n"
+"\n"
+"However, BunsenLabs backports are not tested extensively, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. It is therefore recommended to consider carefully whether you need a backported package before choosing to install it.\n"
+"\n"
+"This will add the line:\n"
+"\n"
+" deb http://pkg.bunsenlabs.org/debian stretch-backports main\n"
+"\n"
+"to /etc/apt/sources.list.d/bunsen-stretch-backports.list,\n"
+"allowing you to upgrade or install packages using that repository."
+msgstr ""
+"BunsenLabs Backports sind Pakete aus anderen Debian- oder Debian-basierten Veröffentlichungen oder anderen Quellen wie GitHub, angepasst und neu kompiliert für die Verwendung auf Debian stable. Wenn Du dieses Repository aktivierst, kannst du einige Programme auf neuere Versionen aktualisieren oder einige Programme installieren, die in Debian stable nicht verfügbar sind.\n"
+"\n"
+"BunsenLabs-Backports werden jedoch nicht ausgiebig getestet und werden auf der Basis des Ist-Zustandes bereitgestellt, mit dem Risiko von Inkompatibilitäten mit anderen Komponenten in Debian stable. Es wird daher empfohlen, sorgfältig zu prüfen, ob du ein rückportiertes Paket benötigst, bevor du dich für die Installation entscheidst.\n"
+"\n"
+"Diese Zeile wird hinzugefügt:\n"
+"\n"
+"deb http://pkg.bunsenlabs.org/debian stretch-backports main\n"
+"\n"
+"in /etc/apt/sources.list.d/bunsen-stretch-backports.list,\n"
+"und erlaubt es dir, Pakete über dieses Repository zu aktualisieren oder zu installieren."
+#: ../welcome/add-bunsen-backports:14
+msgid "Would you like to enable the BunsenLabs Backports repositories?"
+msgstr "Möchtest du die BunsenLabs Backports Repositories aktivieren?"
+#: ../welcome/add-bunsen-backports:47
+msgid "BunsenLabs backports have already been added to apt sources."
+msgstr "BunsenLabs Backports wurden bereits zu den apt-Quellen hinzugefügt."
+#: ../welcome/add-debian-backports:1
+msgid "Debian Backports"
+msgstr "Debian Backports"
+#: ../welcome/add-debian-backports:2
+msgid ""
+"Debian backports are packages taken from the next Debian release (called \\\"testing\\\"), adjusted and recompiled for usage on Debian stable. If you enable this repository you will be able to upgrade some programs to newer versions, or install some programs not available in Debian stable.\n"
+"\n"
+"However, backports cannot be tested as extensively as Debian stable, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. It is therefore recommended to only select single backported packages that fit your needs, and not use all available backports.\n"
+"\n"
+"This will add the line:\n"
+"\n"
+" deb $default_mirror stretch-backports main contrib non-free\n"
+"\n"
+"to /etc/apt/sources.list.d/debian-stretch-backports.list,\n"
+"allowing you to upgrade or install packages using that repository."
+msgstr ""
+"Debian-Backports sind Pakete, die aus der nächsten Debian-Veröffentlichung (genannt \\\"Testing\\\") entnommen, angepasst und für die Verwendung auf Debian Stable neu kompiliert wurden. Wenn du dieses Repository aktivierst, kannst du einige Programme auf neuere Versionen aktualisieren oder einige Programme installieren, die in Debian stable nicht verfügbar sind.\n"
+"\n"
+"Backports können jedoch nicht so umfassend getestet werden wie Debian stable und werden auf der Basis des Ist-Zustandes bereitgestellt, mit dem Risiko von Inkompatibilitäten mit anderen Komponenten in Debian stable. Es wird daher empfohlen, nur einzelne Backport-Pakete auszuwählen die deinen Bedürfnissen entsprechen und nicht alle verfügbaren Backports zu verwenden.\n"
+"\n"
+"Diese Zeile wird hinzufügt:\n"
+"\n"
+" deb $default_mirror stretch-backports main contrib non-free\n"
+"\n"
+"in /etc/apt/sources.list.d/debian-stretch-backports.list,\n"
+"und erlaubt es dir, Pakete über dieses Repository zu aktualisieren oder zu installieren."
+#: ../welcome/add-debian-backports:14
+msgid "Would you like to enable the Debian Backports repositories?"
+msgstr "Möchtest du die Debian-Backports-Repositories aktivieren?"
+#: ../welcome/add-debian-backports:54
+msgid "Debian backports have already been added to apt sources."
+msgstr "Debian Backports wurden bereits zu den apt-Quellen hinzugefügt."
+#: ../welcome/add-multimedia-repo:1
+msgid "Deb-Multimedia Repository"
+msgstr "Deb-Multimedia Repository"
+#: ../welcome/add-multimedia-repo:2
+msgid ""
+"The third-party deb-multimedia repositories contain media-related packages that may be newer than those in the Debian repositories, or not available at all. On the other hand, packages from these repositories can cause problems for some users, and are not supported by Debian in any way. Do not add these repositories unless you need some specific package unobtainable from Debian. If in doubt, you need not add them now - you can do it later if necessary, by running bl-welcome again.\n"
+"\n"
+"This will add the line:\n"
+"    deb http://www.deb-multimedia.org jessie main non-free\n"
+"to /etc/apt/sources.list.d/deb-multi.list, with apt-pinning of 100,\n"
+"allowing you to upgrade or install packages using that repository."
+msgstr ""
+#: ../welcome/add-multimedia-repo:11
+msgid "Would you like to add the deb-multimedia repositories? "
+msgstr "Möchtest du die deb-multimedia Repositories aktivieren?"
+#: ../welcome/add-multimedia-repo:113
+msgid "The deb-multimedia repository has already been added."
+msgstr "Das deb-multimedia Repository wurde bereits zu den apt-Quellen hinzugefügt."
+#: ../welcome/apt-update:1
+msgid "update software sources"
+msgstr "Softwarequellen aktualisieren"
+#: ../welcome/apt-update:2
+msgid "Before we can continue, we need to make sure your system's software sources are up-to-date."
+msgstr "Bevor wir weitermachen, müssen wir sicherstellen, dass die Software-Quellen deines Systems aktuell sind."
+#: ../welcome/apt-update:2
+msgid "This script will now execute the command:"
+msgstr "Dieses Script führt nun folgenden Befehl aus:"
+#: ../welcome/apt-update:5
+msgid "Would you like to update your software sources?"
+msgstr "Möchtest du deine Software-Quellen aktualiseren?"
+#: ../welcome/apt-upgrade:1
+msgid "upgrade installed packages"
+msgstr "Installierte Pakete aktualisieren"
+#: ../welcome/apt-upgrade:2
+msgid "We now need to upgrade the installed packages on your system."
+msgstr "Wir müssen nun die installierten Pakete auf deinem System aktualisieren."
+#: ../welcome/apt-upgrade:2
+msgid "If you choose to do this, this script will execute the command:"
+msgstr "Falls du bestätigst, wird dieses Script folgenden Befehl ausführen:"
+#: ../welcome/apt-upgrade:5
+msgid "Would you like to upgrade your system now?"
+msgstr "Möchtest du dein System jetzt aktualisieren?"
+#: ../welcome/check-repos:13
+msgid "Check Repositories"
+msgstr "Repositories prüfen"
+#: ../welcome/check-repos:13
+msgid "Checking apt sources list for possible missing components..."
+msgstr "Überprüfung der apt-Quellenliste auf mögliche fehlende Komponenten..."
+#: ../welcome/check-repos:17
+msgid "OK - all components found."
+msgstr "OK - alle Komponenten gefunden."
+#: ../welcome/check-repos:19
+msgid "A normal BunsenLabs setup uses the 'contrib' and 'non-free' components of the Debian repositories, but they seem to be missing from your apt sources list. Without them you will be unable to install some packages, for example the Flash Plugins. Would you like to add 'contrib' and 'non-free' to your sources list?"
+msgstr "Ein normales BunsenLabs-Setup verwendet die Komponenten 'contrib' und 'non-free' der Debian-Repositories, aber sie scheinen in deiner Liste der apt-Quellen zu fehlen. Ohne sie kannst du einige Pakete, wie z.B. die Flash-Plugins, nicht installieren. Möchtest du 'contrib' und 'non-free' zu deiner Quellenliste hinzufügen?"
+#: ../welcome/check-repos:27
+msgid "Fixed!"
+msgstr "Repariert!"
+#: ../welcome/check-repos:29
+msgid ""
+"Editing sources list failed. This script will exit.\n"
+"Please open /etc/apt/sources.list in a text editor and check the entries before running bl-welcome again."
+msgstr ""
+"Die Bearbeitung der Quellenliste ist fehlgeschlagen. Dieses Skript wird beendet.\n"
+"Bitte öffne /etc/apt/sources.list in einem Texteditor und überprüfe die Einträge, bevor du bl-welcome erneut startest."
+#: ../welcome/check-repos:34
+msgid "Continuing anyway..."
+msgstr "Setze trotzdem fort...."
+#: ../welcome/deuterium-tweaks:1
+msgid "Deuterium tweaks"
+msgstr "Deuterium Optimierungen"
+#: ../welcome/deuterium-tweaks:1
+msgid "Checking your system for other possible improvements..."
+msgstr "Überprüfe dein System auf weitere mögliche Verbesserungen...."
+#: ../welcome/devel:1
+msgid "INSTALL DEVELOPMENT PACKAGES"
+msgstr "ENTWICKLER-PAKETE INSTALLIEREN"
+#: ../welcome/devel:2
+msgid "The remaining screens will offer you the chance to install less commonly used packages used for developing software."
+msgstr "Die restlichen Bildschirme bieten dir die Möglichkeit, weniger häufig verwendete Pakete zu installieren, die für die Entwicklung von Software verwendet werden."
+#: ../welcome/devel:3
+msgid "Would you like to view these options/screens?"
+msgstr "Möchtest du dir diese Optionen/Bildschirme ansehen?"
+#: ../welcome/devel-install-lamp-stack:2
+msgid "LAMP stack"
+msgstr "LAMP-Stack"
+#: ../welcome/devel-install-lamp-stack:3
+msgid "Would you like to install Apache2 webserver with PHP scripting support and MySQL database server?"
+msgstr "Möchtest du den Apache2 Webserver mit PHP-Scripting-Unterstützung und MySQL-Datenbankserver installieren?"
+#: ../welcome/devel-install-lamp-stack:6
+msgid "INSTALL LAMP STACK - CONTINUED"
+msgstr "LAMP-STACK INSTALLIEREN - FORTSETZUNG"
+#: ../welcome/devel-install-lamp-stack:7
+msgid ""
+"Would you like to allow .htaccess files under /var/www/html, enable modrewrite and create a symlink within the webroot directory to a directory within your home directory?\n"
+"If you do this, you will be able to access your web development documents from the address:"
+msgstr ""
+"Möchtest du .htaccess-Dateien unter /var/wwww/html zulassen, modrewrite aktivieren und einen Symlink innerhalb des webroot-Verzeichnisses zu einem Verzeichnis in deinem Home-Verzeichnis erstellen?\n"
+"Wenn du dies tust, kannst du auf deine Web-Entwicklungsdokumente von der Adresse aus zugreifen:"
+#: ../welcome/devel-install-lamp-stack:12
+msgid "The file path will be: "
+msgstr "Der Dateipfad wird lauten: "
+#: ../welcome/devel-install-lamp-stack:14
+msgid "Note: if this system is used by multiple users, you may want to consider using apache2's 'userdir' module instead."
+msgstr "Anmerkung: Wenn dieses System von mehreren Benutzern verwendet wird, solltest du stattdessen das Modul 'userdir' von apache2 verwenden."
+#: ../welcome/devel-install-lamp-stack:15
+msgid "Would you like to do the configuration?"
+msgstr "Möchtest du die Konfiguration durchführen?"
+#: ../welcome/devel-install-packaging-tools:1
+msgid "debian packaging tools"
+msgstr "Debian-Werkzeuge zur Paketierung"
+#: ../welcome/devel-install-packaging-tools:2
+msgid "Would you like to install a suite of packages used for developing Debian packages?"
+msgstr "Möchtest du eine Suite von Paketen installieren, die für die Entwicklung von Debian-Paketen verwendet werden?"
+#: ../welcome/devel-install-packaging-tools:3
+msgid "Create pbuilder environment now?"
+msgstr "Jetzt die pbuilder Umgebung erstellen?"
+#: ../welcome/devel-install-ssh-server:1
+msgid "ssh"
+msgstr "ssh"
+#: ../welcome/devel-install-ssh-server:2
+msgid "OpenSSH is a FREE version of the SSH connectivity tools that technical users of the Internet rely on. Would you like to install OpenSSH?"
+msgstr "OpenSSH ist eine FREIE Version der SSH-Konnektivitätswerkzeuge, auf die sich technische Benutzer des Internets verlassen. Möchtest du den OpenSSH-Server installieren?"
+#: ../welcome/devel-install-version-control-tools:1
+msgid "version control tools"
+msgstr "Werkzeuge zur Versionskontrolle"
+#: ../welcome/devel-install-version-control-tools:2
+msgid "Would you like to install some commonly used version control tools?"
+msgstr "Möchtest du einige häufig verwendete Werkzeuge zur Versionskontrolle installieren?"
+#: ../welcome/install-dropbox:1
+msgid "Dropbox"
+msgstr "Dropbox"
+#: ../welcome/install-dropbox:46
+msgid "  Install python-gpgme?"
+msgstr "  python-gpgme installieren?"
+#: ../welcome/install-flashplugin:1
+msgid "Flash Browser Plugin"
+msgstr "Flash Browserplugin"
+#: ../welcome/install-flashplugin:7
+msgid ""
+"Some web pages use the proprietary Adobe Flash format to play audio or video. This page will download and install a Flash Player from Adobe. It is unfree software which sometimes causes problems, and it is recommended NOT to install it if you do not need to.\n"
+"\n"
+"However, while an increasing number of websites, support alternative technologies, occasionally Flash is the only option.\n"
+""
+msgstr ""
+"Einige Webseiten verwenden das proprietäre Adobe Flash-Format, um Audio oder Video abzuspielen. Auf dieser Seite wird ein Flash Player von Adobe heruntergeladen und installiert. Es ist unfreie Software, die manchmal Probleme verursacht und es wird empfohlen, sie NICHT zu installieren, wenn man sie nicht braucht.\n"
+"\n"
+"Obwohl immer mehr Websites alternative Technologien unterstützen, ist Flash gelegentlich die einzige Möglichkeit.\n"
+""
+#: ../welcome/install-flashplugin:13
+msgid ""
+"The flash plugin will be downloaded and configured by bunsen-pepperflash, which will download the PPAPI (\\\"pepperflash\\\") plugin directly from Adobe, and check for updates every day. Configuration files will be installed for Chromium and Firefox.\n"
+""
+msgstr ""
+"Das Flash-Plugin wird von bunsen-pepperflash heruntergeladen und konfiguriert, das das PPAPI-Plugin (\\\"pepperflash\\\") direkt von Adobe herunterlädt und jeden Tag nach Updates sucht. Konfigurationsdateien werden für Chromium und Firefox installiert.\n"
+""
+#: ../welcome/install-flashplugin:18
+msgid ""
+"The safest option is to install Chromium and use it for Flash content only, continuing to use Firefox for everything else. Chromium runs flash in a \\\"sandbox\\\" which keeps it somewhat isolated from the rest of the system.\n"
+""
+msgstr ""
+"Die sicherste Option ist es, Chromium zu installieren und nur für Flash-Inhalte zu verwenden, während Firefox weiterhin für alles andere verwendet wird. Chromium verwendet Flash in einem \\\"Sandkasten\\\", was es etwas isoliert vom Rest des Systems hält.\n"
+""
+#: ../welcome/install-flashplugin:22
+msgid ""
+"You can also use Firefox for Flash content along with your other web browsing. Firefox is not able to \\\"sandbox\\\" flash content, so is less secure, but this option might be more convenient for some people.\n"
+"The extra package browser-plugin-freshplayer-pepperflash will be installed.\n"
+""
+msgstr ""
+"Du kannst Firefox auch für Flash-Inhalte zusammen mit anderen Webbrowsern verwenden. Firefox kann Flash-Inhalte nicht in einem \\\"Sandkasten\\\" halten, ist also es weniger sicher. Aber diese Option könnte für einige Leute bequemer sein.\n"
+"Das Extra-Paket browser-plugin-freshplayer-freshplayer-pepperflash wird installiert.\n"
+""
+#: ../welcome/install-flashplugin:30
+msgid "Would you like to install a Flash Browser Plugin?"
+msgstr "Möchtest du ein Flash-Browserplugin installieren?"
+#: ../welcome/install-flashplugin:52
+msgid "Cancelled, going on to next page..."
+msgstr "Abgebrochen, fahre fort mit der nächsten Seite..."
+#: ../welcome/install-flashplugin:64
+msgid ""
+"These packages are no longer needed, and will be removed:\n"
+"${pkgs_to_remove[*]}"
+msgstr ""
+"Diese Pakete werden nicht mehr benötigt und werden entfernt:\n"
+"${pkgs_to_remove[*]}"
+#: ../welcome/install-flashplugin:66
+msgid "  Continue?"
+msgstr "  Fortfahren?"
+#: ../welcome/install-flashplugin:103
+msgid ""
+"These packages will be installed:\n"
+"${pkgs_to_install[*]}"
+msgstr ""
+"Diese Pakete werden installiert:\n"
+"${pkgs_to_install[*]}"
+#: ../welcome/install-flashplugin:105
+msgid "  Continue?"
+msgstr "  Fortfahren?"
+#: ../welcome/install-flashplugin:121
+msgid "You already have a Flash Plugin installed and configured for Firefox."
+msgstr "Du hast bereits eine Flash-Plugin für Firefox installiert und konfiguriert."
+#: ../welcome/install-flashplugin:124
+msgid "You already have a Flash Plugin installed and configured for Chromium."
+msgstr "Du hast bereits ein Flash-Plugin für Chromium installiert und konfiguriert."
+#: ../welcome/install-images-extra:1
+msgid "Bunsen Extra Images"
+msgstr "Bunsen Extra Images"
+#: ../welcome/install-images-extra:2
+msgid "By default, BunsenLabs comes with a minimal set of background images. Would you like to install the larger collection of wallpapers etc. from the BunsenLabs Extra Images package? (It will be an 90MB download.)"
+msgstr "BunsenLabs wird standardmäßig mit einem minimalen Satz von Hintergrundbildern ausgeliefert. Möchtest du die größere Sammlung von Wallpapers etc. aus dem BunsenLabs Extra Images-Paket installieren? (Es wird ein Download von 90MB sein.)"
+#: ../welcome/install-java-packages:1
+msgid "Java Support"
+msgstr "Java-Support"
+#: ../welcome/install-java-packages:2
+msgid "By default, BunsenLabs does not come with a Java Runtime Environment. Would you like to install Java support now?"
+msgstr "BunsenLabs wird standardmäßig nicht mit einer Java-Laufzeitumgebung ausgeliefert. Möchtest du den Java-Support jetzt installieren?"
+#: ../welcome/install-libreoffice:1
+msgid "LibreOffice Suite"
+msgstr "LibreOffice Suite"
+#: ../welcome/install-libreoffice:2
+msgid "By default, BunsenLabs comes with LibreOffice Writer only. Would you like to install the full LibreOffice suite?"
+msgstr "BunsenLabs wird standardmäßig nur mit LibreOffice Writer ausgeliefert. Möchtest du die komplette LibreOffice Suite installieren?"
+#: ../welcome/install-printer-packages:1
+msgid "printer support"
+msgstr "Drucker-Support"
+#: ../welcome/install-printer-packages:2
+msgid "By default, BunsenLabs does not come with printer support. Would you like to add printer support now?"
+msgstr "Standardmäßig wird BunsenLabs nicht mit Druckerunterstützung ausgeliefert. Möchtest du die Druckerunterstützung jetzt hinzufügen?"
+#: ../welcome/intro:10
+msgid ""
+"welcome to BunsenLabs Linux! :)\n"
+"\n"
+"This is an optional post-installation script, designed to help you configure your new Linux installation and get the most out of BunsenLabs.\n"
+"\n"
+"You will now be presented with a series of options. You will need your password, so please have it ready.\n"
+"\n"
+"You will also need a working internet connection, so if you have not done so already, please configure your internet connection.\n"
+"\n"
+"If you do not want to run this script now, you can run it at a later date by entering the command \\\"bl-welcome\\\" in your terminal.\n"
+"\n"
+"(Messages will be saved to "
+msgstr ""
+"Willkommen bei BunsenLabs Linux! :)\n"
+"\n"
+"Dies ist ein optionales Post-Installationsskript, das dir helfen soll, deine neue Linux-Installation zu konfigurieren und das Beste aus BunsenLabs herauszuholen.\n"
+"\n"
+"Dir werden nun eine Reihe von Optionen gezeigt. Du benötigst dein Administrator-Passwort (sudo), also halte es bitte bereit.\n"
+"\n"
+"Du benötigst auch eine funktionierende Internetverbindung. Wenn du das also noch nicht getan hast, konfiguriere deine Internetverbindung bitte jetzt.\n"
+"\n"
+"Wenn du dieses Skript jetzt nicht ausführen willst, kannst du es zu einem späteren Zeitpunkt ausführen, indem du den Befehl \\\"bl-welcome\\\" in deinem Terminal eingibst."
+"\n"
+"(Nachrichten werden gespeichert unter "
+#: ../welcome/intro:23
+msgid "  Hit \\\"Enter\\\" to continue, or \\\"q\\\" to quit..."
+msgstr "  \\\"Enter\\\" zum Fortfahren oder \\\"q\\\" zum Beenden drücken..."
+#: ../welcome/system-tweaks:1
+msgid "system tweaks"
+msgstr "System-Optimierungen"
+#: ../welcome/system-tweaks:1
+msgid "Checking your system for possible improvements..."
+msgstr "Überprüfe dein System auf mögliche Verbesserungen...."
+#: ../welcome/system-tweaks:12
+msgid "Your processor does not support PAE."
+msgstr "Dein Prozessor unterstützt kein PAE"
+#: ../welcome/system-tweaks:15
+msgid "You already have a PAE enabled kernel installed."
+msgstr "Du hast bereits einen PAE-fähigen Kernel installiert."
+#: ../welcome/system-tweaks:17
+msgid "Your processor supports PAE, but you do not have a PAE enabled kernel installed. Depending on your hardware, a PAE kernel might, or might not, improve performance."
+msgstr "Dein Prozessor unterstützt PAE aber du hast keinen PAE-fähigen Kernel installiert. Abhängig von deiner Hardware kann ein PAE-Kernel die Performance verbessern oder auch nicht."
+#: ../welcome/warning:20
+msgid "  Enter \\\"I understand\\\" to continue. (Q to quit) "
+msgstr " Gib \\\"I understand\\\" ein zum Fortfahren. (Q zum Beenden) "
