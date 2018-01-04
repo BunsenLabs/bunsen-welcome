@@ -4,11 +4,20 @@ msgstr ""
 #: ../bl-welcome:18
 msgid "Error: Unable to read $1 in $BL_WELCOME_LIBDIR"
 msgstr ""
+#: ../bl-welcome:42
+msgid ""
+"######## WARNING ########\n"
+"${1-}\n"
+"------------------------------------------------"
+msgstr ""
 #: ../bl-welcome:54
 msgid "page %d of %d"
 msgstr ""
 #: ../bl-welcome:82
 msgid "install"
+msgstr ""
+#: ../bl-welcome:83
+msgid "$1 has already been installed."
 msgstr ""
 #: ../bl-welcome:88
 msgid "If you choose to do this, the following packages will be installed:"
@@ -41,8 +50,31 @@ msgstr ""
 #: ../welcome/add-bunsen-backports:14
 msgid "Would you like to enable the BunsenLabs Backports repositories?"
 msgstr ""
+#: ../welcome/add-bunsen-backports:27
+msgid "BunsenLabs backports have already been added to apt sources."
+msgstr ""
+#: ../welcome/add-bunsen-backports:29
+msgid "\\nAdding BunsenLabs backports to apt sources...\\n"
+msgstr ""
+#: ../welcome/add-bunsen-backports:37
+msgid "Failed to add BunsenLabs backports to apt sources."
+msgstr ""
+#: ../welcome/add-bunsen-backports:40
+msgid "\\nupdating apt...\\n"
+msgstr ""
+#: ../welcome/add-bunsen-backports:41
+msgid "Continuing in spite of update problem..."
+msgstr ""
 #: ../welcome/add-bunsen-backports:47
 msgid "BunsenLabs backports have already been added to apt sources."
+msgstr ""
+#: ../welcome/add-bunsen-backports:52
+msgid ""
+"Successfully added BunsenLabs backports. You can add or upgrade packages with the command:\n"
+" sudo apt-get install -t stretch-backports <packagename>"
+msgstr ""
+#: ../welcome/add-bunsen-backports:56
+msgid "Failed to add backports, going to next page."
 msgstr ""
 #: ../welcome/add-debian-backports:1
 msgid "Debian Backports"
@@ -63,8 +95,31 @@ msgstr ""
 #: ../welcome/add-debian-backports:14
 msgid "Would you like to enable the Debian Backports repositories?"
 msgstr ""
+#: ../welcome/add-debian-backports:27
+msgid "Debian backports have already been added to apt sources."
+msgstr ""
+#: ../welcome/add-debian-backports:29
+msgid "\\nAdding Debian backports to apt sources...\\n"
+msgstr ""
+#: ../welcome/add-debian-backports:37
+msgid "Failed to add Debian backports to apt sources."
+msgstr ""
+#: ../welcome/add-debian-backports:42
+msgid "\\ncommenting out obsolete backports entries in /etc/apt/sources.list..."
+msgstr ""
+#: ../welcome/add-debian-backports:47
+msgid "\\nupdating apt...\\n"
+msgstr ""
 #: ../welcome/add-debian-backports:54
 msgid "Debian backports have already been added to apt sources."
+msgstr ""
+#: ../welcome/add-debian-backports:59
+msgid ""
+"Successfully added Debian backports. You can add or upgrade packages with the command:\n"
+" sudo apt-get install -t stretch-backports <packagename>"
+msgstr ""
+#: ../welcome/add-debian-backports:63
+msgid "Failed to add backports, going to next page."
 msgstr ""
 #: ../welcome/add-multimedia-repo:1
 msgid "Deb-Multimedia Repository"
@@ -81,8 +136,67 @@ msgstr ""
 #: ../welcome/add-multimedia-repo:11
 msgid "Would you like to add the deb-multimedia repositories? "
 msgstr ""
+#: ../welcome/add-multimedia-repo:27
+msgid "Multimedia repositories have already been added to sources.list."
+msgstr ""
+#: ../welcome/add-multimedia-repo:35
+msgid "Failed to add deb-multimedia to sources.list."
+msgstr ""
+#: ../welcome/add-multimedia-repo:42
+msgid "Apt pinning has already been added for deb-multimedia."
+msgstr ""
+#: ../welcome/add-multimedia-repo:57
+msgid "\\nupdating apt...\\n"
+msgstr ""
+#: ../welcome/add-multimedia-repo:60
+msgid "Continuing in spite of update problem..."
+msgstr ""
+#: ../welcome/add-multimedia-repo:69
+msgid "Failed to pin deb-multimedia correctly."
+msgstr ""
+#: ../welcome/add-multimedia-repo:70
+msgid "Remove deb-multimedia from apt sources and preferences?"
+msgstr ""
+#: ../welcome/add-multimedia-repo:77
+msgid "...removed."
+msgstr ""
+#: ../welcome/add-multimedia-repo:81
+msgid "There was an update problem..."
+msgstr ""
+#: ../welcome/add-multimedia-repo:93
+msgid "Multimedia keyring has already been installed."
+msgstr ""
+#: ../welcome/add-multimedia-repo:95
+msgid "Installing deb-multimedia keyring...\\n"
+msgstr ""
+#: ../welcome/add-multimedia-repo:98
+msgid "Multimedia keyring successfully installed."
+msgstr ""
+#: ../welcome/add-multimedia-repo:100
+msgid "Failed to install multimedia keyring."
+msgstr ""
+#: ../welcome/add-multimedia-repo:103
+msgid "\\nupdating apt again...\\n"
+msgstr ""
+#: ../welcome/add-multimedia-repo:106
+msgid "Continuing in spite of update problem..."
+msgstr ""
 #: ../welcome/add-multimedia-repo:113
 msgid "The deb-multimedia repository has already been added."
+msgstr ""
+#: ../welcome/add-multimedia-repo:116
+msgid "Adding deb-multimedia repositories...\\n"
+msgstr ""
+#: ../welcome/add-multimedia-repo:119
+msgid ""
+"Successfully added deb-multimedia repositories.     You can add or upgrade packages with the command:\n"
+"     sudo apt-get install -t jessie <packagename>"
+msgstr ""
+#: ../welcome/add-multimedia-repo:123
+msgid ""
+"Failed to add deb-multimedia repositories.\n"
+"\n"
+"    ...going to next page."
 msgstr ""
 #: ../welcome/apt-update:1
 msgid "update software sources"
@@ -96,6 +210,11 @@ msgstr ""
 #: ../welcome/apt-update:5
 msgid "Would you like to update your software sources?"
 msgstr ""
+#: ../welcome/apt-update:11
+msgid ""
+"It was necessary to update in order to continue the script.\n"
+"Exiting..."
+msgstr ""
 #: ../welcome/apt-upgrade:1
 msgid "upgrade installed packages"
 msgstr ""
@@ -107,6 +226,23 @@ msgid "If you choose to do this, this script will execute the command:"
 msgstr ""
 #: ../welcome/apt-upgrade:5
 msgid "Would you like to upgrade your system now?"
+msgstr ""
+#: ../welcome/apt-upgrade:9
+msgid "Current version of bunsen-welcome: $bw_version"
+msgstr ""
+#: ../welcome/apt-upgrade:13
+msgid "bunsen-welcome: upgraded to $bw_new_version"
+msgstr ""
+#: ../welcome/apt-upgrade:14
+msgid ""
+"The package 'bunsen-welcome' has been upgraded.\n"
+"This script might have changed, so it will be restarted.\n"
+"Please wait a moment..."
+msgstr ""
+#: ../welcome/apt-upgrade:21
+msgid ""
+"It was necessary to upgrade in order to continue the script.\n"
+"Exiting..."
 msgstr ""
 #: ../welcome/check-repos:13
 msgid "Check Repositories"
@@ -136,6 +272,70 @@ msgid "Deuterium tweaks"
 msgstr ""
 #: ../welcome/deuterium-tweaks:1
 msgid "Checking your system for other possible improvements..."
+msgstr ""
+#: ../welcome/deuterium-tweaks:20
+msgid "$filepath might be corrupted."
+msgstr ""
+#: ../welcome/deuterium-tweaks:21
+msgid " Please compare it with $ref_file and edit if necessary."
+msgstr ""
+#: ../welcome/deuterium-tweaks:25
+msgid "$filepath is already up to date."
+msgstr ""
+#: ../welcome/deuterium-tweaks:29
+msgid "Recent startup configuration has changed slightly. Would you like to apply the latest changes to your openbox autostart file?"
+msgstr ""
+#: ../welcome/deuterium-tweaks:30
+msgid "Update $autostart with latest configs?"
+msgstr ""
+#: ../welcome/deuterium-tweaks:31
+msgid "updating $filepath..."
+msgstr ""
+#: ../welcome/deuterium-tweaks:35
+msgid "$filepath seems to have been edited."
+msgstr ""
+#: ../welcome/deuterium-tweaks:36
+msgid "You might want to compare it with $ref_file and edit if necessary."
+msgstr ""
+#: ../welcome/deuterium-tweaks:41
+msgid ""
+"COMPOSITING\n"
+"-----------\n"
+""
+msgstr ""
+#: ../welcome/deuterium-tweaks:61
+msgid ""
+"\n"
+"PULSE AUDIO\n"
+"-----------\n"
+""
+msgstr ""
+#: ../welcome/deuterium-tweaks:72
+msgid "You are using the original BunsenLabs volume control \\\"Volti\\\". We currently recommend \\\"Volumeicon\\\", along with a slightly different startup configuration of PulseAudio. Would you like to replace volti with volumeicon, and reconfigure PulseAudio?"
+msgstr ""
+#: ../welcome/deuterium-tweaks:75
+msgid "Update audio settings?"
+msgstr ""
+#: ../welcome/deuterium-tweaks:78
+msgid "Failed to find $i. Please fix this before running bl-welcome again."
+msgstr ""
+#: ../welcome/deuterium-tweaks:82
+msgid "Updating $autostart..."
+msgstr ""
+#: ../welcome/deuterium-tweaks:104
+msgid "disabling pulse autostart file..."
+msgstr ""
+#: ../welcome/deuterium-tweaks:108
+msgid "installing volumeicon config..."
+msgstr ""
+#: ../welcome/deuterium-tweaks:112
+msgid "commenting out XF86Audio entries from rc.xml..."
+msgstr ""
+#: ../welcome/deuterium-tweaks:131
+msgid "Something went wrong with the audio update."
+msgstr ""
+#: ../welcome/deuterium-tweaks:133
+msgid "Not touching audio settings."
 msgstr ""
 #: ../welcome/devel:1
 msgid "INSTALL DEVELOPMENT PACKAGES"
@@ -169,6 +369,39 @@ msgstr ""
 #: ../welcome/devel-install-lamp-stack:15
 msgid "Would you like to do the configuration?"
 msgstr ""
+#: ../welcome/devel-install-lamp-stack:26
+msgid "allowing .htaccess under /var/www/html in $a2d"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:30
+msgid "$a2d: already edited."
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:33
+msgid "configuring $a2d..."
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:37
+msgid "$search not found in $a2d. Please check with a text editor."
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:40
+msgid "enabling modrewrite"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:41
+msgid "failed: sudo a2enmod rewrite"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:42
+msgid "failed: sudo systemctl restart apache2"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:44
+msgid "making symlink"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:45
+msgid "failed to create directory $HOME/htdocs"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:46
+msgid "failed to create symlink"
+msgstr ""
+#: ../welcome/devel-install-lamp-stack:52
+msgid "Configuring the default site for Apache2 failed. Check $logfile for hints."
+msgstr ""
 #: ../welcome/devel-install-packaging-tools:1
 msgid "debian packaging tools"
 msgstr ""
@@ -177,6 +410,9 @@ msgid "Would you like to install a suite of packages used for developing Debian 
 msgstr ""
 #: ../welcome/devel-install-packaging-tools:3
 msgid "Create pbuilder environment now?"
+msgstr ""
+#: ../welcome/devel-install-packaging-tools:6
+msgid "configuring /etc/pbuilderrc..."
 msgstr ""
 #: ../welcome/devel-install-ssh-server:1
 msgid "ssh"
@@ -190,11 +426,135 @@ msgstr ""
 #: ../welcome/devel-install-version-control-tools:2
 msgid "Would you like to install some commonly used version control tools?"
 msgstr ""
+#: ../welcome/fini:3
+msgid ""
+"\n"
+" _____ ___ _   _ ___ ____  _   _ _____ ____  _\n"
+"|  ___|_ _| \\ | |_ _/ ___|| | | | ____|  _ \\| |\n"
+"| |_   | ||  \\| || |\\___ \\| |_| |  _| | | | | |\n"
+"|  _|  | || |\\  || | ___) |  _  | |___| |_| |_|\n"
+"|_|   |___|_| \\_|___|____/|_| |_|_____|____/(_)\n"
+"\n"
+"\n"
+"THANK YOU FOR USING BUNSENLABS! :)\n"
+"\n"
+"If you have any questions or feedback, please visit us on the web:\n"
+"URL: http://bunsenlabs.org\n"
+"\n"
+"Hit any key to exit..."
+msgstr ""
 #: ../welcome/install-dropbox:1
 msgid "Dropbox"
 msgstr ""
+#: ../welcome/install-dropbox:23
+msgid "$0: $USER_DBPY exists but is not executable."
+msgstr ""
+#: ../welcome/install-dropbox:27
+msgid "Fetching Dropbox frontend dropbox.py..."
+msgstr ""
+#: ../welcome/install-dropbox:28
+msgid "$0: dropbox.py download failed."
+msgstr ""
+#: ../welcome/install-dropbox:29
+msgid "$0: $USER_DBPY does not exist."
+msgstr ""
+#: ../welcome/install-dropbox:30
+msgid "$0: failed to set permissions on $USER_DBPY"
+msgstr ""
+#: ../welcome/install-dropbox:38
+msgid "$0: failed to fetch dropbox.py"
+msgstr ""
+#: ../welcome/install-dropbox:39
+msgid "Failed to fetch dropbox.py"
+msgstr ""
+#: ../welcome/install-dropbox:44
+msgid ""
+"We need to install the package python-gpgme.\n"
+"Do you want to proceed?"
+msgstr ""
 #: ../welcome/install-dropbox:46
 msgid "  Install python-gpgme?"
+msgstr ""
+#: ../welcome/install-dropbox:50
+msgid ""
+"Dropbox install abandoned.\n"
+"...going to next page."
+msgstr ""
+#: ../welcome/install-dropbox:56
+msgid ""
+"\n"
+"Dropbox will be downloaded and installed.\n"
+"If you want to connect to an existing account, please have your login details ready.\n"
+"(A separate browser window will open for login, but you can also sign in to Dropbox later via the systemtray icon.)"
+msgstr ""
+#: ../welcome/install-dropbox:63
+msgid "Dropbox installation failed."
+msgstr ""
+#: ../welcome/install-dropbox:67
+msgid ""
+"\n"
+"Dropbox has been installed."
+msgstr ""
+#: ../welcome/install-dropbox:69
+msgid ""
+"\n"
+"Dropbox CLI frontend dropbox.py has been installed in $USER_DBPY_DIR.\n"
+"Run '$USER_DBPY help' to view options.\n"
+"(If $USER_DBPY_DIR is in your PATH, then the path $USER_DBPY_DIR can be omitted.)"
+msgstr ""
+#: ../welcome/install-dropbox:74
+msgid ""
+"\n"
+"Dropbox can be started automatically when you start your session. Would you like to autostart Dropbox when you login?"
+msgstr ""
+#: ../welcome/install-dropbox:76
+msgid "  autostart?"
+msgstr ""
+#: ../welcome/install-dropbox:84
+msgid "It is a good idea to add a delay before autostarting Dropbox so that your system can establish a working network connection."
+msgstr ""
+#: ../welcome/install-dropbox:87
+msgid "Autostart entry already exists."
+msgstr ""
+#: ../welcome/install-dropbox:89
+msgid "Please enter the number of your choice > "
+msgstr ""
+#: ../welcome/install-dropbox:93
+msgid "Adding delay of $time in $HOME/.config/openbox/autostart"
+msgstr ""
+#: ../welcome/install-dropbox:101
+msgid "Autostart entry not added"
+msgstr ""
+#: ../welcome/install-dropbox:104
+msgid ""
+"\n"
+"You can change the autostart setting by editing $HOME/.config/openbox/autostart at the line with \\\"$USER_DBPY start\\\""
+msgstr ""
+#: ../welcome/install-dropbox:109
+msgid ""
+"Dropbox is a popular file synchronizing service that some people find useful.\n"
+"However it is proprietary software and there may also be security issues.\n"
+"\n"
+"See:\n"
+"Dropbox website https://www.dropbox.com\n"
+"Dropbox terms: https://www.dropbox.com/terms\n"
+"\n"
+"For installation, the dropbox python utility dropbox.py\n"
+"will be downloaded from dropbox and run with the arguments \\\"start -i\\\".\n"
+"See https://www.dropbox.com/help/desktop-web/linux-commands\n"
+"for more information on dropbox.py.\n"
+""
+msgstr ""
+#: ../welcome/install-dropbox:121
+msgid "Would you like to install Dropbox?"
+msgstr ""
+#: ../welcome/install-dropbox:130
+msgid "Dropbox is already installed."
+msgstr ""
+#: ../welcome/install-dropbox:133
+msgid ""
+"Something went wrong.\n"
+"Going to next page..."
 msgstr ""
 #: ../welcome/install-flashplugin:1
 msgid "Flash Browser Plugin"
@@ -225,6 +585,24 @@ msgstr ""
 #: ../welcome/install-flashplugin:30
 msgid "Would you like to install a Flash Browser Plugin?"
 msgstr ""
+#: ../welcome/install-flashplugin:32
+msgid ""
+"$intro2\n"
+"There are two options:\n"
+"\n"
+"1) $chromium_intro\n"
+"2) $firefox_intro\n"
+"\n"
+"Would you like to use Chromium for Flash (safer)\n"
+"or use the Pepperflash plugin with Firefox?\n"
+"\n"
+"Press 'c' for Chromium or 'f' for Firefox,\n"
+"any other key to cancel.\n"
+""
+msgstr ""
+#: ../welcome/install-flashplugin:45
+msgid " \\\"C\\\" for Chromium, \\\"F\\\" for Firefox: "
+msgstr ""
 #: ../welcome/install-flashplugin:52
 msgid "Cancelled, going on to next page..."
 msgstr ""
@@ -236,6 +614,21 @@ msgstr ""
 #: ../welcome/install-flashplugin:66
 msgid "  Continue?"
 msgstr ""
+#: ../welcome/install-flashplugin:68
+msgid "${pkgs_to_remove[*]} will be uninstalled."
+msgstr ""
+#: ../welcome/install-flashplugin:70
+msgid "...going to next page."
+msgstr ""
+#: ../welcome/install-flashplugin:91
+msgid "No packages selected for install."
+msgstr ""
+#: ../welcome/install-flashplugin:97
+msgid "Sucessfully removed: ${pkgs_to_remove[*]}"
+msgstr ""
+#: ../welcome/install-flashplugin:99
+msgid "...going to next page."
+msgstr ""
 #: ../welcome/install-flashplugin:103
 msgid ""
 "These packages will be installed:\n"
@@ -243,6 +636,15 @@ msgid ""
 msgstr ""
 #: ../welcome/install-flashplugin:105
 msgid "  Continue?"
+msgstr ""
+#: ../welcome/install-flashplugin:109
+msgid "Flash setup complete."
+msgstr ""
+#: ../welcome/install-flashplugin:111
+msgid "...going to next page."
+msgstr ""
+#: ../welcome/install-flashplugin:115
+msgid "...going to next page."
 msgstr ""
 #: ../welcome/install-flashplugin:121
 msgid "You already have a Flash Plugin installed and configured for Firefox."
@@ -274,6 +676,15 @@ msgstr ""
 #: ../welcome/install-printer-packages:2
 msgid "By default, BunsenLabs does not come with printer support. Would you like to add printer support now?"
 msgstr ""
+#: ../welcome/intro:4
+msgid ""
+"   _   _ _____ _     _     ___\n"
+"  | | | | ____| |   | |   / _   | |_| |  _| | |   | |  | | | |\n"
+"  |  _  | |___| |___| |__| |_| |\n"
+"  |_| |_|_____|_____|_____\\___/\n"
+"\n"
+""
+msgstr ""
 #: ../welcome/intro:10
 msgid ""
 "welcome to BunsenLabs Linux! :)\n"
@@ -286,16 +697,37 @@ msgid ""
 "\n"
 "If you do not want to run this script now, you can run it at a later date by entering the command \\\"bl-welcome\\\" in your terminal.\n"
 "\n"
-"(Messages will be saved to "
+"(Messages will be saved to \\\""
 msgstr ""
 #: ../welcome/intro:23
 msgid "  Hit \\\"Enter\\\" to continue, or \\\"q\\\" to quit..."
+msgstr ""
+#: ../welcome/intro:25
+msgid ""
+"\n"
+"Please enter your password now and it will be stored for a while.\n"
+"(You may need to enter it again later.)"
+msgstr ""
+#: ../welcome/intro:30
+msgid "Thank you."
+msgstr ""
+#: ../welcome/intro:32
+msgid ""
+"You do not appear to have permission to use sudo,\n"
+"which is needed in this script.\n"
+"Please make the necessary adjustments to your system and try again."
 msgstr ""
 #: ../welcome/system-tweaks:1
 msgid "system tweaks"
 msgstr ""
 #: ../welcome/system-tweaks:1
 msgid "Checking your system for possible improvements..."
+msgstr ""
+#: ../welcome/system-tweaks:6
+msgid ""
+"PAE KERNEL\n"
+"----------\n"
+""
 msgstr ""
 #: ../welcome/system-tweaks:12
 msgid "Your processor does not support PAE."
@@ -306,6 +738,47 @@ msgstr ""
 #: ../welcome/system-tweaks:17
 msgid "Your processor supports PAE, but you do not have a PAE enabled kernel installed. Depending on your hardware, a PAE kernel might, or might not, improve performance."
 msgstr ""
+#: ../welcome/system-tweaks:19
+msgid "Would you like to install one now?"
+msgstr ""
+#: ../welcome/system-tweaks:21
+msgid "PAE Kernel"
+msgstr ""
+#: ../welcome/system-tweaks:21
+msgid "This script will install a linux kernel that supports PAE."
+msgstr ""
+#: ../welcome/system-tweaks:21
+msgid "Continuing in spite of install problem..."
+msgstr ""
+#: ../welcome/system-tweaks:23
+msgid "continuing..."
+msgstr ""
+#: ../welcome/warning:1
+msgid "A Warning"
+msgstr ""
+#: ../welcome/warning:3
+msgid ""
+"While FOSS is primarily about freedom and choice, certain choices are\n"
+"known to carry an increased risk of breaking things in BunsenLabs.\n"
+"\n"
+"Two of the riskier things are:\n"
+" * adding Ubuntu PPAs or unknown/untrusted repos to your\n"
+"   /etc/apt/sources.list or /etc/apt/sources.list.d\n"
+" * installing a package that wants a newer version of libc6\n"
+"\n"
+"More information on some of the riskier things, the above included,\n"
+"can be found here:\n"
+"https://wiki.debian.org/DontBreakDebian\n"
+"\n"
+"(Right click the above link and choose \\\"Open Link\\\" to visit the page.)\n"
+"\n"
+"Please type \\\"I understand\\\" to continue with this script.\n"
+"\n"
+""
+msgstr ""
 #: ../welcome/warning:20
 msgid "  Enter \\\"I understand\\\" to continue. (Q to quit) "
+msgstr ""
+#: ../welcome/warning:21
+msgid "I understand"
 msgstr ""

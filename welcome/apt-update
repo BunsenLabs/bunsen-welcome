@@ -8,7 +8,7 @@ if setupPage "$UPDATE_TITLE" "$UPDATE_TEXT" "$UPDATE_PROMPT"
 then
     safeUpdate
 else
-    say 'It was necessary to update in order to continue the script.
-Exiting...' 2
+    say $"It was necessary to update in order to continue the script.
+Exiting..." 2
     exit 0
 fi

@@ -39,7 +39,7 @@ ${1-}
 }
 
 warnlog() {
-    echo "######## WARNING ########
+    echo $"######## WARNING ########
 ${1-}
 ------------------------------------------------" >> "$logfile"
 }
@@ -80,7 +80,7 @@ $2
 # or install declined, 1 if there was an error.
 installPage() {
     local title=$"install"" $1"
-    local text="$1 has already been installed."
+    local text=$"$1 has already been installed."
     allInstalled "${@:3}" && {
         setupPage "$title" "$text"
         return 2

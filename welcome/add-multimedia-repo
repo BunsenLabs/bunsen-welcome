@@ -24,7 +24,7 @@ haveMulti() {
 addMulti() {
     if haveMulti
     then
-        say 'Multimedia repositories have already been added to sources.list.' 2
+        say $"Multimedia repositories have already been added to sources.list." 2
     else
         local dmo_repo='# added by bl-welcome
 # Multimedia repository
@@ -32,14 +32,14 @@ deb http://www.deb-multimedia.org jessie main non-free
 '
         cat <<< "$dmo_repo" | sudo tee -a /etc/apt/sources.list.d/deb-multi.list >/dev/null
         grep -q '^deb http://www.deb-multimedia.org jessie main non-free' /etc/apt/sources.list.d/deb-multi.list || {
-            say 'Failed to add deb-multimedia to sources.list.' pause >&2
+            say $"Failed to add deb-multimedia to sources.list." pause >&2
             return 1
         }
     fi
 
     if grep -Eq 'Pin:.*(deb-multimedia\.org\>|Unofficial Multimedia Packages)' /etc/apt/preferences{,.d/*} 2>/dev/null
     then
-        say 'Apt pinning has already been added for deb-multimedia.' 2
+        say $"Apt pinning has already been added for deb-multimedia." 2
     else
         local pinning="# added by bl-welcome
 # Multimedia repository pinning
@@ -54,10 +54,10 @@ Pin-Priority: $dmo_priority
         cat <<< "$pinning" | sudo tee /etc/apt/preferences.d/deb-multi-pin >/dev/null
     fi
 
-    say $'\nupdating apt...\n' 1
+    say $"\nupdating apt...\n" 1
     if ! safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
     then
-        say 'Continuing in spite of update problem...' 2 >&2
+        say $"Continuing in spite of update problem..." 2 >&2
     fi
 
     local dmo_regex='[./]((deb(ian)?-)(multimedia|marillat)|marillat)[. /]?'
@@ -66,19 +66,19 @@ Pin-Priority: $dmo_priority
     for i in "${dmo_pins[@]}"
     do
         [[ $i = "$dmo_priority" ]] || {
-            say 'Failed to pin deb-multimedia correctly.' 2 >&2
-            if prompt 'Remove deb-multimedia from apt sources and preferences?'
+            say $"Failed to pin deb-multimedia correctly." 2 >&2
+            if prompt $"Remove deb-multimedia from apt sources and preferences?"
             then
                 local removed=true
                 sudo rm /etc/apt/preferences.d/deb-multi-pin || removed=false
                 sudo rm /etc/apt/sources.list.d/deb-multi.list || removed=false
                 if $removed
                     then
-                        say '...removed.'
+                        say $"...removed."
                         say $'\nupdating apt again...\n' 1
                         if ! safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
                         then
-                            say 'There was an update problem...' 2 >&2
+                            say $"There was an update problem..." 2 >&2
                         fi
                 else
                     say 'Failed to completely remove deb-multimedia files.' 3 >&2
@@ -90,20 +90,20 @@ Pin-Priority: $dmo_priority
 
     if allInstalled deb-multimedia-keyring
     then
-        say 'Multimedia keyring has already been installed.' 2
+        say $"Multimedia keyring has already been installed." 2
     else
-        say $'Installing deb-multimedia keyring...\n' 1
+        say $"Installing deb-multimedia keyring...\n" 1
         if safeInstall --allow-unauthenticated deb-multimedia-keyring
         then
-            say 'Multimedia keyring successfully installed.'
+            say $"Multimedia keyring successfully installed."
         else
-            say "Failed to install multimedia keyring." pause >&2
+            say $"Failed to install multimedia keyring." pause >&2
             return 1
         fi
-        say $'\nupdating apt again...\n' 1
+        say $"\nupdating apt again...\n" 1
         if ! safeUpdate --ignore "http://www.deb-multimedia.org.*The following signatures couldn't be verified because the public key is not available"
         then
-            say 'Continuing in spite of update problem...' 2 >&2
+            say $"Continuing in spite of update problem..." 2 >&2
         fi
     fi
 }
@@ -113,14 +113,14 @@ then
     setupPage "$ADD_MULTI_TITLE" $"The deb-multimedia repository has already been added."
 else
     if setupPage "$ADD_MULTI_TITLE" "$ADD_MULTI_TEXT" "$ADD_MULTI_PROMPT" "$ADD_MULTI_EXTRA_ARG"; then
-        say $'Adding deb-multimedia repositories...\n'
+        say $"Adding deb-multimedia repositories...\n"
         if addMulti
         then
-            say "Successfully added deb-multimedia repositories.\
+            say $"Successfully added deb-multimedia repositories.\
      You can add or upgrade packages with the command:
      sudo apt-get install -t jessie <packagename>" 'pause'
         else
-            say "Failed to add deb-multimedia repositories.
+            say $"Failed to add deb-multimedia repositories.
 
     ...going to next page." 2
         fi

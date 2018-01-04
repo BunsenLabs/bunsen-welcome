@@ -24,9 +24,9 @@ haveBunsenBackports() {
 addBunsenBackports() {
     if haveBunsenBackports
     then
-        say 'BunsenLabs backports have already been added to apt sources.' 2
+        say $"BunsenLabs backports have already been added to apt sources." 2
     else
-        say $'\nAdding BunsenLabs backports to apt sources...\n' 1
+        say $"\nAdding BunsenLabs backports to apt sources...\n" 1
         local bp_repo="# added by bl-welcome
 # BunsenLabs backports
 deb http://pkg.bunsenlabs.org/debian stretch-backports main
@@ -34,11 +34,11 @@ deb http://pkg.bunsenlabs.org/debian stretch-backports main
 "
         sudo tee <<< "$bp_repo" /etc/apt/sources.list.d/bunsen-stretch-backports.list >/dev/null
         grep -q '^deb http://pkg.bunsenlabs.org/debian stretch-backports main' /etc/apt/sources.list.d/bunsen-stretch-backports.list || {
-            say 'Failed to add BunsenLabs backports to apt sources.' pause >&2
+            say $"Failed to add BunsenLabs backports to apt sources." pause >&2
             return 1
         }
-        say $'\nupdating apt...\n'
-        safeUpdate || say 'Continuing in spite of update problem...' 2
+        say $"\nupdating apt...\n"
+        safeUpdate || say $"Continuing in spite of update problem..." 2
     fi
 }
 
@@ -49,11 +49,11 @@ else
     if setupPage "$ADD_BL_BACKPORTS_TITLE" "$ADD_BL_BACKPORTS_TEXT" "$ADD_BL_BACKPORTS_PROMPT" "$ADD_BL_BACKPORTS_EXTRA_ARG"; then
         if addBunsenBackports
         then
-            say "Successfully added BunsenLabs backports.\
+            say $"Successfully added BunsenLabs backports.\
  You can add or upgrade packages with the command:
  sudo apt-get install -t stretch-backports <packagename>" pause
         else
-            say "Failed to add backports, going to next page." 3
+            say $"Failed to add backports, going to next page." 3
         fi
     fi
 fi

@@ -1,6 +1,6 @@
 clear
 header
-say '
+say $"
  _____ ___ _   _ ___ ____  _   _ _____ ____  _
 |  ___|_ _| \ | |_ _/ ___|| | | | ____|  _ \| |
 | |_   | ||  \| || |\___ \| |_| |  _| | | | | |
@@ -13,7 +13,7 @@ THANK YOU FOR USING BUNSENLABS! :)
 If you have any questions or feedback, please visit us on the web:
 URL: http://bunsenlabs.org
 
-Hit any key to exit...'
+Hit any key to exit..."
 
 read -srn1
 clear

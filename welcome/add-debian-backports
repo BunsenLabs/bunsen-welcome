@@ -24,9 +24,9 @@ haveDebianBackports() {
 addDebianBackports() {
     if haveDebianBackports
     then
-        say 'Debian backports have already been added to apt sources.' 2
+        say $"Debian backports have already been added to apt sources." 2
     else
-        say $'\nAdding Debian backports to apt sources...\n' 1
+        say $"\nAdding Debian backports to apt sources...\n" 1
         local bp_repo="# added by bl-welcome
 # Debian backports
 deb $default_mirror stretch-backports main contrib non-free
@@ -34,17 +34,17 @@ deb $default_mirror stretch-backports main contrib non-free
 "
         sudo tee <<< "$bp_repo" /etc/apt/sources.list.d/debian-stretch-backports.list >/dev/null
         grep -q "^deb $default_mirror stretch-backports main contrib non-free\$" /etc/apt/sources.list.d/debian-stretch-backports.list || {
-            say 'Failed to add Debian backports to apt sources.' pause >&2
+            say $"Failed to add Debian backports to apt sources." pause >&2
             return 1
         }
         if grep -q 'stretch-backports' /etc/apt/sources.list
         then
-            say $'\ncommenting out obsolete backports entries in /etc/apt/sources.list...'
+            say $"\ncommenting out obsolete backports entries in /etc/apt/sources.list..."
             local bkp_list=/etc/apt/sources.list~bl-welcome-$(date +%y%m%dT%T)~
             sudo cp /etc/apt/sources.list "$bkp_list"
             sed '/stretch-backports/ s/^/#/' "$bkp_list" | sudo tee /etc/apt/sources.list >/dev/null
         fi
-        say $'\nupdating apt...\n'
+        say $"\nupdating apt...\n"
         safeUpdate || say 'Continuing in spite of update problem...' 2
     fi
 }
@@ -56,11 +56,11 @@ else
     if setupPage "$ADD_BACKPORTS_TITLE" "$ADD_BACKPORTS_TEXT" "$ADD_BACKPORTS_PROMPT" "$ADD_BACKPORTS_EXTRA_ARG"; then
         if addDebianBackports
         then
-            say "Successfully added Debian backports.\
+            say $"Successfully added Debian backports.\
  You can add or upgrade packages with the command:
  sudo apt-get install -t stretch-backports <packagename>" pause
         else
-            say "Failed to add backports, going to next page." 3
+            say $"Failed to add backports, going to next page." 3
         fi
     fi
 fi

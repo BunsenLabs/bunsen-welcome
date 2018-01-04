@@ -3,9 +3,9 @@ setupPage $"system tweaks" $"Checking your system for possible improvements..."
 autostart="$HOME/.config/openbox/autostart"
 autostart_bkp="${autostart}~bl-welcome-$( date +%FT%T )~"
 
-say 'PAE KERNEL
+say $"PAE KERNEL
 ----------
-'
+"
 
 if ! grep -wq pae /proc/cpuinfo
 then
@@ -16,10 +16,10 @@ then
 else
     say $"Your processor supports PAE, but you do not have a PAE enabled kernel installed.\
  Depending on your hardware, a PAE kernel might, or might not, improve performance."
-    if  prompt "Would you like to install one now?"
+    if  prompt $"Would you like to install one now?"
     then
-        promptInstall 'PAE Kernel' 'This script will install a linux kernel that supports PAE.' 'linux-image-686-pae' || say 'Continuing in spite of install problem...' 2
+        promptInstall $"PAE Kernel" $"This script will install a linux kernel that supports PAE." 'linux-image-686-pae' || say $"Continuing in spite of install problem..." 2
     else
-        say 'continuing...' 2
+        say $"continuing..." 2
     fi
 fi

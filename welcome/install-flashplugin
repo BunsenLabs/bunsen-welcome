@@ -29,7 +29,7 @@ The extra package browser-plugin-freshplayer-pepperflash will be installed.
 
     setupPage "$install_flash_title" "$intro1" $"Would you like to install a Flash Browser Plugin?" 'N' || return 0
 
-    say "$intro2
+    say $"$intro2
 There are two options:
 
 1) $chromium_intro
@@ -42,7 +42,7 @@ Press 'c' for Chromium or 'f' for Firefox,
 any other key to cancel.
 "
     local REPLY
-    read -r -p ' "C" for Chromium, "F" for Firefox: '
+    read -r -p $" \"C\" for Chromium, \"F\" for Firefox: "
     case ${REPLY^} in
     C)
         choice=chromium;;
@@ -65,9 +65,9 @@ any other key to cancel.
 ${pkgs_to_remove[*]}"
         if prompt $"  Continue?" Y
         then
-            say "${pkgs_to_remove[*]} will be uninstalled."
+            say $"${pkgs_to_remove[*]} will be uninstalled."
         else
-            say "...going to next page."
+            say $"...going to next page."
             return 0
         fi
     fi
@@ -88,15 +88,15 @@ ${pkgs_to_remove[*]}"
     esac
 
     [[ ${#pkgs_to_install[@]} -gt 0 ]] || {
-        say "No packages selected for install." 2
+        say $"No packages selected for install." 2
         return 1
     }
 
     [[ ${#pkgs_to_remove[@]} -gt 0 ]] && if safeRemove "${pkgs_to_remove[@]}"
     then
-        say "Sucessfully removed: ${pkgs_to_remove[*]}" 2
+        say $"Sucessfully removed: ${pkgs_to_remove[*]}" 2
     else
-        say '...going to next page.' 2
+        say $"...going to next page." 2
         return 1
     fi
 
@@ -106,13 +106,13 @@ ${pkgs_to_install[*]}"
     then
         if safeInstall "${pkgs_to_install[@]}" "${old_flash_pkgs[@]/%/-}"
         then
-            say "Flash setup complete." 4
+            say $"Flash setup complete." 4
         else
-            say '...going to next page.' 2
+            say $"...going to next page." 2
             return 1
         fi
     else
-        say '...going to next page.'
+        say $"...going to next page."
         return 0
     fi
 }

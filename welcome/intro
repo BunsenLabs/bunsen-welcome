@@ -1,13 +1,13 @@
 tput clear
 header
 say \
-'   _   _ _____ _     _     ___
+$"   _   _ _____ _     _     ___
   | | | | ____| |   | |   / _ \
   | |_| |  _| | |   | |  | | | |
   |  _  | |___| |___| |__| |_| |
   |_| |_|_____|_____|_____\___/
 
-'"Hi $USER, "$"welcome to BunsenLabs Linux! :)
+""Hi $USER, "$"welcome to BunsenLabs Linux! :)
 
 This is an optional post-installation script, designed to help you configure your new Linux installation and get the most out of BunsenLabs.
 
@@ -17,20 +17,20 @@ You will also need a working internet connection, so if you have not done so alr
 
 If you do not want to run this script now, you can run it at a later date by entering the command \"bl-welcome\" in your terminal.
 
-(Messages will be saved to ""$logfile"')
-'
+(Messages will be saved to \""$logfile"\")
+"
 
 prompt $"  Hit \"Enter\" to continue, or \"q\" to quit..." Q && exit 0
 
-say '
+say $"
 Please enter your password now and it will be stored for a while.
-(You may need to enter it again later.)'
+(You may need to enter it again later.)"
 if sudo -v
 then
-    say 'Thank you.'
+    say $"Thank you."
 else
-    errorExit 'You do not appear to have permission to use sudo,
+    errorExit $"You do not appear to have permission to use sudo,
 which is needed in this script.
-Please make the necessary adjustments to your system and try again.'
+Please make the necessary adjustments to your system and try again."
 fi
 
