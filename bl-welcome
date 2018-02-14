@@ -3,6 +3,32 @@
 
 set -o nounset # do not accept unset variables
 
+HELP='    bl-welcome an interactive system configuration script
+
+Options:
+    -h --help   show this message
+
+If bl-welcome is called in a terminal with no options (the usual method),
+it will start an interactive process whereby the user can
+adjust system configurations and install packages.
+'
+
+for i in "$@"
+do
+    case "$i" in
+    -h|--help)
+        echo "$HELP"
+        exit 0
+        ;;
+    '')
+        ;;
+    *)
+        echo "${i}: no such option" >&2
+        exit 1
+        ;;
+    esac
+done
+
 TEXTDOMAIN=bl-welcome
 
 BL_COMMON_LIBDIR='/usr/lib/bunsen/common'
@@ -44,7 +70,7 @@ ${1-}
 ------------------------------------------------" >> "$logfile"
 }
 
-STEPS_BASIC=('apt-update' 'apt-upgrade' 'system-tweaks' 'install-images-extra' 'install-java-packages' 'add-debian-backports' 'add-bunsen-backports' 'install-flashplugin' 'install-dropbox' 'devel')
+STEPS_BASIC=('apt-update-upgrade' 'system-tweaks' 'install-images-extra' 'install-java-packages' 'add-debian-backports' 'add-bunsen-backports' 'install-flashplugin' 'install-dropbox' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 # prints something like: -------[ page 1 of 10 ]-------

@@ -8,12 +8,21 @@ say '
 |_|   |___|_| \_|___|____/|_| |_|_____|____/(_)
 
 
-THANK YOU FOR USING BUNSENLABS! :)
+THANK YOU FOR SELECTING BUNSENLABS! :)
 
-If you have any questions or feedback, please visit us on the web:
-URL: http://bunsenlabs.org
+Please visit us on the web when you have a chance:
+https://forums.bunsenlabs.org/
 
-Hit any key to exit...'
+There are many ways you can tweak this system to suit your needs.
+
+You might find these forum sections interesting:
+"Getting Started": https://forums.bunsenlabs.org/viewforum.php?id=21
+"Help & Support": https://forums.bunsenlabs.org/viewforum.php?id=2
+"Scripts, Tutorials & Tips": https://forums.bunsenlabs.org/viewforum.php?id=9
+
+And the BunsenLabs menu has a "Help" section too...
+
+Hit any key to exit.'
 
 read -srn1
 clear

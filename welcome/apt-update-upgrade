@@ -1,0 +1,32 @@
+UPDATEGRADE_TITLE=$"update software sources and upgrade installed packages"
+UPDATEGRADE_TEXT=$"Before we can continue, we need to make sure your system's software is up-to-date."' '$"This script will execute the commands:"'
+
+    sudo apt-get update
+    sudo apt-get upgrade --with-new-pkgs
+
+'$"If you do not want to upgrade now, you can run this welcome script any time later in a terminal with the command \"bl-welcome\""
+UPDATEGRADE_PROMPT=$"Would you like to upgrade your software?"
+
+if setupPage "$UPDATEGRADE_TITLE" "$UPDATEGRADE_TEXT" "$UPDATEGRADE_PROMPT"
+then
+    safeUpdate
+    bw_version=$(checkVersion 'bunsen-welcome')
+    log "Current version of bunsen-welcome: $bw_version"
+    safeUpgrade --with-new-pkgs
+    bw_new_version=$(checkVersion 'bunsen-welcome')
+    if [[ $bw_new_version != $bw_version ]]
+    then
+        log "bunsen-welcome: upgraded to $bw_new_version"
+        say "The package 'bunsen-welcome' has been upgraded.
+This script might have changed, so it will be restarted.
+Please wait a moment..." 6
+        exec >/dev/tty 2>&1 # so terminalCheck() doesn't open a new terminal
+        exec "$0"
+    else
+        sleep 2
+    fi
+else
+    say 'Upgrade was necessary to continue the script. You can run it later with "bl-welcome"
+Exiting...' 2
+    exit 0
+fi
