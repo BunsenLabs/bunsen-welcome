@@ -19,14 +19,19 @@
 
 # main packaging script based on dh7 syntax
 %:
-	dh $@ 
+	dh $@
+
+override_dh_installman:
+	debian/genman.sh
+	dh_installman
+
+override_dh_clean:
+	dh_clean
+	debian/genman.sh --clean
 
 # debmake generated override targets
 # This is example for Cmake (See http://bugs.debian.org/641051 )
 #override_dh_auto_configure:
 #	dh_auto_configure -- \
 #	-DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH)
-
-
-
 
