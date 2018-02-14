@@ -1,3 +1,10 @@
+bunsen-welcome (9.3-1) helium; urgency=medium
+
+  * Merge apt-update and apt-upgrade pages.
+  * Expand help suggestions on last page.
+
+ -- John Crawley <john@bunsenlabs.org>  Wed, 14 Feb 2018 17:28:38 +0900
+
 bunsen-welcome (9.2-1) helium; urgency=medium
 
   * Add Dropbox install page.
