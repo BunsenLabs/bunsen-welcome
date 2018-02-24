@@ -13,12 +13,17 @@ it will start an interactive process whereby the user can
 adjust system configurations and install packages.
 '
 
+[[ -d /lib/live ]] && { echo "$0: This script is not meant to be run in a live session." >&2; exit 0;}
+
 for i in "$@"
 do
     case "$i" in
     -h|--help)
         echo "$HELP"
         exit 0
+        ;;
+    --firstrun)
+        [[ -e $HOME/.config/bunsen/bl-welcome ]] && exit 0
         ;;
     '')
         ;;
@@ -133,24 +138,18 @@ installPage() {
     return 1
 }
 
-[[ -d /lib/live ]] && exit 0
-
-if [[ ${1-} = '--firstrun' ]]; then # First run, from autostart
-    [[ -e $HOME/.config/bunsen/bl-welcome ]] && exit 0
-fi
-
 terminalCheck -T 'WELCOME!'
 
 exec > >( tee -a "$logfile" ) 2>&1
 
 log "Starting bl-welcome for $USER at $(date)"
 
-createFlag 'bl-welcome'
-
 if [[ $( id -u ) -eq 0 ]]; then
     echo $"Error: This script should not be run directly by root." >&2
     exit 1
 fi
+
+createFlag 'bl-welcome'
 
 # Run through steps
 STEP=1
