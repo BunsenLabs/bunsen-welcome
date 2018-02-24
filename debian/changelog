@@ -1,3 +1,9 @@
+bunsen-welcome (9.3.1-1) helium; urgency=high
+
+  * Adjust initial tests before running script.
+
+ -- John Crawley <john@bunsenlabs.org>  Sat, 24 Feb 2018 17:24:43 +0900
+
 bunsen-welcome (9.3-2) helium; urgency=medium
 
   * Update copyright.
