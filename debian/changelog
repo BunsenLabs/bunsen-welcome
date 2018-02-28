@@ -1,3 +1,10 @@
+bunsen-welcome (9.3.1-2) helium; urgency=medium
+
+  * Put all metapackages in 'Section: metapackages'.
+     This will affect treatment of dependencies.
+
+ -- John Crawley <john@bunsenlabs.org>  Wed, 28 Feb 2018 16:26:21 +0900
+
 bunsen-welcome (9.3.1-1) helium; urgency=high
 
   * Adjust initial tests before running script.

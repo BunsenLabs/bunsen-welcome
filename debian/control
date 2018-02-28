@@ -9,6 +9,7 @@ Vcs-Git: https://github.com/BunsenLabs/bunsen-welcome.git
 Vcs-Browser: https://github.com/BunsenLabs/bunsen-welcome
 
 Package: bunsen-welcome
+Section: misc
 Architecture: all
 Depends: ${misc:Depends}, bunsen-common (>= 8.8.1-1), bunsen-configs (>=8.7.2-1), xterm | x-terminal-emulator, laptop-detect
 Description: BunsenLabs welcome script
@@ -16,12 +17,14 @@ Description: BunsenLabs welcome script
  to install some optional extra packages.
 
 Package: bunsen-meta-java
+Section: metapackages
 Architecture: all
 Depends: ${misc:Depends}, openjdk-8-jre, icedtea-8-plugin
 Description: BunsenLabs java meta package
  Installs various java packages.
 
 Package: bunsen-meta-lamp
+Section: metapackages
 Architecture: all
 Depends:
  ${misc:Depends},
@@ -42,12 +45,14 @@ Description: BunsenLabs lamp meta package
  Installs various web server tools.
 
 Package: bunsen-meta-libreoffice
+Section: metapackages
 Architecture: all
 Depends: ${misc:Depends}, libreoffice, libreoffice-gtk2, libreoffice-systray
 Description: BunsenLabs libreoffice meta package
  Installs libreoffice and associated gtk theme.
 
 Package: bunsen-meta-packaging
+Section: metapackages
 Architecture: all
 Depends:
  ${misc:Depends},
@@ -69,6 +74,7 @@ Description: BunsenLabs packaging meta package
  Installs various Debian packaging tools.
 
 Package: bunsen-meta-printer-support
+Section: metapackages
 Architecture: all
 Depends:
  ${misc:Depends}, cups, printer-driver-cups-pdf, system-config-printer, printer-driver-hpijs, hplip
@@ -76,12 +82,14 @@ Description: BunsenLabs printer support meta package
  Installs various printer packages to enable printer support.
 
 Package: bunsen-meta-ssh
+Section: metapackages
 Architecture: all
 Depends: ${misc:Depends}, openssh-server, openssh-client
 Description: BunsenLabs ssh meta package
  Installs ssh server and various ssh tools.
 
 Package: bunsen-meta-vcs
+Section: metapackages
 Architecture: all
 Depends:
  ${misc:Depends},
