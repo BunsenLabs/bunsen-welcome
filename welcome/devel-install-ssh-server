@@ -1,3 +1,0 @@
-SSH_SERVER_TITLE=$"ssh"
-SSH_SERVER_TEXT=$"OpenSSH is a FREE version of the SSH connectivity tools that technical users of the Internet rely on. Would you like to install OpenSSH?"
-installPage "$SSH_SERVER_TITLE" "$SSH_SERVER_TEXT" 'bunsen-meta-ssh'

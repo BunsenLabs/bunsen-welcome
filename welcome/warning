@@ -15,6 +15,7 @@ https://wiki.debian.org/DontBreakDebian
 (Right click the above link and choose "Open Link" to visit the page.)
 
 Please type "I understand" to continue with this script.
+(You will not be asked to do this again.)
 
 '
 WARNING_PROMPT=$"  Enter \"I understand\" to continue. (Q to quit) "

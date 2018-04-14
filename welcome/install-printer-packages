@@ -1,3 +1,0 @@
-installPage $"printer support" \
-    $"By default, BunsenLabs does not come with printer support. Would you like to add printer support now?" \
-    'bunsen-meta-printer-support'

@@ -1,12 +1,11 @@
 setupPage $"system tweaks" $"Checking your system for possible improvements..."
 
-autostart="$HOME/.config/openbox/autostart"
-autostart_bkp="${autostart}~bl-welcome-$( date +%FT%T )~"
 
-say 'PAE KERNEL
-----------
+say 'SYSTEM TWEAKS
+-------------
 '
 
+say 'checking for PAE...'
 if ! grep -wq pae /proc/cpuinfo
 then
     say $"Your processor does not support PAE." 2
@@ -19,6 +18,29 @@ else
     if  prompt "Would you like to install one now?"
     then
         promptInstall 'PAE Kernel' 'This script will install a linux kernel that supports PAE.' 'linux-image-686-pae' || say 'Continuing in spite of install problem...' 2
+    else
+        say 'continuing...' 2
+    fi
+fi
+
+isCDInstall() {
+    [[ -r /etc/bunsen/bunsen_install ]] || return 1
+    grep -q '^Version:.*-cd-' /etc/bunsen/bunsen_install && return 0
+    return 1
+}
+
+if isCDInstall
+then
+    say $"BunsenLabs metapackage
+
+This system seems to have been installed from the CD-size iso.\
+ You will not have the complete set of BunsenLabs packages installed.\
+ If you would like to install the missing ones now, you can install the\
+ BunsenLabs metapackage. (Alternatively, you can just install the ones you want\
+ later, using the usual apt interfaces.)"
+    if prompt $"Would you like to install all the BunsenLabs packages now?"
+    then
+        promptInstall 'BunsenLabs Metapackage' 'This script will install all the standard BunsenLabs packages.' 'bunsen-meta-all' || say 'Continuing in spite of install problem...' 2
     else
         say 'continuing...' 2
     fi
