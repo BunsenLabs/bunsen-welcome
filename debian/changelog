@@ -1,3 +1,9 @@
+bunsen-welcome (9.4.1-1) helium; urgency=medium
+
+  * Fix some bugs, improve user text interface.
+
+ -- John Crawley <john@bunsenlabs.org>  Sun, 15 Apr 2018 12:51:25 +0900
+
 bunsen-welcome (9.4-1) helium; urgency=medium
 
   * Add test for CD install, offer to install metapackage.
