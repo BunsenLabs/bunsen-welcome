@@ -30,7 +30,7 @@ Depends:
  ${misc:Depends},
  apache2,
  apache2-utils,
- mysql-server,
+ default-mysql-server,
  php,
  php-pear,
  php-gd,
