@@ -1,3 +1,9 @@
+bunsen-welcome (9.4.2-1) helium; urgency=medium
+
+  * system-tweaks: install bunsen-meta-all without recommends.
+
+ -- John Crawley <john@bunsenlabs.org>  Tue, 17 Apr 2018 18:29:09 +0900
+
 bunsen-welcome (9.4.1-1) helium; urgency=medium
 
   * Fix some bugs, improve user text interface.
