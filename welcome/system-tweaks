@@ -32,14 +32,13 @@ BunsenLabs metapackage:
 This system seems to have been installed from the CD-size iso,\
  and will not have the complete set of BunsenLabs packages installed.\
  If you would like to install the missing ones now, you can install the\
- BunsenLabs metapackage. Because package \"Recommends\" will also be installed,\
- over 800MB of extra disk space will be used.
+ BunsenLabs metapackage. Over 600MB of extra disk space will be used.
 
  (Alternatively, you can just install the packages you want later, using the usual apt interfaces.)
 "
     if prompt $"Would you like to install all the BunsenLabs packages now?" 'N'
     then
-        promptInstall 'BunsenLabs Metapackage' 'This script will install all the standard BunsenLabs packages.' 'bunsen-meta-all' 'gnome-user-guide-' || say 'Continuing in spite of install problem...' 2
+        promptInstall 'BunsenLabs Metapackage' 'This script will install all the standard BunsenLabs packages.' '--no-install-recommends' 'bunsen-meta-all' || say 'Continuing in spite of install problem...' 2
     else
         say 'continuing...' 2
     fi
