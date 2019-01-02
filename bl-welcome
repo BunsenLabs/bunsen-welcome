@@ -65,6 +65,9 @@ mirror_regex='https?://([[:alnum:]_-]+\.)+[[:alnum:]]+(/[[:alnum:]._-]+)*/?'
 # matches BunsenLabs url, http or https
 bunsen_regex='https?://pkg.bunsenlabs.org/debian'
 
+# Debian release that this BunsenLabs system is based on
+debian_base=buster
+
 log_dir="$HOME/.cache/bunsen-welcome"
 mkdir -p "$log_dir"
 logfile="$log_dir"/bl-welcome.log

@@ -7,16 +7,16 @@ However, backports cannot be tested as extensively as Debian stable, and are pro
 
 This will add the line:
 
- deb $default_mirror stretch-backports main contrib non-free
+ deb $default_mirror ${debian_base}-backports main contrib non-free
 
-to /etc/apt/sources.list.d/debian-stretch-backports.list,
+to /etc/apt/sources.list.d/debian-${debian_base}-backports.list,
 allowing you to upgrade or install packages using that repository."
 ADD_BACKPORTS_PROMPT=$"Would you like to enable the Debian Backports repositories?"
 ADD_BACKPORTS_EXTRA_ARG='N'
 
 haveDebianBackports() {
     shopt -s nullglob # in case there is nothing in sources.list.d/
-    grep -Pq '^deb +(?!.*bunsenlabs\.org)(?=.*debian)'"$mirror_regex"' +stretch-backports(?=.*main)(?=.*contrib)(?=.*non-free)( +[a-z-]+){1,3} *$' /etc/apt/sources.list{,.d/*}
+    grep -Pq '^deb +(?!.*bunsenlabs\.org)(?=.*debian)'"$mirror_regex +${debian_base}"'-backports(?=.*main)(?=.*contrib)(?=.*non-free)( +[a-z-]+){1,3} *$' /etc/apt/sources.list{,.d/*}
     local retval=$?
     shopt -u nullglob
     return $retval
@@ -29,20 +29,20 @@ addDebianBackports() {
         say $'\nAdding Debian backports to apt sources...\n' 1
         local bp_repo="# added by bl-welcome
 # Debian backports
-deb $default_mirror stretch-backports main contrib non-free
+deb $default_mirror ${debian_base}-backports main contrib non-free
 
 "
-        sudo tee <<< "$bp_repo" /etc/apt/sources.list.d/debian-stretch-backports.list >/dev/null
-        grep -q "^deb $default_mirror stretch-backports main contrib non-free\$" /etc/apt/sources.list.d/debian-stretch-backports.list || {
+        sudo tee <<< "$bp_repo" /etc/apt/sources.list.d/debian-"${debian_base}"-backports.list >/dev/null
+        grep -q "^deb $default_mirror ${debian_base}-backports main contrib non-free\$" /etc/apt/sources.list.d/debian-"${debian_base}"-backports.list || {
             say 'Failed to add Debian backports to apt sources.' pause >&2
             return 1
         }
-        if grep -q 'stretch-backports' /etc/apt/sources.list
+        if grep -q "${debian_base}-backports" /etc/apt/sources.list
         then
             say $'\ncommenting out obsolete backports entries in /etc/apt/sources.list...'
             local bkp_list=/etc/apt/sources.list~bl-welcome-$(date +%y%m%dT%T)~
             sudo cp /etc/apt/sources.list "$bkp_list"
-            sed '/stretch-backports/ s/^/#/' "$bkp_list" | sudo tee /etc/apt/sources.list >/dev/null
+            sed "/${debian_base}-backports/ s/^/#/" "$bkp_list" | sudo tee /etc/apt/sources.list >/dev/null
         fi
         say $'\nupdating apt...\n'
         safeUpdate || say 'Continuing in spite of update problem...' 2
@@ -58,7 +58,7 @@ else
         then
             say "Successfully added Debian backports.\
  You can add or upgrade packages with the command:
- sudo apt-get install -t stretch-backports <packagename>" pause
+ sudo apt-get install -t ${debian_base}-backports <packagename>" pause
         else
             say "Failed to add backports, going to next page." 3
         fi
