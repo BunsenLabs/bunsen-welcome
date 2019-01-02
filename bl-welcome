@@ -53,11 +53,17 @@ sourcePage() {
 }
 
 # default url for added Debian backports etc.
-default_mirror='http://deb.debian.org/debian'
+default_mirror='https://deb.debian.org/debian'
+
+# url for added BunsenLabs backports
+bunsen_mirror='https://pkg.bunsenlabs.org/debian'
 
 # matches most mirrors
 # add (?=.*debian) at beginning to insist on 'debian' somewhere (needs PCRE)
-mirror_regex='http://([[:alnum:]_-]+\.)+[[:alnum:]]+(/[[:alnum:]._-]+)*/?'
+mirror_regex='https?://([[:alnum:]_-]+\.)+[[:alnum:]]+(/[[:alnum:]._-]+)*/?'
+
+# matches BunsenLabs url, http or https
+bunsen_regex='https?://pkg.bunsenlabs.org/debian'
 
 log_dir="$HOME/.cache/bunsen-welcome"
 mkdir -p "$log_dir"
