@@ -2,8 +2,8 @@ Source: bunsen-welcome
 Section: misc
 Priority: optional
 Maintainer: John Crawley <john@bunsenlabs.org>
-Build-Depends: debhelper (>= 9), help2man
-Standards-Version: 3.9.5
+Build-Depends: debhelper (>= 10), help2man
+Standards-Version: 4.3.0
 Homepage: https://github.com/BunsenLabs/bunsen-welcome
 Vcs-Git: https://github.com/BunsenLabs/bunsen-welcome.git
 Vcs-Browser: https://github.com/BunsenLabs/bunsen-welcome
@@ -11,7 +11,7 @@ Vcs-Browser: https://github.com/BunsenLabs/bunsen-welcome
 Package: bunsen-welcome
 Section: misc
 Architecture: all
-Depends: ${misc:Depends}, bunsen-common (>= 8.8.1-1), bunsen-configs (>=8.7.2-1), xterm | x-terminal-emulator, laptop-detect
+Depends: ${misc:Depends}, bunsen-common (>= 10.0.1-1), xterm | x-terminal-emulator, laptop-detect
 Description: BunsenLabs welcome script
  Post installation script for BunsenLabs Linux,
  to install some optional extra packages.
@@ -77,7 +77,11 @@ Package: bunsen-meta-printer-support
 Section: metapackages
 Architecture: all
 Depends:
- ${misc:Depends}, cups, printer-driver-cups-pdf, system-config-printer, printer-driver-hpijs, hplip
+ ${misc:Depends},
+ cups,
+ printer-driver-all,
+ system-config-printer,
+ hplip
 Description: BunsenLabs printer support meta package
  Installs various printer packages to enable printer support.
 
