@@ -51,7 +51,10 @@ else
         then
             say "Successfully added BunsenLabs backports.\
  You can add or upgrade packages with the command:
- sudo apt-get install -t ${debian_base}-backports <packagename>" pause
+ sudo apt-get install -t ${debian_base}-backports <packagename>
+
+ (NB ${debian_base}-backports is correct!)
+ " pause
         else
             say "Failed to add backports, going to next page." 3
         fi
