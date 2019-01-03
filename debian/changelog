@@ -1,3 +1,13 @@
+bunsen-welcome (10.0-1) lithium; urgency=medium
+
+  * Migrate to BunsenLabs Lithium.
+  * Raise standards version to 4.3.0, debhelper version to 10.
+  * Remove bunsen-configs from Depends.
+  * bunsen-meta-printer-support: add printer-driver-all to Depends.
+  * Use https urls for all repositories.
+
+ -- John Crawley <john@bunsenlabs.org>  Thu, 03 Jan 2019 16:59:45 +0900
+
 bunsen-welcome (9.4.2-1) helium; urgency=medium
 
   * system-tweaks: install bunsen-meta-all without recommends.
