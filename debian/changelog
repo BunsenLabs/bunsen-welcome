@@ -1,3 +1,9 @@
+bunsen-welcome (10.0.1-1) lithium; urgency=medium
+
+  * Temporarily remove backports and dropbox install pages.
+
+ -- John Crawley <john@bunsenlabs.org>  Wed, 30 Jan 2019 17:47:55 +0900
+
 bunsen-welcome (10.0-1) lithium; urgency=medium
 
   * Migrate to BunsenLabs Lithium.
