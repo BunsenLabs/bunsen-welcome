@@ -67,7 +67,6 @@ Depends:
  lintian,
  devscripts,
  pbuilder,
- dpatch,
  dput,
  quilt
 Description: BunsenLabs packaging meta package
