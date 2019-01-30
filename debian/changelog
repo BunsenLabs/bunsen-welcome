@@ -1,3 +1,9 @@
+bunsen-welcome (10.0.2-1) lithium; urgency=medium
+
+  * Temporarily remove flash plugin page (bunsen-pepperflash not ready).
+
+ -- John Crawley <john@bunsenlabs.org>  Wed, 30 Jan 2019 18:31:01 +0900
+
 bunsen-welcome (10.0.1-2) lithium; urgency=medium
 
   * bunsen-meta-packaging: remove dependency on deprecated package dpatch.
