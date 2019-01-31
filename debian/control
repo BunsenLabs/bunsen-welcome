@@ -38,7 +38,6 @@ Depends:
  php-imagick,
  php-curl,
  curl,
- phpmyadmin,
  rsync,
  cronolog
 Description: BunsenLabs lamp meta package
