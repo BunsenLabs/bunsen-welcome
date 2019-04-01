@@ -40,12 +40,12 @@ install_dropbox() {
         return 1
     }
 
-    allInstalled python-gpgme || {
-        say 'We need to install the package python-gpgme.
+    allInstalled python3-gpg || {
+        say 'We need to install the package python3-gpg.
 Do you want to proceed?'
-        if prompt $"  Install python-gpgme?" Y
+        if prompt $"  Install python3-gpg?" Y
         then
-            safeInstall python-gpgme
+            safeInstall python3-gpg
         else
             say "Dropbox install abandoned.
 ...going to next page."
