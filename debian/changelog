@@ -1,3 +1,10 @@
+bunsen-welcome (9.4.2-2) helium; urgency=medium
+
+  * Non-maintainer upload.
+  * bunsen-meta-java: Drop nonexistant icedtea-8-plugin dependency
+
+ -- Jens John <dev@2ion.de>  Sat, 04 May 2019 11:48:23 +0200
+
 bunsen-welcome (9.4.2-1) helium; urgency=medium
 
   * system-tweaks: install bunsen-meta-all without recommends.
