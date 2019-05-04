@@ -19,7 +19,7 @@ Description: BunsenLabs welcome script
 Package: bunsen-meta-java
 Section: metapackages
 Architecture: all
-Depends: ${misc:Depends}, openjdk-8-jre, icedtea-8-plugin
+Depends: ${misc:Depends}, openjdk-8-jre
 Description: BunsenLabs java meta package
  Installs various java packages.
 
