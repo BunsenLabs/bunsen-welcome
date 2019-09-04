@@ -2,7 +2,7 @@ DEBIAN_DEVENV_TITLE=$"debian packaging tools"
 DEBIAN_DEVENV_TEXT=$"Would you like to install a suite of packages used for developing Debian packages?"
 DEBIAN_DEVENV_PBUILDER=$"Create pbuilder environment now?"
 
-if installPage "$DEBIAN_DEVENV_TITLE" "$DEBIAN_DEVENV_TEXT" 'bunsen-meta-packaging'; then
+if triggerInstallPage "$DEBIAN_DEVENV_TITLE" "$DEBIAN_DEVENV_TEXT" 'bunsen-meta-packaging'; then
     say "configuring /etc/pbuilderrc..." 2
     sudo tee <<< "MIRRORSITE=${default_mirror}" '/etc/pbuilderrc'
     sudo tee <<< "DISTRIBUTION=${debian_base}" -a '/etc/pbuilderrc'

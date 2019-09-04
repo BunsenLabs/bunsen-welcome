@@ -1,4 +1,4 @@
-installPage $"Bunsen Extra Images" \
+triggerInstallPage $"Bunsen Extra Images" \
     $"By default, BunsenLabs comes with a minimal set of background images.\
  Would you like to install the larger collection of wallpapers etc. from the BunsenLabs Extra Images package?\
  It will be a 100MB download, so might take some time, depending on your connection speed.\

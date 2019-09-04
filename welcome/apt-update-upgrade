@@ -16,17 +16,23 @@ then
     bw_new_version=$(checkVersion 'bunsen-welcome')
     if [[ $bw_new_version != $bw_version ]]
     then
+        # This allows us to upgrade bunsen-welcome at its first run.
         log "bunsen-welcome: upgraded to $bw_new_version"
         say "The package 'bunsen-welcome' has been upgraded.
-THIS SCRIPT MIGHT HAVE CHANGED, SO IT WILL BE RESTARTED.
-Please wait a moment..." 6
-        exec >/dev/tty 2>&1 # so terminalCheck() doesn't open a new terminal
-        exec "$0"
+THIS SCRIPT MIGHT HAVE CHANGED, SO IT WILL BE RESTARTED."
+        prompt $"  Hit \"Enter\" to continue, or \"q\" to quit..." Q && exit 0
+        #exec >/dev/tty 2>&1 # so terminalCheck() doesn't open a new terminal
+        # Above diversion no longer needed because we are already in terminal
+        # and --restart bypasses terminalCheck().
+        exec "$0 --restart"
     else
         sleep 2
     fi
 else
-    say 'Upgrade was necessary to continue the script. You can run it later with "bl-welcome"
-Exiting...' 2
+    say 'Upgrade was necessary to continue the script.
+You can run it later by entering:
+    bl-welcome
+
+Exiting...' 3
     exit 0
 fi

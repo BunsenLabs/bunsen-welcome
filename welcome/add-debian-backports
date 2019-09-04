@@ -21,6 +21,7 @@ haveDebianBackports() {
     shopt -u nullglob
     return $retval
 }
+
 addDebianBackports() {
     if haveDebianBackports
     then
@@ -44,8 +45,8 @@ deb $default_mirror ${debian_base}-backports main contrib non-free
             sudo cp /etc/apt/sources.list "$bkp_list"
             sed "/${debian_base}-backports/ s/^/#/" "$bkp_list" | sudo tee /etc/apt/sources.list >/dev/null
         fi
-        say $'\nupdating apt...\n'
-        safeUpdate || say 'Continuing in spite of update problem...' 2
+#        say $'\nupdating apt...\n'
+#        triggerUpdate || say 'Continuing in spite of update problem...' 2 # update is run later anyway
     fi
 }
 

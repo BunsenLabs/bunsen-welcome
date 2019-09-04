@@ -37,8 +37,8 @@ deb $bunsen_mirror ${debian_base}-backports main
             say 'Failed to add BunsenLabs backports to apt sources.' pause >&2
             return 1
         }
-        say $'\nupdating apt...\n'
-        safeUpdate || say 'Continuing in spite of update problem...' 2
+#        say $'\nupdating apt...\n'
+#        triggerUpdate || say 'Continuing in spite of update problem...' 2 # update is run later anyway
     fi
 }
 
@@ -55,8 +55,24 @@ else
 
  (NB ${debian_base}-backports is correct!)
  " pause
+            if ! haveDebianBackports
+            then
+                say "You do not have Debian Backports enabled.
+Some BunsenLabs Backports packages depend on Debian backported versions of other packages."
+                if prompt "Would you like to add the Debian Backports now?"
+                then
+                    if addDebianBackports
+                    then
+                        say "Successfully added Debian backports.\
+             You can add or upgrade packages with the command:
+             sudo apt-get install -t ${debian_base}-backports <packagename>" pause
+                    else
+                        say "Failed to add Debian backports." 3
+                    fi
+                fi
+            fi
         else
-            say "Failed to add backports, going to next page." 3
+            say "Failed to add BunsenLabs backports, going to next page." 3
         fi
     fi
 fi

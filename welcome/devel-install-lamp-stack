@@ -47,8 +47,8 @@ configureApache() {
 
 }
 
-if installPage "$LAMP_1_TITLE" "$LAMP_1_TEXT" 'bunsen-meta-lamp'; then
+if triggerInstallPage "$LAMP_1_TITLE" "$LAMP_1_TEXT" 'bunsen-meta-lamp'; then
     if setupPage "$LAMP_2_TITLE" "$LAMP_2_TEXT" "$LAMP_2_PROMPT" 'N'; then
-        configureApache || say "Configuring the default site for Apache2 failed. Check $logfile for hints." pause
+        triggerRunPostFunction configureApache
     fi
 fi

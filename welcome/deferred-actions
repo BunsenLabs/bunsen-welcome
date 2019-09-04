@@ -1,0 +1,85 @@
+START_INSTALLS_TITLE=$"Install Packages"
+START_INSTALLS_TEXT_NONE=$"No packages have been chosen to install."
+
+START_INSTALLS_TEXT='This script will now execute some deferred actions.
+'
+
+log "Deferred actions arrays:
+$( declare -p pre_functions_to_execute pkgs_to_remove pkgs_to_install pkgs_to_install_norecs post_functions_to_execute )"
+
+(( ${#pre_functions_to_execute[@]} > 0 )) && START_INSTALLS_TEXT+=$"
+These functions will be executed before installing packages:
+ ${pre_functions_to_execute[*]/%/$'\n'}"
+
+(( ${#pkgs_to_remove[@]} > 0 )) && START_INSTALLS_TEXT+=$"
+These packages will be removed:
+ ${pkgs_to_remove[*]/%/$'\n'}"
+
+(( ${#pkgs_to_install[@]} > 0 )) && START_INSTALLS_TEXT+=$"
+These packages will be installed:
+ ${pkgs_to_install[*]/%/$'\n'}"
+
+(( ${#pkgs_to_install_norecs[@]} > 0 )) && START_INSTALLS_TEXT+=$"
+These packages will be installed without recommends:
+ ${pkgs_to_install_norecs[*]/%/$'\n'}"
+
+(( ${#post_functions_to_execute[@]} > 0 )) && START_INSTALLS_TEXT+=$"
+These functions will be executed after installing packages:
+ ${post_functions_to_execute[*]/%/$'\n'}"
+
+START_INSTALLS_PROMPT=$"Would you like to perform these actions?"
+
+haveWork() {
+    (( ${#pkgs_to_install[@]} > 0 )) && return 0
+    (( ${#pkgs_to_install_norecs[@]} > 0 )) && return 0
+    (( ${#pkgs_to_remove[@]} > 0 )) && return 0
+    (( ${#pre_functions_to_execute[@]} > 0 )) && return 0
+    (( ${#post_functions_to_execute[@]} > 0 )) && return 0
+    return 1
+}
+
+doInstalls(){
+    say 'Updating apt data...' 1
+    safeUpdate || say 'Continuing in spite of update problems...' 3
+    for f in "${pre_functions_to_execute[@]}"
+    do
+        [[ $( type -t "$f" ) = 'function' ]] || { echo "Cannot execute ${f}, it is not a function." >&2; return 1;}
+        say "Running ${f}..." 1
+        "$f" || { echo "$f failed." >&2; return 1;}
+    done
+    if (( ${#pkgs_to_remove[@]} > 0 )); then
+        say 'Removing packages...' 1
+        safeRemove "${pkgs_to_remove[@]}" || { echo "Failed to remove ${pkgs_to_remove[*]}." >&2; return 1;}
+    fi
+    if (( ${#pkgs_to_install[@]} > 0 )); then
+        say 'Installing packages...' 1
+        safeInstall "${pkgs_to_install[@]}" || { echo "Failed to install ${pkgs_to_install[*]}." >&2; return 1;}
+    fi
+    if (( ${#pkgs_to_install_norecs[@]} > 0 )); then
+        say 'Installing packages (without recommends)...' 1
+        safeInstall --no-install-recommends "${pkgs_to_install_norecs[@]}" || { echo "Failed to install ${pkgs_to_install_norecs[*]}." >&2; return 1;}
+    fi
+    for f in "${post_functions_to_execute[@]}"
+    do
+        [[ $( type -t "$f" ) = 'function' ]] || { echo "Cannot execute ${f}, it is not a function." >&2; return 1;}
+        say "Running ${f}..." 1
+        "$f" || { echo "$f failed." >&2; return 1;}
+    done
+}
+
+if haveWork
+then
+    if setupPage "$START_INSTALLS_TITLE" "$START_INSTALLS_TEXT" "$START_INSTALLS_PROMPT"
+    then
+        doInstalls || { say "There was a problem somewhere. Check $logfile for possible hints, or ask on the BunsenLabs forum." pause; exit 1;}
+    else
+        say 'Installations abandoned.
+
+You can run this script any time later by entering:
+    bl-welcome
+Now exiting...' 3
+        exit 0
+    fi
+else
+    setupPage "$START_INSTALLS_TITLE" "$START_INSTALLS_TEXT_NONE"
+fi

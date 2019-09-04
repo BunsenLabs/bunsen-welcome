@@ -12,7 +12,7 @@ else
  Depending on your hardware, a PAE kernel might, or might not, improve performance."
     if  prompt "Would you like to install one now?"
     then
-        promptInstall 'PAE Kernel' 'This script will install a linux kernel that supports PAE.' 'linux-image-686-pae' || say 'Continuing in spite of install problem...' 2
+        promptTriggerInstall 'PAE Kernel' 'This script will install a linux kernel that supports PAE.' 'linux-image-686-pae' || say 'Continuing in spite of install problem...' 2
     else
         say 'continuing...' 2
     fi
@@ -38,7 +38,7 @@ This system seems to have been installed from the CD-size iso,\
 "
     if prompt $"Would you like to install all the BunsenLabs packages now?" 'N'
     then
-        promptInstall 'BunsenLabs Metapackage' 'This script will install all the standard BunsenLabs packages.' '--no-install-recommends' 'bunsen-meta-all' || say 'Continuing in spite of install problem...' 2
+        promptTriggerInstall 'BunsenLabs Metapackage' 'This script will install all the standard BunsenLabs packages.' '--no-install-recommends' 'bunsen-meta-all' || say 'Continuing in spite of install problem...' 2
     else
         say 'continuing...' 2
     fi

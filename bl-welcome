@@ -15,6 +15,15 @@ adjust system configurations and install packages.
 
 [[ -d /lib/live ]] && { echo "$0: This script is not meant to be run in a live session." >&2; exit 0;}
 
+# Contents of these arrays will be executed at the "deferred-actions" page.
+pkgs_to_install=()
+pkgs_to_install_norecs=()
+pkgs_to_remove=()
+pre_functions_to_execute=() # executed before package installs
+post_functions_to_execute=() # executed after package installs
+
+restart=false
+
 for i in "$@"
 do
     case "$i" in
@@ -25,6 +34,9 @@ do
     --firstrun)
         [[ -e $HOME/.config/bunsen/bl-welcome ]] && exit 0
         ;;
+    --restart)
+        restart=true
+        ;;
     '')
         ;;
     *)
@@ -34,23 +46,20 @@ do
     esac
 done
 
-TEXTDOMAIN=bl-welcome
+TEXTDOMAIN=bl-welcome # might be used in future for translations
 
 BL_COMMON_LIBDIR='/usr/lib/bunsen/common'
 BL_WELCOME_LIBDIR='/usr/lib/bunsen/welcome'
+#BL_COMMON_LIBDIR='./'
+#BL_WELCOME_LIBDIR='./welcome'
 
 if ! . "$BL_COMMON_LIBDIR/bl-includes" 2> /dev/null; then
     echo $"Error: Failed to source bl-includes in $BL_COMMON_LIBDIR" >&2
     exit 1
 fi
 
-sourcePage() {
-    if [[ ! -r "$BL_WELCOME_LIBDIR/$1" ]]; then
-        echo $"Error: Unable to read $1 in $BL_WELCOME_LIBDIR" >&2
-        exit 1
-    fi
-    . "$BL_WELCOME_LIBDIR/$1"
-}
+# Debian release that this BunsenLabs system is based on
+debian_base=buster
 
 # default url for added Debian backports etc.
 default_mirror='https://deb.debian.org/debian'
@@ -65,12 +74,18 @@ mirror_regex='https?://([[:alnum:]_-]+\.)+[[:alnum:]]+(/[[:alnum:]._-]+)*/?'
 # matches BunsenLabs url, http or https
 bunsen_regex='https?://pkg.bunsenlabs.org/debian'
 
-# Debian release that this BunsenLabs system is based on
-debian_base=buster
+# pages (in BL_WELCOME_LIBDIR) that bl-welcome will run through
+STEPS_FIRST=('intro' 'warning' 'apt-update-upgrade')
+STEPS_UNDERSTOOD=('intro' 'apt-update-upgrade')
+STEPS_RESTART=('restart')
+STEPS_BASIC=('system-tweaks' 'install-images-extra' 'install-java-packages' 'add-debian-backports' 'add-bunsen-backports' 'install-flashplugin' 'install-dropbox' 'devel')
+STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 log_dir="$HOME/.cache/bunsen-welcome"
 mkdir -p "$log_dir"
 logfile="$log_dir"/bl-welcome.log
+
+####### functions #######
 
 log() {
     echo "
@@ -84,10 +99,13 @@ ${1-}
 ------------------------------------------------" >> "$logfile"
 }
 
-#STEPS_BASIC=('apt-update-upgrade' 'system-tweaks' 'install-images-extra' 'install-java-packages' 'add-debian-backports' 'add-bunsen-backports' 'install-flashplugin' 'install-dropbox' 'devel')
-# some steps temporarily removed while in development stage
-STEPS_BASIC=('apt-update-upgrade' 'system-tweaks' 'install-images-extra' 'install-java-packages' 'devel')
-STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
+sourcePage() {
+    if [[ ! -r "$BL_WELCOME_LIBDIR/$1" ]]; then
+        echo $"Error: Unable to read $1 in $BL_WELCOME_LIBDIR" >&2
+        exit 1
+    fi
+    . "$BL_WELCOME_LIBDIR/$1"
+}
 
 # prints something like: -------[ page 1 of 10 ]-------
 header() {
@@ -115,12 +133,15 @@ $2
     return $?
 }
 
-# Common function for most install scripts. USE THIS unless you really can't.
-# Usage: installPage title text package...
-# example: installPage 'LibreOffice suite' 'This will install libreoffice' 'libreoffice'
-# Returns 0 if installation suceeds, 2 if package(s) already installed
-# or install declined, 1 if there was an error.
-installPage() {
+# trigger* functions prepare lists for actions at the "deferred-actions" step.
+
+# This is the easiest function to use for a page installing one package.
+# Usage: triggerInstallPage title text package...
+# example: triggerInstallPage 'LibreOffice suite' 'This will install libreoffice' 'libreoffice'
+# Returns 0 if package added to install list,
+# 2 if package(s) already installed or install declined,
+# 1 if there was an error.
+triggerInstallPage() {
     local title=$"install"" $1"
     local text="$1 has already been installed."
     allInstalled "${@:3}" && {
@@ -137,7 +158,7 @@ installPage() {
 
     if setupPage "$title" "$text" "$prompt" 'N'
     then
-        if safeInstall "${@:3}"
+        if triggerInstall "${@:3}"
         then
             return 0
         else
@@ -149,48 +170,138 @@ installPage() {
     return 1
 }
 
-terminalCheck -T 'WELCOME!'
+# usage: triggerInstall [--apt-get-option] <package> [<packages>]
+triggerInstall() {
+    local norecs=false
+    case ${1-} in
+    --no-install-recommends)
+        norecs=true
+        shift
+        ;;
+    -*)
+        echo "${1}: this apt option is not supported by triggerInstall()" >&2
+        return 1
+        ;;
+    '')
+        echo "No package has been sent to triggerInstall()" >&2
+        return 1
+        ;;
+    esac
+    if [[ $norecs = true ]]
+    then
+        pkgs_to_install_norecs+=("$@")
+    else
+        pkgs_to_install+=("$@")
+    fi
+    say "$* has been added to the install list for execution later." 2
+}
 
-exec > >( tee -a "$logfile" ) 2>&1
+# usage: triggerRemove <package> [<packages>]
+triggerRemove() {
+    [[ -n ${1-} ]] || { echo "No package has been sent to triggerRemove()" >&2; return 1;}
+    pkgs_to_remove+=("$@")
+    say "$* has been added to the removal list for execution later." 2
+}
 
-log "Starting bl-welcome for $USER at $(date)"
+# usage: triggerRunPreFunction <function> [<functions>]
+triggerRunPreFunction(){
+    [[ -n ${1-} ]] || { echo "No function passed to triggerRunPreFunction()" >&2; return 1;}
+    pre_functions_to_execute+=("$@")
+    say "function(s) $* will be run later, before installing packages." 2
+}
+
+# usage: triggerRunPostFunction <function> [<functions>]
+triggerRunPostFunction(){
+    [[ -n ${1-} ]] || { echo "No function passed to triggerRunPostFunction()" >&2; return 1;}
+    post_functions_to_execute+=("$@")
+    say "function(s) $* will be run later, after installing packages." 2
+}
+
+# Usage: promptTriggerInstall name description [--apt-get-option] package [package...]
+# To have some defined function - functionname - run first, use:
+# promptTriggerInstall --setup functionname name desc...
+# This function is only needed in cases when triggerInstallPage is inappropriate.
+promptTriggerInstall() {
+    local setupFunction=
+    if [[ $1 = '--setup' ]]; then
+        if [[ -n ${2-} && $(type -t "$2") = 'function'  ]]; then
+            setupFunction="$2"
+            shift 2
+        else
+            say "Error: ${2-} is not a function."
+            return 1
+        fi
+    fi
+
+    tput clear
+    local title="INSTALL ${1^^}"
+    say "
+$title
+${title//?/-}
+
+$2
+"
+
+    prompt '  Add to the install list?' || return 1
+
+    if [[ -n $setupFunction ]]; then
+        triggerRunPreFunction "$setupFunction" || return 1 # run setup function later, if it exists
+    fi
+
+    triggerInstall "${@:3}" || return 1
+}
+
+####### end functions #######
+
+if [[ $restart = true ]]
+then
+    log "Restarting bl-welcome for $USER at $(date)"
+else
+    terminalCheck -T 'WELCOME!'
+    exec > >( tee -ia "$logfile" ) 2>&1
+    log "Starting bl-welcome for $USER at $(date)"
+fi
 
 if [[ $( id -u ) -eq 0 ]]; then
     echo $"Error: This script should not be run directly by root." >&2
     exit 1
 fi
 
+[[ $( lsb_release -cs ) = "$debian_base" ]] || {
+    echo "Error: This script should be run only on Debian ${debian_base^}." >&2
+    exit 1
+}
+
 createFlag 'bl-welcome'
+
+if [[ $restart = true ]]; then
+    STEPS_BASIC=("${STEPS_RESTART[@]}" "${STEPS_BASIC[@]}")
+elif [[ -e $HOME/.config/bunsen/bl-welcome-understood ]]; then
+    STEPS_BASIC=("${STEPS_UNDERSTOOD[@]}" "${STEPS_BASIC[@]}")
+else
+    STEPS_BASIC=("${STEPS_FIRST[@]}" "${STEPS_BASIC[@]}")
+fi
+
+(( STEPS = ${#STEPS_BASIC[@]} + ${#STEPS_DEVEL[@]} + 2 )) # +2 is for deferred-actions and fini
 
 # Run through steps
 STEP=1
-if [[ -e $HOME/.config/bunsen/bl-welcome-understood ]]; then
-    (( STEPS = ${#STEPS_BASIC[@]} + ${#STEPS_DEVEL[@]} + 2 )) # 2 is intro and fini
-    sourcePage intro
-else
-    (( STEPS = ${#STEPS_BASIC[@]} + ${#STEPS_DEVEL[@]} + 3 )) # 3 is intro, warning and fini
-    sourcePage intro
-    ((STEP++))
-    sourcePage warning
-    createFlag 'bl-welcome-understood'
-fi
-sleep 2
-tput clear
-connectiontest
 
 DEVEL=false
 
 for curStep in "${STEPS_BASIC[@]}"; do
-    ((STEP++))
     sourcePage "$curStep"
+    ((STEP++))
 done
 
 if $DEVEL; then
     for curStep in "${STEPS_DEVEL[@]}"; do
-        ((STEP++))
         sourcePage "$curStep"
+        ((STEP++))
     done
 fi
+
+sourcePage deferred-actions
 STEP=$STEPS
 sourcePage fini
 

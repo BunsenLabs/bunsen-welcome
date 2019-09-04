@@ -22,6 +22,9 @@ You might find these forum sections interesting:
 
 And the BunsenLabs menu has a "Help" section too...
 
+You can rerun this script at any time with
+    bl-welcome
+
 Hit any key to exit.'
 
 read -srn1
