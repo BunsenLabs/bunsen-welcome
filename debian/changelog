@@ -1,3 +1,14 @@
+bunsen-welcome (10.1-1) lithium; urgency=medium
+
+  * bunsen-welcome: 
+     - Defer most actions till all dialogues have completed.
+     - Restore flash plugin page using pepperflashplugin-nonfree.
+     - Restore dropbox page.
+    bunsen-meta-java: change dependency to default-jre.
+    bunsen-meta-libreoffice: remove dependency on libreoffice-systray.
+
+ -- John Crawley <john@bunsenlabs.org>  Thu, 05 Sep 2019 15:14:01 +0900
+
 bunsen-welcome (10.0.2-2) lithium; urgency=medium
 
   * bunsen-meta-lamp: remove dependency on missing package phpmyadmin.
