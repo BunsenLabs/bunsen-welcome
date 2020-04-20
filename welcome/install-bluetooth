@@ -1,0 +1,3 @@
+triggerInstallPage $"Bluetooth support" \
+    $"By default, BunsenLabs does not come with Bluetooth support. Would you like to install some bluetooth packages now?" \
+    'bunsen-meta-bluetooth'

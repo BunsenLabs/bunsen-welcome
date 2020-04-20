@@ -16,6 +16,20 @@ Description: BunsenLabs welcome script
  Post installation script for BunsenLabs Linux,
  to install some optional extra packages.
 
+Package: bunsen-meta-bluetooth
+Section: metapackages
+Architecture: all
+Depends:
+ ${misc:Depends},
+ bluez,
+ blueman,
+ pulseaudio-module-bluetooth,
+ bluez-cups,
+ bluez-obexd,
+ bluez-tools
+Description: BunsenLabs bluetooth meta package
+ Installs various bluetooth support packages.
+
 Package: bunsen-meta-java
 Section: metapackages
 Architecture: all

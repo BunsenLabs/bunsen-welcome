@@ -78,7 +78,7 @@ bunsen_regex='https?://pkg.bunsenlabs.org/debian'
 STEPS_FIRST=('intro' 'warning' 'apt-update-upgrade')
 STEPS_UNDERSTOOD=('intro' 'apt-update-upgrade')
 STEPS_RESTART=('restart')
-STEPS_BASIC=('system-tweaks' 'install-images-extra' 'install-java-packages' 'add-debian-backports' 'add-bunsen-backports' 'install-flashplugin' 'install-dropbox' 'devel')
+STEPS_BASIC=('system-tweaks' 'add-debian-backports' 'add-bunsen-backports' 'install-bluetooth' 'install-java-packages' 'install-flashplugin' 'install-dropbox' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 log_dir="$HOME/.cache/bunsen-welcome"
