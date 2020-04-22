@@ -1,0 +1,21 @@
+bunsen-meta-printer-support
+===========================
+
+This metapackage will install the cups printing system, 
+along with a selection of drivers.
+
+It will also apply a change (via dpkg-divert) to 
+the cups-browsed configuration file /etc/cups/cups-browsed.conf,
+to support IPP printers.
+
+This line is uncommented:
+
+CreateIPPPrinterQueues All
+
+For more information, see:
+https://wiki.debian.org/CUPSQuickPrintQueues#IPP_Printers
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=921252
+https://lists.debian.org/debian-printing/2020/01/msg00073.html
+
+The above configuration will probably become default in Debian Bullseye,
+making this package's dpkg file diversion unnecessary.

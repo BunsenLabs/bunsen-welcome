@@ -2,7 +2,7 @@ Source: bunsen-welcome
 Section: misc
 Priority: optional
 Maintainer: John Crawley <john@bunsenlabs.org>
-Build-Depends: debhelper (>= 10), help2man
+Build-Depends: debhelper (>= 10), help2man, config-package-dev (>= 5.1)
 Standards-Version: 4.3.0
 Homepage: https://github.com/BunsenLabs/bunsen-welcome
 Vcs-Git: https://github.com/BunsenLabs/bunsen-welcome.git
@@ -96,6 +96,7 @@ Depends:
  hplip
 Description: BunsenLabs printer support meta package
  Installs various printer packages to enable printer support.
+ Also configures cups-browsed for IPP printers.
 
 Package: bunsen-meta-ssh
 Section: metapackages
