@@ -1,3 +1,9 @@
+bunsen-welcome (10.1.2-1) lithium; urgency=medium
+
+  * bunsen-meta-printer-support: add cups-browsed config for IPP printers.
+
+ -- John Crawley <john@bunsenlabs.org>  Wed, 22 Apr 2020 18:16:30 +0900
+
 bunsen-welcome (10.1.1-1) lithium; urgency=medium
 
   * Add bunsen-meta-bluetooth and install option for bluetooth support.
