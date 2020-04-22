@@ -94,6 +94,8 @@ Depends:
  printer-driver-all,
  system-config-printer,
  hplip
+Provides: ${diverted-files}
+Conflicts: ${diverted-files}
 Description: BunsenLabs printer support meta package
  Installs various printer packages to enable printer support.
  Also configures cups-browsed for IPP printers.
