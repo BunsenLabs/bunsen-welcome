@@ -91,9 +91,9 @@ Architecture: all
 Depends:
  ${misc:Depends},
  cups,
- printer-driver-all,
- system-config-printer,
- hplip
+ cups-browsed (>= 1.21.6-5),
+ system-config-printer
+Recommends: printer-driver-all, hplip
 Provides: ${diverted-files}
 Conflicts: ${diverted-files}
 Description: BunsenLabs printer support meta package
