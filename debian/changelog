@@ -1,3 +1,9 @@
+bunsen-welcome (9.4.3-1) helium; urgency=medium
+
+  * Tweak mirror regex to recognize https as well as http protocols.
+
+ -- John Crawley <john@bunsenlabs.org>  Mon, 01 Jun 2020 16:13:11 +0900
+
 bunsen-welcome (9.4.2-2) helium; urgency=medium
 
   * Non-maintainer upload.
