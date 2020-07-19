@@ -24,7 +24,7 @@ THIS SCRIPT MIGHT HAVE CHANGED, SO IT WILL BE RESTARTED."
         #exec >/dev/tty 2>&1 # so terminalCheck() doesn't open a new terminal
         # Above diversion no longer needed because we are already in terminal
         # and --restart bypasses terminalCheck().
-        exec "$0 --restart"
+        exec "$0" --restart
     else
         sleep 2
     fi
