@@ -1,3 +1,10 @@
+bunsen-welcome (10.1.5-1) lithium; urgency=medium
+
+  * Bugfix: command to restart when bunsen-welcome upgrades
+      was wrongly quoted.
+
+ -- John Crawley <john@bunsenlabs.org>  Sun, 19 Jul 2020 14:34:31 +0900
+
 bunsen-welcome (10.1.4-1) lithium; urgency=medium
 
   * Add option to install bunsen-meta-lite for CD installs.
