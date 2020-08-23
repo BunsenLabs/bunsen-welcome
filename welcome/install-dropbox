@@ -4,9 +4,14 @@ install_dropbox_title=$"Dropbox"
 # If dropbox.py is in user's $PATH they can use that command
 # to control dropbox. Otherwise, use the absolute path /path/to/dropbox.py
 USER_DBPY_DIR="$HOME/bin"
-USER_DBPY="$USER_DBPY_DIR/dropbox.py"
+USER_DBPY="$USER_DBPY_DIR/dropbox"
+# If dropbox.py is already installed, link to that,
+# so executable is named "dropbox".
+[[ -x "$USER_DBPY_DIR/dropbox.py" && ! -e "$USER_DBPY_DIR/dropbox" ]] && {
+    ln -s dropbox.py "$USER_DBPY_DIR/dropbox"
+}
 
-REMOTE_DBPY='https://www.dropbox.com/download?dl=packages/dropbox.py'
+REMOTE_DBPY='https://linux.dropbox.com/packages/dropbox.py'
 
 USER_DB_DIR="$HOME/.dropbox-dist/"
 
