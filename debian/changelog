@@ -1,3 +1,10 @@
+bunsen-welcome (10.1.6-1~test1) lithium; urgency=medium
+
+  * Improve test for live session.
+  * Improve test for debian codename in apt sources.
+
+ -- John Crawley <john@bunsenlabs.org>  Fri, 04 Sep 2020 16:19:01 +0900
+
 bunsen-welcome (10.1.5-1) lithium; urgency=medium
 
   * Bugfix: command to restart when bunsen-welcome upgrades
