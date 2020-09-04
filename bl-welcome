@@ -13,7 +13,7 @@ it will start an interactive process whereby the user can
 adjust system configurations and install packages.
 '
 
-[[ -d /lib/live ]] && { echo "$0: This script is not meant to be run in a live session." >&2; exit 0;}
+grep -q '\<boot=live\>' /proc/cmdline && { echo "$0: This script is not meant to be run in a live session." >&2; exit 0;}
 
 # Contents of these arrays will be executed at the "deferred-actions" page.
 pkgs_to_install=()
@@ -251,6 +251,25 @@ $2
     triggerInstall "${@:3}" || return 1
 }
 
+# Returns 0 if a line in 'apt-cache policy' contains all the terms provided.
+# Terms can be in any order, quote terms containing spaces.
+# eg: checkSources c=main 'l=Debian Backports'
+checkSources() {
+    local re=
+    for term in "$@"
+    do
+        re+="(?=.*$term(,|\s*$))"
+    done
+    apt-cache policy | grep -Pq "$re" && return 0
+    return 1
+}
+
+# wrapper function in case future scripts want to do the test differently
+usingDebStable() {
+    checkSources "n=$debian_base" l=Debian c=main && return 0
+    return 1
+}
+
 ####### end functions #######
 
 if [[ $restart = true ]]
@@ -267,7 +286,7 @@ if [[ $( id -u ) -eq 0 ]]; then
     exit 1
 fi
 
-[[ $( lsb_release -cs ) = "$debian_base" ]] || {
+usingDebStable || {
     echo "Error: This script should be run only on Debian ${debian_base^}." >&2
     exit 1
 }
