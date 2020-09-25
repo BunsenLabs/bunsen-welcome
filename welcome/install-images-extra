@@ -1,6 +1,8 @@
-triggerInstallPage $"Bunsen Extra Images" \
-    $"By default, BunsenLabs comes with a minimal set of background images.\
- Would you like to install the larger collection of wallpapers etc. from the BunsenLabs Extra Images package?\
- It will be a 100MB download, so might take some time, depending on your connection speed.\
+triggerInstallPage $"Bunsen Image Archives" \
+    $"BunsenLabs Lithium comes with a set of background images, but\
+ the wallpaper and other background images that were released\
+ with BunsenLabs Hydrogen and Helium are also still available.
+
+Would you like to install these other images from the BunsenLabs Image Archives package?\
  If you do not want to do this now, remember you can run this script anytime later with 'bl-welcome'" \
-    'bunsen-images-extra'
+    'bunsen-images-archives'
