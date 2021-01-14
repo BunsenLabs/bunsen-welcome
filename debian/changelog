@@ -1,3 +1,9 @@
+bunsen-welcome (10.2-1) lithium; urgency=medium
+
+  * Add bunsen-images-archives to install options.
+
+ -- John Crawley <john@bunsenlabs.org>  Thu, 14 Jan 2021 10:39:14 +0900
+
 bunsen-welcome (10.1.6-1) lithium; urgency=medium
 
   * Improve test for live session.
