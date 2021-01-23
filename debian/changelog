@@ -1,3 +1,9 @@
+bunsen-welcome (10.2.1-1) lithium; urgency=medium
+
+  * Remove discontinued flash plugin install option.
+
+ -- John Crawley <john@bunsenlabs.org>  Sat, 23 Jan 2021 15:00:30 +0900
+
 bunsen-welcome (10.2-1) lithium; urgency=medium
 
   * Add bunsen-images-archives to install options.
