@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@ --with=config-package
+	dh $@
 
 override_dh_installman:
 	debian/genman.sh
