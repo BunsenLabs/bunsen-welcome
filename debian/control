@@ -2,8 +2,8 @@ Source: bunsen-welcome
 Section: misc
 Priority: optional
 Maintainer: John Crawley <john@bunsenlabs.org>
-Build-Depends: debhelper (>= 10), help2man, config-package-dev (>= 5.1)
-Standards-Version: 4.3.0
+Build-Depends: debhelper-compat (= 12), help2man, config-package-dev (>= 5.1)
+Standards-Version: 4.5.1
 Homepage: https://github.com/BunsenLabs/bunsen-welcome
 Vcs-Git: https://github.com/BunsenLabs/bunsen-welcome.git
 Vcs-Browser: https://github.com/BunsenLabs/bunsen-welcome
@@ -60,7 +60,7 @@ Description: BunsenLabs lamp meta package
 Package: bunsen-meta-libreoffice
 Section: metapackages
 Architecture: all
-Depends: ${misc:Depends}, libreoffice, libreoffice-gtk2, libreoffice-gnome
+Depends: ${misc:Depends}, libreoffice, libreoffice-gtk3, libreoffice-gnome
 Description: BunsenLabs libreoffice meta package
  Installs libreoffice and associated gtk theme.
 
