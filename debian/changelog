@@ -1,3 +1,17 @@
+bunsen-welcome (11.0-1) beryllium; urgency=medium
+
+  * Migrate for Debian Bullseye.
+    + debian/control: Bump Standards-Version to 4.5.1 - no changes required.
+    + debian/control: Declare debhelper compatibility 12.
+    + Remove debian/compat, now unnecessary.
+    + debian/copyright: update year.
+  * Remove unused flash plugin install file.
+  * bunsen-meta-printer-support: remove "CreateIPPPrinterQueues All"
+     from cups-browsed config - now left to package default.
+  * bunsen-meta-libreoffice: libreoffice-gtk2 dep. to libreoffice-gtk3
+
+ -- John Crawley <john@bunsenlabs.org>  Sat, 13 Feb 2021 18:32:40 +0900
+
 bunsen-welcome (10.2.1-1) lithium; urgency=medium
 
   * Remove discontinued flash plugin install option.
