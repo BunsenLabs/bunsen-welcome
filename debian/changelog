@@ -1,3 +1,9 @@
+bunsen-welcome (11.0.1-1) beryllium; urgency=medium
+
+  * bl-welcome: bugfix to allow use on Debian bullseye.
+
+ -- John Crawley <john@bunsenlabs.org>  Wed, 17 Feb 2021 10:16:58 +0900
+
 bunsen-welcome (11.0-1) beryllium; urgency=medium
 
   * Migrate for Debian Bullseye.
