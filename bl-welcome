@@ -59,7 +59,7 @@ if ! . "$BL_COMMON_LIBDIR/bl-includes" 2> /dev/null; then
 fi
 
 # Debian release that this BunsenLabs system is based on
-debian_base=buster
+debian_base=bullseye
 
 # default url for added Debian backports etc.
 default_mirror='https://deb.debian.org/debian'
