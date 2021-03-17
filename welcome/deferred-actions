@@ -1,5 +1,5 @@
 START_INSTALLS_TITLE=$"Install Packages"
-START_INSTALLS_TEXT_NONE=$"No packages have been chosen to install."
+START_INSTALLS_TEXT_NONE=$"No further actions need to be performed."
 
 START_INSTALLS_TEXT='This script will now execute some deferred actions.
 '
@@ -8,7 +8,7 @@ log "Deferred actions arrays:
 $( declare -p pre_functions_to_execute pkgs_to_remove pkgs_to_install pkgs_to_install_norecs post_functions_to_execute )"
 
 (( ${#pre_functions_to_execute[@]} > 0 )) && START_INSTALLS_TEXT+=$"
-These functions will be executed before installing packages:
+These functions will be executed first:
  ${pre_functions_to_execute[*]/%/$'\n'}"
 
 (( ${#pkgs_to_remove[@]} > 0 )) && START_INSTALLS_TEXT+=$"
@@ -24,7 +24,7 @@ These packages will be installed without recommends:
  ${pkgs_to_install_norecs[*]/%/$'\n'}"
 
 (( ${#post_functions_to_execute[@]} > 0 )) && START_INSTALLS_TEXT+=$"
-These functions will be executed after installing packages:
+These functions will be executed last:
  ${post_functions_to_execute[*]/%/$'\n'}"
 
 START_INSTALLS_PROMPT=$"Would you like to perform these actions?"
