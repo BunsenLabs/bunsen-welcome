@@ -96,7 +96,6 @@ Depends:
 Recommends: printer-driver-all, hplip
 Description: BunsenLabs printer support meta package
  Installs various printer packages to enable printer support.
- Also configures cups-browsed for IPP printers.
 
 Package: bunsen-meta-ssh
 Section: metapackages
