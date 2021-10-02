@@ -1,5 +1,5 @@
-clear
-header
+scrollScreen
+#header
 say '
  _____ ___ _   _ ___ ____  _   _ _____ ____  _
 |  ___|_ _| \ | |_ _/ ___|| | | | ____|  _ \| |
@@ -7,25 +7,21 @@ say '
 |  _|  | || |\  || | ___) |  _  | |___| |_| |_|
 |_|   |___|_| \_|___|____/|_| |_|_____|____/(_)
 
+     THANK YOU FOR SELECTING BUNSENLABS! :)
 
-THANK YOU FOR SELECTING BUNSENLABS! :)
+There are many ways you can tweak this system to suit your needs:
 
-Please visit us on the web when you have a chance:
-https://forums.bunsenlabs.org/
-
-There are many ways you can tweak this system to suit your needs.
-
-You might find these forum sections interesting:
 "Getting Started": https://forums.bunsenlabs.org/viewforum.php?id=21
 "Help & Support": https://forums.bunsenlabs.org/viewforum.php?id=2
 "Scripts, Tutorials & Tips": https://forums.bunsenlabs.org/viewforum.php?id=9
 
 And the BunsenLabs menu has a "Help" section too...
 
-You can rerun this script at any time with
+You can rerun this script at any time with:
     bl-welcome
 
 Hit any key to exit.'
 
 read -srn1
-clear
+tput clear
+
