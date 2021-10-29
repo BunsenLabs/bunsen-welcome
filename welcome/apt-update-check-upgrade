@@ -9,25 +9,6 @@ UPDATEGRADE_TEXT=$"Before we can continue, we need to make sure your system's so
 '$"If you do not want to upgrade now, you can run this welcome script any time later in a terminal with the command \"bl-welcome\""
 UPDATEGRADE_PROMPT=$"Would you like to upgrade your software?"
 
-
-# regardless of debian repo status, check local user apt sources configuration
-# for now, only check Debian repos for contrib or non-free in user sources
-# pass source line (from eg ${repo_status[debian_main]}) as $1 and component to check for as $2
-checkAptTargets() {
-    local src component repo_uri release
-    [[ -n $indextargets ]] || indextargets=$(apt-get indextargets --no-release-info --format '$(RELEASE)|$(COMPONENT)|$(REPO_URI)' 'Identifier: Packages')
-    src=$1
-    component=$2
-    read -r _ repo_uri release _ _ <<< "$src"
-    release=${release%/*}
-    log "$component was found missing from $release in apt policy - checking local configs"
-    grep -q "${release}|${component}|${repo_uri}" <<< "$indextargets" || {
-        log "$release $component not found in user apt sources"
-        return 1
-    }
-    log "$release $component found in user apt sources"
-}
-
 checkRepos(){
     local -a missing_components
     local repo name shortname said src c unknown_list
@@ -77,7 +58,7 @@ This script can add the missing entry now, or you might prefer to exit and edit 
         missing_components=()
         for c in contrib non-free
         do
-            [[ -n ${repo_status[${repo}_"$c"]} ]] || {
+            [[ -n ${repo_status[${repo}_"$c"]-} ]] || {
                 checkAptTargets "$src" "$c" || missing_components+=("$c")
             }
         done
@@ -120,7 +101,7 @@ Alternatively you might want to continue with free software only.
         [[ $u = unknown_* ]] || continue
         unknown_list+="${repo_status[$u]}"$'\n'
     done
-    if [[ -n $unknown_list ]]
+    if [[ -n ${unknown_list-} ]]
     then
         said=true
         say "
@@ -133,8 +114,9 @@ before running 'bl-welcome' again.
 "
         prompt $"  Hit \"Enter\" to continue, or \"q\" to quit..." Q && exit 0
     fi
-    [[ $said = true ]] || echo 'OK'
+    [[ $said = true ]] || echo $'OK\n'
     unset indextargets
+    sleep 1
 }
 
 # Usage addRepo <name> [component [component]]
@@ -142,7 +124,7 @@ before running 'bl-welcome' again.
 addRepo() {
     local name components repo_msg repo_line missing sources_file
     sources_file='/etc/apt/sources.list'
-    [[ -n $1 ]] || { echo "${0}: addRepo() needs a repo name" >&2; return 1;}
+    [[ -n ${1-} ]] || { echo "${0}: addRepo() needs a repo name" >&2; return 1;}
     name=$1
     shift
     missing=''
