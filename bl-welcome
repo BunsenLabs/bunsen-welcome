@@ -46,12 +46,8 @@ do
     esac
 done
 
-#TEXTDOMAIN=bl-welcome # might be used in future for translations
-
 BL_COMMON_LIBDIR='/usr/lib/bunsen/common'
 BL_WELCOME_LIBDIR='/usr/lib/bunsen/welcome'
-#BL_COMMON_LIBDIR='./'
-#BL_WELCOME_LIBDIR='./welcome'
 
 if ! . "$BL_COMMON_LIBDIR/bl-includes" 2> /dev/null; then
     echo $"Error: Failed to source bl-includes in $BL_COMMON_LIBDIR" >&2
