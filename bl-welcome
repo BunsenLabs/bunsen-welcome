@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 # Post installation script
 
 set -o nounset # do not accept unset variables
@@ -241,7 +241,7 @@ triggerRunPreFunction(){
 
 # no arguments used - adds Apt_Update (wrapper round safeUpdate) to beginning of pre_functions_to_execute
 triggerAptUpdate(){
-    [[ "${pre_functions_to_execute[0]}" = Apt_Update ]] || {
+    [[ "${pre_functions_to_execute[0]-}" = Apt_Update ]] || {
         pre_functions_to_execute=(Apt_Update "${pre_functions_to_execute[@]}")
     }
     say 'Apt_Update will be run later, before installing packages.' 2
@@ -331,7 +331,7 @@ getRepoStatus() {
         local v o a n l c b # version origin archive/suite codename label component architecture
         unset v o a n l c b
         eval "${line//,/ }"
-        case "$o" in
+        case "${o-}" in
         '')
             continue # first entry is /var/lib/dpkg/status, release a=now
             ;;
@@ -383,6 +383,26 @@ getRepoStatus() {
             ;;
         esac
     done
+}
+
+# regardless of debian repo status, check local user apt sources configuration for config or non-free
+# for now, only check Debian repos for contrib or non-free in user sources
+# pass source line (from eg ${repo_status[debian_main]}) as $1 and component to check for as $2
+# optionally, to check other release (like backports) from same origin, pass origin src + different release name as $3
+checkAptTargets() {
+    local src component repo_uri release
+    [[ -n ${indextargets-} ]] || indextargets=$(apt-get indextargets --no-release-info --format '$(RELEASE)|$(COMPONENT)|$(REPO_URI)' 'Identifier: Packages')
+    src=${1-}
+    component=${2-}
+    read -r _ repo_uri release _ _ <<< "$src"
+    release=${release%/*}
+    [[ -n ${3-} ]] && release=$3
+    log "$component was found missing from $release + $repo_uri in apt policy - checking local configs"
+    grep -q "${release}|${component}|${repo_uri}" <<< "$indextargets" || {
+        log "$release + $repo_uri $component not found in user apt sources"
+        return 1
+    }
+    log "$release $component found in user apt sources"
 }
 
 ####### end functions #######
