@@ -137,7 +137,7 @@ scrollScreen() {
      for  (( c=start; c<=end; c++ ))
     do
     tput cud1               # line feed
-    sleep 0.006
+    sleep 0.01
     done
     tput home
 }
