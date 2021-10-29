@@ -1,3 +1,12 @@
+bunsen-welcome (11.0.1-1+dev1) beryllium; urgency=medium
+
+  * Scroll between pages instead of clearing. (Thanks to @eight.bit.al.)
+  * Trigger apt update at end if repositories have been added.
+  * Check for necessary Debian sources in user's apt sources lists,
+     offer to add any missing ones.
+
+ -- John Crawley <john@bunsenlabs.org>  Fri, 29 Oct 2021 13:22:05 +0900
+
 bunsen-welcome (11.0.1-1) beryllium; urgency=medium
 
   * bl-welcome: bugfix to allow use on Debian bullseye.
