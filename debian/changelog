@@ -1,3 +1,13 @@
+bunsen-welcome (11.1-1) beryllium; urgency=medium
+
+  * Scroll between pages instead of clearing. (Thanks to @eight.bit.al.)
+  * Trigger apt update at end if repositories have been changed.
+  * Check for necessary Debian sources in user's apt sources lists,
+     offer to add any missing ones.
+  * Inhibit the popup terminal on first run for non-sudo users.
+
+ -- John Crawley <john@bunsenlabs.org>  Fri, 29 Oct 2021 18:08:13 +0900
+
 bunsen-welcome (11.0.1-1) beryllium; urgency=medium
 
   * bl-welcome: bugfix to allow use on Debian bullseye.
