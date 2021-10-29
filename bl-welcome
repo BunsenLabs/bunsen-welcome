@@ -60,9 +60,18 @@ fi
 
 # Debian release that this BunsenLabs system is based on
 debian_base=bullseye
+# set this too, it's used in a sanity test
+debian_version=11
+
+bunsen_codename=beryllium
 
 # default url for added Debian backports etc.
 default_mirror='https://deb.debian.org/debian'
+
+# used when restoring missing repos
+deb_security_source="https://deb.debian.org/debian-security ${debian_base}-security"
+# NOTE buster used this:
+#deb_security_source="https://deb.debian.org/debian-security ${debian_base}/updates"
 
 # url for added BunsenLabs backports
 bunsen_mirror='https://pkg.bunsenlabs.org/debian'
@@ -75,8 +84,8 @@ mirror_regex='https?://([[:alnum:]_-]+\.)+[[:alnum:]]+(/[[:alnum:]._-]+)*/?'
 bunsen_regex='https?://pkg.bunsenlabs.org/debian'
 
 # pages (in BL_WELCOME_LIBDIR) that bl-welcome will run through
-STEPS_FIRST=('intro' 'warning' 'apt-update-upgrade')
-STEPS_UNDERSTOOD=('intro' 'apt-update-upgrade')
+STEPS_FIRST=('intro' 'warning' 'apt-update-check-upgrade')
+STEPS_UNDERSTOOD=('intro' 'apt-update-check-upgrade')
 STEPS_RESTART=('restart')
 STEPS_BASIC=('system-tweaks' 'install-images-extra' 'add-debian-backports' 'add-bunsen-backports' 'install-bluetooth' 'install-java-packages' 'install-dropbox' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
@@ -97,6 +106,14 @@ warnlog() {
     echo "######## WARNING ########
 ${1-}
 ------------------------------------------------" >> "$logfile"
+}
+
+errorExit() {
+    local msg="######## ERROR ########
+${1-}"
+    echo "$msg" >> "$logfile"
+    echo "msg" >&2
+    exit 1
 }
 
 sourcePage() {
@@ -146,7 +163,7 @@ $2
 
 # trigger* functions prepare lists for actions at the "deferred-actions" step.
 
-# This is the easiest function to use for a page installing one package.
+# This is the easiest function to use for a page installing one or more packages.
 # Usage: triggerInstallPage title text package...
 # example: triggerInstallPage 'LibreOffice suite' 'This will install libreoffice' 'libreoffice'
 # Returns 0 if package added to install list,
@@ -215,10 +232,25 @@ triggerRemove() {
 }
 
 # usage: triggerRunPreFunction <function> [<functions>]
+# note: functions are not checked for existence here, because they may be added by subsequently sourced pages
 triggerRunPreFunction(){
     [[ -n ${1-} ]] || { echo "No function passed to triggerRunPreFunction()" >&2; return 1;}
     pre_functions_to_execute+=("$@")
     say "function(s) $* will be run later, before installing packages." 2
+}
+
+# no arguments used - adds Apt_Update (wrapper round safeUpdate) to beginning of pre_functions_to_execute
+triggerAptUpdate(){
+    [[ "${pre_functions_to_execute[0]}" = Apt_Update ]] || {
+        pre_functions_to_execute=(Apt_Update "${pre_functions_to_execute[@]}")
+    }
+    say 'Apt_Update will be run later, before installing packages.' 2
+}
+
+# cosmetic wrapper round safeUpdate
+Apt_Update(){
+    say 'Updating apt data...' 1
+    safeUpdate || say 'Continuing in spite of update problems...' 3
 }
 
 # usage: triggerRunPostFunction <function> [<functions>]
@@ -262,23 +294,95 @@ $2
     triggerInstall "${@:3}" || return 1
 }
 
-# Returns 0 if a line in 'apt-cache policy' contains all the terms provided.
-# Terms can be in any order, quote terms containing spaces.
-# eg: checkSources c=main 'l=Debian Backports'
-checkSources() {
-    local re=
-    for term in "$@"
-    do
-        re+="(?=.*$term(,|\s*$))"
-    done
-    apt-cache policy | grep -Pq "$re" && return 0
-    return 1
-}
 
 # wrapper function in case future scripts want to do the test differently
 usingDebStable() {
-    checkSources "n=$debian_base" l=Debian c=main && return 0
+# Debian apt line is missing if installed without network, so testing apt policy fails
+    grep -qE "(\<${debian_base}\>|(^|[^a-zA-Z0-9.])${debian_version}(\$|[^a-zA-Z0-9]))" /etc/debian_version && return 0
+    log "Unexpected contents of /etc/debian_version: $(< /etc/debian_version)"
     return 1
+}
+
+# This function is used in 'apt-update-check-upgrade' and 'restart'.
+# https://manpages.debian.org/testing/apt/apt_preferences.5.en.html
+# generate global array repo_status based on state of 'apt-cache policy' at this point
+# generated repo_status keys are:
+# debian_{main,contrib,non-free} (each component is tested and recorded separately)
+# deb_sec_{"} (debian security)
+# deb_update_{"} (debian updates)
+# deb_bkpt_{"} (debian backports)
+# bunsen_main (bunsenlabs)
+# Bunsen_bkpt_main (bunsenlabs backports)
+# (bunsenlabs only provide "main" packages at the moment)
+# Any other repositories found are given keys of unknown_<some number>
+getRepoStatus() {
+    unset repo_status
+    declare -gA repo_status
+    local -a policy
+    local i line src
+    mapfile -t policy < <(apt-cache policy)
+    for ((i=0;i<${#policy[@]};i++))
+    do
+        line=${policy[i]}
+        [[ $line =~ (([voanlcb]=[- _[:alnum:]]+(,|$))+) ]] || continue
+        src="${policy[i-1]}"
+        line="${BASH_REMATCH[0]}"
+        line="${line// /\\ }"
+        local v o a n l c b # version origin archive/suite codename label component architecture
+        unset v o a n l c b
+        eval "${line//,/ }"
+        case "$o" in
+        '')
+            continue # first entry is /var/lib/dpkg/status, release a=now
+            ;;
+        Debian)
+            case $n in
+            "${debian_base}")
+                case $l in # in Buster, security codename is "buster" so need to check label
+                Debian)
+                    repo_status[debian_$c]=$src
+                    ;;
+                Debian-Security)
+                    repo_status[deb_sec_$c]=$src
+                    ;;
+                *)
+                    repo_status[unknown_$i]=$src
+                    ;;
+                esac
+                ;;
+            "${debian_base}-security") # in Bullseye, security codename is "bullseye-security"
+                repo_status[deb_sec_$c]=$src
+                ;;
+            "${debian_base}-updates")
+                repo_status[deb_update_$c]=$src
+                ;;
+            *)
+                repo_status[unknown_$i]=$src
+            esac
+            ;;
+        'Debian Backports')
+            [[ $n = "${debian_base}-backports" ]] && {
+                repo_status[deb_bkpt_$c]=$src
+            }
+            ;;
+        bunsenlabs)
+            case $n in
+            "${bunsen_codename}")
+                repo_status[bunsen_$c]=$src
+                ;;
+            "${debian_base}-backports")
+                repo_status[bunsen_bkpt_$c]=$src
+                ;;
+            *)
+                repo_status[unknown_$i]=$src
+                ;;
+            esac
+            ;;
+        *)
+            repo_status[unknown_$i]=$src
+            ;;
+        esac
+    done
 }
 
 ####### end functions #######

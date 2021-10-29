@@ -1,0 +1,222 @@
+UPDATEGRADE_TITLE=$"update software sources, check sources and upgrade installed packages"
+UPDATEGRADE_TEXT=$"Before we can continue, we need to make sure your system's software is up-to-date."' '$"This script will execute the commands:"'
+
+    sudo apt-get update
+    sudo apt-get upgrade --with-new-pkgs
+
+'$"It will also check your configured apt sources to make sure that all necessary repositories are available"'
+
+'$"If you do not want to upgrade now, you can run this welcome script any time later in a terminal with the command \"bl-welcome\""
+UPDATEGRADE_PROMPT=$"Would you like to upgrade your software?"
+
+
+# regardless of debian repo status, check local user apt sources configuration
+# for now, only check Debian repos for contrib or non-free in user sources
+# pass source line (from eg ${repo_status[debian_main]}) as $1 and component to check for as $2
+checkAptTargets() {
+    local src component repo_uri release
+    [[ -n $indextargets ]] || indextargets=$(apt-get indextargets --no-release-info --format '$(RELEASE)|$(COMPONENT)|$(REPO_URI)' 'Identifier: Packages')
+    src=$1
+    component=$2
+    read -r _ repo_uri release _ _ <<< "$src"
+    release=${release%/*}
+    log "$component was found missing from $release in apt policy - checking local configs"
+    grep -q "${release}|${component}|${repo_uri}" <<< "$indextargets" || {
+        log "$release $component not found in user apt sources"
+        return 1
+    }
+    log "$release $component found in user apt sources"
+}
+
+checkRepos(){
+    local -a missing_components
+    local repo name shortname said src c unknown_list
+    said=false
+    repos_changed=false # checked by calling code
+    say 'Checking apt sources... '
+    getRepoStatus || return 1
+    log "Checked repositories status.
+Data:
+$(declare -p repo_status)"
+    for repo in debian deb_sec deb_update # for now, only Debian repos are checked
+    do
+        case "$repo" in
+        debian)
+            name="main Debian ${debian_base} repository"
+            shortname='Debian main'
+            ;;
+        deb_sec)
+            name="Debian Security ${debian_base} repository"
+            shortname='Debian Security'
+            ;;
+        deb_update)
+            name="Debian Updates ${debian_base} repository"
+            shortname='Debian Updates'
+            ;;
+        esac
+        if [[ -z ${repo_status[${repo}_main]} ]]
+        then
+            said=true
+            say "
+The $name seems to be missing from your apt sources.\
+ This can happen if an install is done without an internet connection.
+This script can add the missing entry now, or you might prefer to exit and edit /etc/apt/sources.list yourself.\
+ In that case, you can run this script in a terminal later with the command 'bl-welcome'"
+            if prompt "Add the $shortname now?"
+            then
+                say $'\n'$"Adding $name repo to apt sources..."$'\n' 1
+                addRepo "$shortname" || return 1 # all components will be added
+                repos_changed=true
+            else
+                say 'Exiting...' 3
+                exit 0
+            fi
+        else
+            src=${repo_status[${repo}_main]}
+        fi
+        missing_components=()
+        for c in contrib non-free
+        do
+            [[ -n ${repo_status[${repo}_"$c"]} ]] || {
+                checkAptTargets "$src" "$c" || missing_components+=("$c")
+            }
+        done
+        if [[ ${#missing_components[@]} -gt 0 ]]
+        then
+            said=true
+            say "
+Non-free components are missing from your ${shortname} apt sources (${missing_components[*]}).\
+ Without these, some packages will not be installable - for example some possibly necessary firmware.\
+ This script can add the missing entries to your apt sources now, but you might prefer to exit and edit /etc/apt/sources.list yourself.
+(You can run this script in a terminal later with the command 'bl-welcome'.)
+Alternatively you might want to continue with free software only.
+"
+            say "Would you like to add the missing components (A), exit now (Q) or continue anyway (C)?"
+            local REPLY
+            while true
+            do
+                read -r -p ' "A" to add non-free, "Q" to quit now, "C" to continue: '
+                case ${REPLY^} in
+                A)
+                    say $'\n'"Adding missing components ${missing_components[*]} to ${shortname} in apt sources..."$'\n' 1
+                    addRepo  "$shortname" "${missing_components[@]}" || return 1 # adds extra line with missing components
+                    repos_changed=true
+                    break
+                    ;;
+                Q)
+                    say 'Exiting...' 2
+                    exit 0
+                    ;;
+                C)
+                    say 'Continuing...' 2
+                    break
+                    ;;
+                esac
+            done
+        fi
+    done
+    for u in "${!repo_status[@]}"
+    do
+        [[ $u = unknown_* ]] || continue
+        unknown_list+="${repo_status[$u]}"$'\n'
+    done
+    if [[ -n $unknown_list ]]
+    then
+        said=true
+        say "
+You have some unknown repositories enabled:
+$unknown_list
+If you are aware of these and want to go on using them, you can continue.
+Otherwise, you might want to exit this script now and investigate
+/etc/apt/sources.list and /etc/apt/sources.list.d
+before running 'bl-welcome' again.
+"
+        prompt $"  Hit \"Enter\" to continue, or \"q\" to quit..." Q && exit 0
+    fi
+    [[ $said = true ]] || echo 'OK'
+    unset indextargets
+}
+
+# Usage addRepo <name> [component [component]]
+# If no components passed, all (main contrib non-free) are added.
+addRepo() {
+    local name components repo_msg repo_line missing sources_file
+    sources_file='/etc/apt/sources.list'
+    [[ -n $1 ]] || { echo "${0}: addRepo() needs a repo name" >&2; return 1;}
+    name=$1
+    shift
+    missing=''
+    if [[ -z "$*" ]]
+    then
+        components=(main contrib non-free)
+    else
+        missing=' with missing components' # extra comment
+        components=("$@")
+    fi
+    repo_msg="
+# added by bl-welcome on $(date)
+# $name repository${missing}
+"
+    case $name in
+    'Debian main')
+        repo_line="deb $default_mirror ${debian_base} ${components[*]}
+"
+        ;;
+    'Debian Security')
+        repo_line="deb ${deb_security_source} ${components[*]}
+"
+        ;;
+    'Debian Updates')
+        repo_line="deb $default_mirror ${debian_base}-updates ${components[*]}
+"
+        ;;
+
+    *)
+        echo "${name}: repo name not supported" >&2
+        return 1
+        ;;
+    esac
+    sudo tee -a <<< "${repo_msg}${repo_line}" "$sources_file" >/dev/null
+    grep -q "^${repo_line}\$" /etc/apt/sources.list || { echo "Failed to add $name to apt sources." >&2; return 1;}
+}
+
+if setupPage "$UPDATEGRADE_TITLE" "$UPDATEGRADE_TEXT" "$UPDATEGRADE_PROMPT"
+then
+    safeUpdate
+    checkRepos || errorExit 'Error checking repositories.'
+    if [[ $repos_changed = true ]]
+    then
+        say "Repositories have changed, so another apt update will be needed."
+        safeUpdate
+        # new repo_status array might be needed later in the script
+        getRepoStatus || errorExit 'Failed to determine new apt sources status.'
+        log "Checked repositories status again after editing apt sources.
+Data:
+$(declare -p repo_status)"
+    fi
+    bw_version=$(checkVersion 'bunsen-welcome')
+    log "Current version of bunsen-welcome: $bw_version"
+    safeUpgrade --with-new-pkgs
+    bw_new_version=$(checkVersion 'bunsen-welcome')
+    if [[ $bw_new_version != "$bw_version" ]]
+    then
+        # This allows us to upgrade bunsen-welcome at its first run.
+        log "bunsen-welcome: upgraded to $bw_new_version"
+        say "The package 'bunsen-welcome' has been upgraded.
+THIS SCRIPT MIGHT HAVE CHANGED, SO IT WILL BE RESTARTED."
+        prompt $"  Hit \"Enter\" to continue, or \"q\" to quit..." Q && exit 0
+        #exec >/dev/tty 2>&1 # so terminalCheck() doesn't open a new terminal
+        # Above diversion no longer needed because we are already in terminal
+        # and --restart bypasses terminalCheck().
+        exec "$0" --restart
+    else
+        sleep 2
+    fi
+else
+    say 'Upgrade was necessary to continue the script.
+You can run it later by entering:
+    bl-welcome
+
+Exiting...' 3
+    exit 0
+fi

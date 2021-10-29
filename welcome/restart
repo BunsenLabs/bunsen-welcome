@@ -35,3 +35,10 @@ Please make the necessary adjustments to your system and try again.'
 fi
 
 connectiontest 0
+
+# repo_status array might be needed later in the script
+getRepoStatus || errorExit 'Failed to determine apt sources status.'
+log "Checked repositories status again after restart.
+Data:
+$(declare -p repo_status)"
+

@@ -39,8 +39,6 @@ haveWork() {
 }
 
 doInstalls(){
-    say 'Updating apt data...' 1
-    safeUpdate || say 'Continuing in spite of update problems...' 3
     for f in "${pre_functions_to_execute[@]}"
     do
         [[ $( type -t "$f" ) = 'function' ]] || { echo "Cannot execute ${f}, it is not a function." >&2; return 1;}
