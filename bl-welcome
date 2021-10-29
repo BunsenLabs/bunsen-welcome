@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Post installation script
 
 set -o nounset # do not accept unset variables
@@ -46,7 +46,7 @@ do
     esac
 done
 
-TEXTDOMAIN=bl-welcome # might be used in future for translations
+#TEXTDOMAIN=bl-welcome # might be used in future for translations
 
 BL_COMMON_LIBDIR='/usr/lib/bunsen/common'
 BL_WELCOME_LIBDIR='/usr/lib/bunsen/welcome'
@@ -117,18 +117,29 @@ header() {
     echo "  ${dashesStart// /-}[ ${headerText} ]${dashesEnd// /-}"$'\n'
 }
 
+# scroll previous page off the screen
+scrollScreen() {
+    start=1
+    end=$(tput lines)
+     for  (( c=start; c<=end; c++ ))
+    do
+    tput cud1               # line feed
+    sleep 0.006
+    done
+    tput home
+}
+
 # Usage: setupPage title text [prompt [prompt-extra-arg]]
 # Omit prompt for noninteractive page.
 setupPage() {
-    sleep 1
-    tput clear
+    scrollScreen
     header
     say "${1^^}
 ${1//?/-}
 
 $2
 "
-    [[ ${3-} ]] || { sleep 1;return 0;}
+    [[ ${3-} ]] || { sleep 2;return 0;}
     prompt "  $3" "${4:-}"
     return $?
 }
