@@ -79,6 +79,9 @@ mirror_regex='https?://([[:alnum:]_-]+\.)+[[:alnum:]]+(/[[:alnum:]._-]+)*/?'
 # matches BunsenLabs url, http or https
 bunsen_regex='https?://pkg.bunsenlabs.org/debian'
 
+# suffix for any backed-up files
+bkp_sfx=".$(date +"%Y%m%d-%H%M%S").welcome~"
+
 # pages (in BL_WELCOME_LIBDIR) that bl-welcome will run through
 STEPS_FIRST=('intro' 'warning' 'apt-update-check-upgrade')
 STEPS_UNDERSTOOD=('intro' 'apt-update-check-upgrade')

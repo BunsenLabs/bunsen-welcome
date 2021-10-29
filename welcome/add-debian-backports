@@ -41,7 +41,7 @@ deb $default_mirror ${debian_base}-backports main contrib non-free
         if grep -q "${debian_base}-backports" /etc/apt/sources.list
         then
             say $'\ncommenting out obsolete backports entries in /etc/apt/sources.list...'
-            local bkp_list=/etc/apt/sources.list~bl-welcome-$(date +%y%m%dT%T)~
+            local bkp_list=/etc/apt/sources.list"$bkp_sfx"
             sudo cp /etc/apt/sources.list "$bkp_list"
             sed "/${debian_base}-backports/ s/^/#/" "$bkp_list" | sudo tee /etc/apt/sources.list >/dev/null
         fi
