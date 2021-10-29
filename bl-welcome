@@ -46,6 +46,13 @@ do
     esac
 done
 
+if ! [[ -t 0 && -t 1 && -t 2 ]]
+then # not attached to terminal
+    groups | grep -q 'sudo' || { echo "$0: This script can only be run by users with sudo access." >&2; exit 0;}
+fi
+
+#TEXTDOMAIN=bl-welcome # might be used in future for translations
+
 BL_COMMON_LIBDIR='/usr/lib/bunsen/common'
 BL_WELCOME_LIBDIR='/usr/lib/bunsen/welcome'
 
@@ -111,7 +118,9 @@ errorExit() {
     local msg="######## ERROR ########
 ${1-}"
     echo "$msg" >> "$logfile"
-    echo "msg" >&2
+    echo "$msg" >&2
+    echo "Press any key to exit"
+    read -srn1
     exit 1
 }
 
@@ -405,6 +414,17 @@ checkAptTargets() {
 }
 
 ####### end functions #######
+
+# inhibit the popup terminal for non-sudo users
+# they can still try to run the script with 'bl-welcome'
+if ! [[ -t 0 && -t 1 && -t 2 ]]
+then # not attached to terminal
+    groups | grep -q 'sudo' || {
+        echo "$0: This script can only be run by users with sudo access." >&2
+        createFlag 'bl-welcome'
+        exit 0
+    }
+fi
 
 if [[ $restart = true ]]
 then
