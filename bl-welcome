@@ -11,6 +11,15 @@ Options:
 If bl-welcome is called in a terminal with no options (the usual method),
 it will start an interactive process whereby the user can
 adjust system configurations and install packages.
+
+The main steps are:
+    Update apt information and make a sanity-check of apt sources.
+        ("inxi -r" will list your sources too)
+    Check system for some possible tweaks.
+    Offer to install a firmware checker and add necessary firmware.
+    Offer to enable Debian and/or Bunselabs backport repositories.
+    Offer to install various other software.
+    Apply the chosen changes to the system.
 '
 
 grep -q '\<boot=live\>' /proc/cmdline && { echo "$0: This script is not meant to be run in a live session." >&2; exit 0;}
@@ -318,6 +327,7 @@ usingDebStable() {
 # debian_{main,contrib,non-free} (each component is tested and recorded separately)
 # deb_sec_{"} (debian security)
 # deb_update_{"} (debian updates)
+# deb_prop_{"} (debian proposed updates)
 # deb_bkpt_{"} (debian backports)
 # bunsen_main (bunsenlabs)
 # Bunsen_bkpt_main (bunsenlabs backports)
@@ -364,6 +374,9 @@ getRepoStatus() {
             "${debian_base}-updates")
                 repo_status[deb_update_$c]=$src
                 ;;
+            "${debian_base}-proposed-updates")
+                repo_status[deb_prop_$c]=$src
+                ;;
             *)
                 repo_status[unknown_$i]=$src
             esac
@@ -399,6 +412,7 @@ getRepoStatus() {
 # optionally, to check other release (like backports) from same origin, pass origin src + different release name as $3
 checkAptTargets() {
     local src component repo_uri release
+    # indextargets is global but unset after running checkRepos()
     [[ -n ${indextargets-} ]] || indextargets=$(apt-get indextargets --no-release-info --format '$(RELEASE)|$(COMPONENT)|$(REPO_URI)' 'Identifier: Packages')
     src=${1-}
     component=${2-}
@@ -406,7 +420,7 @@ checkAptTargets() {
     release=${release%/*}
     [[ -n ${3-} ]] && release=$3
     log "$component was found missing from $release + $repo_uri in apt policy - checking local configs"
-    grep -q "${release}|${component}|${repo_uri}" <<< "$indextargets" || {
+    grep --quiet --fixed-strings "${release}|${component}|${repo_uri}" <<< "$indextargets" || {
         log "$release + $repo_uri $component not found in user apt sources"
         return 1
     }

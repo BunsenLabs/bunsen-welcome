@@ -4,7 +4,7 @@ UPDATEGRADE_TEXT=$"Before we can continue, we need to make sure your system's so
     sudo apt-get update
     sudo apt-get upgrade --with-new-pkgs
 
-'$"It will also check your configured apt sources to make sure that all necessary repositories are available"'
+'$"It will also check your configured apt sources to make sure that all necessary repositories are available."'
 
 '$"If you do not want to upgrade now, you can run this welcome script any time later in a terminal with the command \"bl-welcome\""
 UPDATEGRADE_PROMPT=$"Would you like to upgrade your software?"
@@ -14,7 +14,8 @@ checkRepos(){
     local repo name shortname said src c unknown_list
     said=false
     repos_changed=false # checked by calling code
-    say 'Checking apt sources... '
+    say '
+Checking apt sources... '
     getRepoStatus || return 1
     log "Checked repositories status.
 Data:
@@ -105,7 +106,7 @@ Alternatively you might want to continue with free software only.
     then
         said=true
         say "
-You have some unknown repositories enabled:
+I did not recognize some repositories which you have enabled:
 $unknown_list
 If you are aware of these and want to go on using them, you can continue.
 Otherwise, you might want to exit this script now and investigate
