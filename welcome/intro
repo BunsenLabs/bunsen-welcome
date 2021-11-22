@@ -9,11 +9,9 @@ say \
 
 '"Hi $USER, "$"welcome to BunsenLabs Linux! :)
 
-This is an optional post-installation script, designed to help you configure your new Linux installation and get the most out of BunsenLabs.
+This is an optional post-installation script to help you configure your new Linux installation and get the most out of BunsenLabs.
 
-You will now be presented with a series of options. You will need your password, so please have it ready.
-
-You will also need a working internet connection, so if you have not done so already, please configure your internet connection.
+You will now be presented with a series of options. You will need your password, and a working internet connection.
 
 To see the output of a previous page, you can scroll back in the terminal.
 

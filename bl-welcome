@@ -107,7 +107,7 @@ bkp_sfx=".$(date +"%Y%m%d-%H%M%S").welcome~"
 STEPS_FIRST=('intro' 'warning' 'apt-update-check-upgrade')
 STEPS_UNDERSTOOD=('intro' 'apt-update-check-upgrade')
 STEPS_RESTART=('restart')
-STEPS_BASIC=('system-tweaks' 'install-images-extra' 'add-debian-backports' 'add-bunsen-backports' 'install-bluetooth' 'install-java-packages' 'install-dropbox' 'devel')
+STEPS_BASIC=('system-tweaks' 'install-isenkram' 'install-images-extra' 'add-debian-backports' 'add-bunsen-backports' 'install-bluetooth' 'install-java-packages' 'install-dropbox' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 log_dir="$HOME/.cache/bunsen-welcome"

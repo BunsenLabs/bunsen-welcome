@@ -1,6 +1,9 @@
 offerRunIsenkram() {
-    say "isenkram-cli has been installed so you can check your system\
-for any missing firmware. If you choose to do this now the command:
+    say "
+isenkram-cli has been installed so you can check your system \
+for any missing firmware.
+
+If you choose to do this now the command:
     'sudo isenkram-autoinstall-firmware'
 will be run, some packages may be installed and, if necessary,\
 non-free repositories may be enabled on your system.\
@@ -8,16 +11,19 @@ You can also choose to run this command later instead."
     if prompt "  Check for firmware?"
     then
         sudo isenkram-autoinstall-firmware
-        say "If new firmware was installed, your computer may need to be\
-restarted to make sure all kernel modules are properly initialized."
+        say "
+If new firmware was installed, your computer may need to be \
+restarted to make sure all kernel modules are properly initialized." 3
     else
         say "Not running firmware check."
     fi
 }
 
 if triggerInstallPage $"Firmware Check" \
-    $"Isenkram is software to check your system for missing firmware and install any that your hardware needs. \
+    $"Isenkram is software to check your system for missing firmware and install any that your hardware needs.
+
 NOTE: if non-free packages are needed the necessary apt sources will be enabled automatically.
+
 You can choose to run isenkram now, or just install it and read the manual before running it later." \
     'isenkram-cli'
 then
