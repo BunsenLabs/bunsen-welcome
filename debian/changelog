@@ -1,3 +1,10 @@
+bunsen-welcome (11.2-1) beryllium; urgency=medium
+
+  * Add page to check for firmware with isenkram-cli.
+  * bl-welcome: getRepoStatus(): recognize debian-proposed-updates.
+
+ -- John Crawley <john@bunsenlabs.org>  Mon, 22 Nov 2021 14:30:04 +0900
+
 bunsen-welcome (11.1-1) beryllium; urgency=medium
 
   * Scroll between pages instead of clearing. (Thanks to @eight.bit.al.)
