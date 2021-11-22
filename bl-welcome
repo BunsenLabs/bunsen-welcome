@@ -238,7 +238,7 @@ triggerInstall() {
     else
         pkgs_to_install+=("$@")
     fi
-    say "$* has been added to the install list for execution later." 2
+    say "$* has been added to the install list for installation later." 2
 }
 
 # usage: triggerRemove <package> [<packages>]
