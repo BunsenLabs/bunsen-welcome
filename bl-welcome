@@ -14,11 +14,16 @@ adjust system configurations and install packages.
 
 The main steps are:
     Update apt information and make a sanity-check of apt sources.
-        ("inxi -r" will list your sources too)
+    ("inxi -r" will list your sources too)
+
     Check system for some possible tweaks.
+
     Offer to install a firmware checker and add necessary firmware.
-    Offer to enable Debian and/or Bunselabs backport repositories.
+
+    Offer to enable Debian and/or Bunsenlabs backport repositories.
+
     Offer to install various other software.
+
     Apply the chosen changes to the system.
 '
 
