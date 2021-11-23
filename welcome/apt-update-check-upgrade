@@ -36,7 +36,7 @@ $(declare -p repo_status)"
             shortname='Debian Updates'
             ;;
         esac
-        if [[ -z ${repo_status[${repo}_main]} ]]
+        if [[ -z ${repo_status[${repo}_main]-} ]]
         then
             said=true
             say "
