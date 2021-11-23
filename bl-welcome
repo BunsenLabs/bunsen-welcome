@@ -451,6 +451,9 @@ then
 else
     terminalCheck -T 'WELCOME!'
     exec > >( tee -ia "$logfile" ) 2>&1
+    log '
+
+######################################################'
     log "Starting bl-welcome for $USER at $(date)"
 fi
 
