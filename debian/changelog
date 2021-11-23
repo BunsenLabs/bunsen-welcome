@@ -1,3 +1,9 @@
+bunsen-welcome (11.2.2-1) beryllium; urgency=medium
+
+  * Add bugfix and clearer log session separation.
+
+ -- John Crawley <john@bunsenlabs.org>  Tue, 23 Nov 2021 13:36:19 +0900
+
 bunsen-welcome (11.2.1-1) beryllium; urgency=medium
 
   * Add bugfix and text formatting improvements.
