@@ -93,7 +93,10 @@ Depends:
  cups,
  cups-browsed (>= 1.21.6-5),
  system-config-printer
-Recommends: printer-driver-all, hplip
+Recommends:
+ printer-driver-all,
+ hplip,
+ ipp-usb
 Description: BunsenLabs printer support meta package
  Installs various printer packages to enable printer support.
 
