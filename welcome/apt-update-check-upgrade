@@ -11,7 +11,7 @@ UPDATEGRADE_PROMPT=$"Would you like to upgrade your software?"
 
 checkRepos(){
     local -a missing_components
-    local repo name shortname said src c unknown_list
+    local repo name shortname said src c repo_uri unknown_list
     said=false
     repos_changed=false # checked by calling code
     say '
@@ -54,6 +54,7 @@ This script can add the missing entry now, or you might prefer to exit and edit 
                 exit 0
             fi
         else
+            log "$name found in configured apt sources"
             src=${repo_status[${repo}_main]}
         fi
         missing_components=()
@@ -81,7 +82,8 @@ Alternatively you might want to continue with free software only.
                 case ${REPLY^} in
                 A)
                     say $'\n'"Adding missing components ${missing_components[*]} to ${shortname} in apt sources..."$'\n' 1
-                    addRepo  "$shortname" "${missing_components[@]}" || return 1 # adds extra line with missing components
+                    read -r _ repo_uri _ _ _ <<< "$src"
+                    addRepo  "$shortname" "$repo_uri" "${missing_components[@]}" || return 1 # adds extra line with missing components
                     repos_changed=true
                     break
                     ;;
@@ -120,10 +122,11 @@ before running 'bl-welcome' again.
     sleep 1
 }
 
-# Usage addRepo <name> [component [component]]
-# If no components passed, all (main contrib non-free) are added.
+# Usage addRepo <name> [uri component [component]]
+# If no components passed, all (main contrib non-free) are added, using default mirror.
+# If uri and components are passed, components are added using uri as mirror.
 addRepo() {
-    local name components repo_msg repo_line missing sources_file
+    local name missing components repo_msg repo_mirror repo_line sources_file
     sources_file='/etc/apt/sources.list'
     [[ -n ${1-} ]] || { echo "${0}: addRepo() needs a repo name" >&2; return 1;}
     name=$1
@@ -134,6 +137,8 @@ addRepo() {
         components=(main contrib non-free)
     else
         missing=' with missing components' # extra comment
+        repo_mirror=$1
+        shift
         components=("$@")
     fi
     repo_msg="
@@ -142,18 +147,17 @@ addRepo() {
 "
     case $name in
     'Debian main')
-        repo_line="deb $default_mirror ${debian_base} ${components[*]}
+        repo_line="deb ${repo_mirror:-${default_mirror}} ${debian_base} ${components[*]}
 "
         ;;
     'Debian Security')
-        repo_line="deb ${deb_security_source} ${components[*]}
+        repo_line="deb ${repo_mirror:-${default_deb_sec_mirror}} ${deb_sec_suite} ${components[*]}
 "
         ;;
     'Debian Updates')
-        repo_line="deb $default_mirror ${debian_base}-updates ${components[*]}
+        repo_line="deb ${repo_mirror:-${default_mirror}} ${debian_base}-updates ${components[*]}
 "
         ;;
-
     *)
         echo "${name}: repo name not supported" >&2
         return 1
