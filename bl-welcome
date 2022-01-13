@@ -86,9 +86,12 @@ bunsen_codename=beryllium
 default_mirror='https://deb.debian.org/debian'
 
 # used when restoring missing repos
-deb_security_source="https://deb.debian.org/debian-security ${debian_base}-security"
+default_deb_sec_mirror="https://deb.debian.org/debian-security"
+deb_sec_suite="${debian_base}-security"
 # NOTE buster used this:
 #deb_security_source="https://deb.debian.org/debian-security ${debian_base}/updates"
+# so a Lithium backport would need:
+#deb_sec_suite="${debian_base}/updates"
 
 # url for added BunsenLabs backports
 bunsen_mirror='https://pkg.bunsenlabs.org/debian'
@@ -126,16 +129,6 @@ warnlog() {
     echo "######## WARNING ########
 ${1-}
 ------------------------------------------------" >> "$logfile"
-}
-
-errorExit() {
-    local msg="######## ERROR ########
-${1-}"
-    echo "$msg" >> "$logfile"
-    echo "$msg" >&2
-    echo "Press any key to exit"
-    read -srn1
-    exit 1
 }
 
 sourcePage() {
@@ -414,7 +407,7 @@ getRepoStatus() {
 # regardless of debian repo status, check local user apt sources configuration for config or non-free
 # for now, only check Debian repos for contrib or non-free in user sources
 # pass source line (from eg ${repo_status[debian_main]}) as $1 and component to check for as $2
-# optionally, to check other release (like backports) from same origin, pass origin src + different release name as $3
+# optionally, to check other release (like backports) from same origin, pass origin src as $1 + component as $2 + different release name as $3
 checkAptTargets() {
     local src component repo_uri release
     # indextargets is global but unset after running checkRepos()
