@@ -1,3 +1,10 @@
+bunsen-welcome (11.3-1) beryllium; urgency=medium
+
+  * When adding missing components to apt repository, use same uri as "main".
+  * Add ipp-usb to Recommends of bunsen-meta-printer-support.
+
+ -- John Crawley <john@bunsenlabs.org>  Thu, 13 Jan 2022 18:05:57 +0900
+
 bunsen-welcome (11.2.2-1) beryllium; urgency=medium
 
   * Add bugfix and clearer log session separation.
