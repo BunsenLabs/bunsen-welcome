@@ -56,47 +56,47 @@ This script can add the missing entry now, or you might prefer to exit and edit 
         else
             log "$name found in configured apt sources"
             src=${repo_status[${repo}_main]}
-        fi
-        missing_components=()
-        for c in contrib non-free
-        do
-            [[ -n ${repo_status[${repo}_"$c"]-} ]] || {
-                checkAptTargets "$src" "$c" || missing_components+=("$c")
-            }
-        done
-        if [[ ${#missing_components[@]} -gt 0 ]]
-        then
-            said=true
-            say "
+            missing_components=()
+            for c in contrib non-free
+            do
+                [[ -n ${repo_status[${repo}_"$c"]-} ]] || {
+                    checkAptTargets "$src" "$c" || missing_components+=("$c")
+                }
+            done
+            if [[ ${#missing_components[@]} -gt 0 ]]
+            then
+                said=true
+                say "
 Non-free components are missing from your ${shortname} apt sources (${missing_components[*]}).\
  Without these, some packages will not be installable - for example some possibly necessary firmware.\
  This script can add the missing entries to your apt sources now, but you might prefer to exit and edit /etc/apt/sources.list yourself.
 (You can run this script in a terminal later with the command 'bl-welcome'.)
 Alternatively you might want to continue with free software only.
 "
-            say "Would you like to add the missing components (A), exit now (Q) or continue anyway (C)?"
-            local REPLY
-            while true
-            do
-                read -r -p ' "A" to add non-free, "Q" to quit now, "C" to continue: '
-                case ${REPLY^} in
-                A)
-                    say $'\n'"Adding missing components ${missing_components[*]} to ${shortname} in apt sources..."$'\n' 1
-                    read -r _ repo_uri _ _ _ <<< "$src"
-                    addRepo  "$shortname" "$repo_uri" "${missing_components[@]}" || return 1 # adds extra line with missing components
-                    repos_changed=true
-                    break
-                    ;;
-                Q)
-                    say 'Exiting...' 2
-                    exit 0
-                    ;;
-                C)
-                    say 'Continuing...' 2
-                    break
-                    ;;
-                esac
-            done
+                say "Would you like to add the missing components (A), exit now (Q) or continue anyway (C)?"
+                local REPLY
+                while true
+                do
+                    read -r -p ' "A" to add non-free, "Q" to quit now, "C" to continue: '
+                    case ${REPLY^} in
+                    A)
+                        say $'\n'"Adding missing components ${missing_components[*]} to ${shortname} in apt sources..."$'\n' 1
+                        read -r _ repo_uri _ _ _ <<< "$src"
+                        addRepo  "$shortname" "$repo_uri" "${missing_components[@]}" || return 1 # adds extra line with missing components
+                        repos_changed=true
+                        break
+                        ;;
+                    Q)
+                        say 'Exiting...' 2
+                        exit 0
+                        ;;
+                    C)
+                        say 'Continuing...' 2
+                        break
+                        ;;
+                    esac
+                done
+            fi
         fi
     done
     for u in "${!repo_status[@]}"
