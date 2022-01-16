@@ -75,11 +75,12 @@ if ! . "$BL_COMMON_LIBDIR/bl-includes" 2> /dev/null; then
     exit 1
 fi
 
-# Debian release that this BunsenLabs system is based on
+# Debian release that this BunsenLabs system is based on (lowercase)
 debian_base=bullseye
 # set this too, it's used in a sanity test
 debian_version=11
 
+# (lowercase too)
 bunsen_codename=beryllium
 
 # default url for added Debian backports etc.
@@ -309,12 +310,14 @@ $2
     triggerInstall "${@:3}" || return 1
 }
 
-
 # wrapper function in case future scripts want to do the test differently
+# lsb-release is now a direct dependency of bunsen-welcome
 usingDebStable() {
-# Debian apt line is missing if installed without network, so testing apt policy fails
-    grep -qE "(\<${debian_base}\>|(^|[^a-zA-Z0-9.])${debian_version}(\$|[^a-zA-Z0-9]))" /etc/debian_version && return 0
-    log "Unexpected contents of /etc/debian_version: $(< /etc/debian_version)"
+    local reported_codename=$( lsb_release -cs )
+    case ${reported_codename,,} in
+    "$debian_base"|"$bunsen_codename") return 0 ;;
+    esac
+    log "'lsb_release -cs' reported wrong codename: $reported_codename"
     return 1
 }
 
@@ -456,7 +459,7 @@ if [[ $( id -u ) -eq 0 ]]; then
 fi
 
 usingDebStable || {
-    echo "Error: This script should be run only on Debian ${debian_base^}." >&2
+    echo "Error: This script should be run only on a BunsenLabs system based on Debian ${debian_base^}." >&2
     exit 1
 }
 

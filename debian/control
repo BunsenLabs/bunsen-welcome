@@ -11,7 +11,12 @@ Vcs-Browser: https://github.com/BunsenLabs/bunsen-welcome
 Package: bunsen-welcome
 Section: misc
 Architecture: all
-Depends: ${misc:Depends}, bunsen-common (>= 10.0.1-1), xterm | x-terminal-emulator, laptop-detect
+Depends:
+ ${misc:Depends},
+ bunsen-common (>= 11.1-1),
+ laptop-detect,
+ lsb-release,
+ xterm | x-terminal-emulator
 Description: BunsenLabs welcome script
  Post installation script for BunsenLabs Linux,
  to install some optional extra packages.
