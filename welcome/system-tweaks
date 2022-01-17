@@ -4,7 +4,7 @@ say 'checking for PAE...'
 if ! grep -wq pae /proc/cpuinfo
 then
     say $"Your processor does not support PAE." 2
-elif dpkg -l | grep -Eq '^ *ii +linux-image-[^ ]*(amd64|pae) '
+elif dpkg -l | grep -Eq '^ *(h|i)i +linux-image-[^ ]*(amd64|pae) '
 then
     say $"You already have a PAE enabled kernel installed." 2
 else
