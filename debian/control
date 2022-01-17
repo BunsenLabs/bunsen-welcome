@@ -49,16 +49,17 @@ Depends:
  ${misc:Depends},
  apache2,
  apache2-utils,
+ cronolog,
+ curl,
  default-mysql-server,
  php,
- php-pear,
- php-gd,
- php-mysql,
- php-imagick,
  php-curl,
- curl,
- rsync,
- cronolog
+ php-gd,
+ php-imagick,
+ php-mysql,
+ php-pear,
+ phpmyadmin,
+ rsync
 Description: BunsenLabs lamp meta package
  Installs various web server tools.
 
