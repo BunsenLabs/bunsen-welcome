@@ -1,5 +1,6 @@
 triggerInstallPage $"Bunsen Image Archives" \
-    $"BunsenLabs Beryllium comes with a set of background images, but\
+    $"BunsenLabs Beryllium comes with a set of background images,\
+ including some from BunsenLabs Lithium, but\
  the wallpaper and other background images that were released\
  with BunsenLabs Hydrogen and Helium are also still available.
 
