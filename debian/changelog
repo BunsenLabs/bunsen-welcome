@@ -1,3 +1,12 @@
+bunsen-welcome (11.5-1) beryllium; urgency=medium
+
+  * bunsen-meta-lamp: Depends: restore phpmyadmin.
+  * bugfixes: 
+     add-bunsen-backports: improve test for debian backports status
+     system-tweaks: allow for held kernel package
+
+ -- John Crawley <john@bunsenlabs.org>  Sat, 21 May 2022 16:58:55 +0900
+
 bunsen-welcome (11.4-1) beryllium; urgency=medium
 
   * Replace test of Debian base using /etc/debian_version
