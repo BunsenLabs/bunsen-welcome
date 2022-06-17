@@ -11,13 +11,13 @@ say \
 
 This is an optional post-installation script to help you configure your new Linux installation and get the most out of BunsenLabs.
 
-You will now be presented with a series of options. You will need your password, and a working internet connection.
-
-To see the output of a previous page, you can scroll back in the terminal.
+You will now be presented with a series of options. To see the output of a previous page, you can scroll back in the terminal.
 
 If you do not want to run this script now, you can run it at a later date with the command \"bl-welcome\".
 
 (Messages will be saved to ""$logfile"')
+
+Remember that BunsenLabs Linux and its component parts are released under the GNU GPLv3+ license and come without any warranties or support!
 '
 
 prompt $"  Hit \"Enter\" to continue, or \"q\" to quit..." Q && exit 0
