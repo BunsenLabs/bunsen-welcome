@@ -1,3 +1,9 @@
+bunsen-welcome (11.6-1) beryllium; urgency=medium
+
+  * welcome window: add note about BunsenLabs GPL3 status.
+
+ -- John Crawley <john@bunsenlabs.org>  Sun, 19 Jun 2022 16:15:58 +0900
+
 bunsen-welcome (11.5-1) beryllium; urgency=medium
 
   * bunsen-meta-lamp: Depends: restore phpmyadmin.
