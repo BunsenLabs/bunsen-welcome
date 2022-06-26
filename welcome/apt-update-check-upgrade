@@ -20,7 +20,7 @@ Checking apt sources... '
     log "Checked repositories status.
 Data:
 $(declare -p repo_status)"
-    for repo in debian deb_sec deb_update # for now, only Debian repos are checked
+    for repo in debian deb_sec deb_update bunsen # for now, only Debian and BL main repos are checked
     do
         case "$repo" in
         debian)
@@ -35,6 +35,10 @@ $(declare -p repo_status)"
             name="Debian Updates ${debian_base} repository"
             shortname='Debian Updates'
             ;;
+        bunsen)
+            name="BunsenLabs ${bunsen_codename} repository"
+            shortname='BunsenLabs'
+            ;;
         esac
         if [[ -z ${repo_status[${repo}_main]-} ]]
         then
@@ -44,10 +48,10 @@ The $name seems to be missing from your apt sources.\
  This can happen if an install is done without an internet connection.
 This script can add the missing entry now, or you might prefer to exit and edit /etc/apt/sources.list yourself.\
  In that case, you can run this script in a terminal later with the command 'bl-welcome'"
-            if prompt "Add the $shortname now?"
+            if prompt "Add $shortname now?"
             then
                 say $'\n'$"Adding $name repo to apt sources..."$'\n' 1
-                addRepo "$shortname" || return 1 # all components will be added
+                addRepo "$shortname" || return 1 # if Debian, all components will be added
                 repos_changed=true
             else
                 say 'Exiting...' 3
@@ -55,6 +59,7 @@ This script can add the missing entry now, or you might prefer to exit and edit 
             fi
         else
             log "$name found in configured apt sources"
+            [[ $repo = bunsen ]] && continue # only "main" for bunsenlabs
             src=${repo_status[${repo}_main]}
             missing_components=()
             for c in contrib non-free
@@ -158,13 +163,20 @@ addRepo() {
         repo_line="deb ${repo_mirror:-${default_mirror}} ${debian_base}-updates ${components[*]}
 "
         ;;
+    'BunsenLabs')
+        sources_file='/etc/apt/sources.list.d/bunsen.list'
+        sudo touch "$sources_file"
+        components=('main')
+        repo_line="deb ${bunsen_mirror} ${bunsen_codename} ${components[*]}
+"
+        ;;
     *)
         echo "${name}: repo name not supported" >&2
         return 1
         ;;
     esac
     sudo tee -a <<< "${repo_msg}${repo_line}" "$sources_file" >/dev/null
-    grep -q "^${repo_line}\$" /etc/apt/sources.list || { echo "Failed to add $name to apt sources." >&2; return 1;}
+    grep -q "^${repo_line}\$" "$sources_file" || { echo "Failed to add $name to apt sources." >&2; return 1;}
 }
 
 if setupPage "$UPDATEGRADE_TITLE" "$UPDATEGRADE_TEXT" "$UPDATEGRADE_PROMPT"
