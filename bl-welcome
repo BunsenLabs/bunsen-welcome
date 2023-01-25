@@ -76,12 +76,12 @@ if ! . "$BL_COMMON_LIBDIR/bl-includes" 2> /dev/null; then
 fi
 
 # Debian release that this BunsenLabs system is based on (lowercase)
-debian_base=bullseye
+debian_base=bookworm
 # set this too, it's used in a sanity test
-debian_version=11
+debian_version=12
 
 # (lowercase too)
-bunsen_codename=beryllium
+bunsen_codename=boron
 
 # default url for added Debian backports etc.
 default_mirror='https://deb.debian.org/debian'
