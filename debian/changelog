@@ -1,6 +1,19 @@
+bunsen-welcome (12.0-1) boron; urgency=medium
+
+  * Migrate for Debian Bookworm
+    - debian/control: Bump Standards-Version to 4.6.1.0 - no changes required.
+    - debian/control: Declare debhelper compatibility 13.
+    - debian/control: Add Rules-Requires-Root: no
+    - debian/copyright: update year, use https Format url.
+    - bl-welcome: update variables for Boron/Bookworm
+
+  * bunsen-meta-bluetooth: add Depends: bluez-meshd
+
+ -- John Crawley <john@bunsenlabs.org>  Wed, 25 Jan 2023 16:56:24 +0900
+
 bunsen-welcome (11.6.1-2) beryllium; urgency=medium
 
-  * bunsen-meta-printer-support: add Recommends: sane-airscan 
+  * bunsen-meta-printer-support: add Recommends: sane-airscan
      to enhance driverless network scanning.
 
  -- John Crawley <john@bunsenlabs.org>  Fri, 14 Oct 2022 16:02:45 +0900
@@ -20,7 +33,7 @@ bunsen-welcome (11.6-1) beryllium; urgency=medium
 bunsen-welcome (11.5-1) beryllium; urgency=medium
 
   * bunsen-meta-lamp: Depends: restore phpmyadmin.
-  * bugfixes: 
+  * bugfixes:
      add-bunsen-backports: improve test for debian backports status
      system-tweaks: allow for held kernel package
 
@@ -137,7 +150,7 @@ bunsen-welcome (10.1.3-1) lithium; urgency=medium
 
 bunsen-welcome (10.1.2-1) lithium; urgency=medium
 
-  * bunsen-meta-printer-support: add cups-browsed config for IPP printers. 
+  * bunsen-meta-printer-support: add cups-browsed config for IPP printers.
 
  -- John Crawley <john@bunsenlabs.org>  Wed, 22 Apr 2020 18:16:30 +0900
 
@@ -149,7 +162,7 @@ bunsen-welcome (10.1.1-1) lithium; urgency=medium
 
 bunsen-welcome (10.1-1) lithium; urgency=medium
 
-  * bunsen-welcome: 
+  * bunsen-welcome:
      - Defer most actions till all dialogues have completed.
      - Restore flash plugin page using pepperflashplugin-nonfree.
      - Restore dropbox page.
