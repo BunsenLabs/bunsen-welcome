@@ -1,3 +1,10 @@
+bunsen-welcome (12.1-1) boron; urgency=medium
+
+  * Add handling of repository component 'non-free-firmware'.
+  * Cope with empty repositories (debian-security) when using Debian Testing.
+
+ -- John Crawley <john@bunsenlabs.org>  Tue, 07 Feb 2023 16:05:27 +0900
+
 bunsen-welcome (12.0-1) boron; urgency=medium
 
   * Migrate for Debian Bookworm
