@@ -21,16 +21,19 @@ haveDebianBackports() {
 }
 
 addDebianBackports() {
+    local bp_repo_msg bp_repo_line bp_repo_file
     if haveDebianBackports
     then
         say 'Debian backports have already been added to apt sources.' 2
     else
         say $'\nAdding Debian backports to apt sources...\n' 1
-        local bp_repo_msg='# added by bl-welcome
-# Debian backports'
-        local bp_repo_line="deb $default_mirror ${debian_base}-backports main contrib non-free non-free-firmware"
-        sudo tee <<< "${bp_repo_msg}${bp_repo_line}"$'\n' /etc/apt/sources.list.d/debian-"${debian_base}"-backports.list >/dev/null
-        grep -q "^${bp_repo_line}\$" /etc/apt/sources.list.d/debian-"${debian_base}"-backports.list || {
+        bp_repo_msg='# added by bl-welcome
+# Debian backports
+'
+        bp_repo_line="deb $default_mirror ${debian_base}-backports main contrib non-free non-free-firmware"
+        bp_repo_file="/etc/apt/sources.list.d/debian-${debian_base}-backports.list"
+        sudo tee <<< "${bp_repo_msg}${bp_repo_line}"$'\n' "$bp_repo_file" >/dev/null
+        grep -q "^${bp_repo_line}\$" "$bp_repo_file" || {
             say 'Failed to add Debian backports to apt sources.' pause >&2
             return 1
         }
