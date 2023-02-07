@@ -7,7 +7,14 @@ UPDATEGRADE_TEXT=$"Before we can continue, we need to make sure your system's so
 '$"It will also check your configured apt sources to make sure that all necessary repositories are available."'
 
 '$"If you do not want to upgrade now, you can run this welcome script any time later in a terminal with the command \"bl-welcome\""
+UPDATEGRADE_TESTING_NOTE=$"NOTE This system is using Debian Testing, and some repositories like debian-security are still empty.\
+ They will not appear in the output of 'apt-cache policy' so the script will fall back on reading the configuration files.\
+ Especially with debian-security it is best to have those repositories enabled now, but the script is not able to check for\
+ mistyped urls etc. at the moment. If the repositories are declared configured, things will probably be OK but\
+ you might want to check your apt sources manually anyway."
 UPDATEGRADE_PROMPT=$"Would you like to upgrade your software?"
+
+usingDebTesting && UPDATEGRADE_TEXT+=$'\n\n'"$UPDATEGRADE_TESTING_NOTE"
 
 checkRepos(){
     local -a missing_components
@@ -62,11 +69,9 @@ This script can add the missing entry now, or you might prefer to exit and edit 
             [[ $repo = bunsen ]] && continue # only "main" for bunsenlabs
             src=${repo_status[${repo}_main]}
             missing_components=()
-            for c in contrib non-free
+            for c in contrib non-free non-free-firmware
             do
-                [[ -n ${repo_status[${repo}_"$c"]-} ]] || {
-                    checkAptTargets "$src" "$c" || missing_components+=("$c")
-                }
+                [[ -n ${repo_status[${repo}_"$c"]-} ]] || missing_components+=("$c")
             done
             if [[ ${#missing_components[@]} -gt 0 ]]
             then
@@ -86,7 +91,9 @@ Alternatively you might want to continue with free software only.
                     case ${REPLY^} in
                     A)
                         say $'\n'"Adding missing components ${missing_components[*]} to ${shortname} in apt sources..."$'\n' 1
-                        read -r _ repo_uri _ _ _ <<< "$src"
+                        repo_uri=$src
+                        uri_regex='^[[:blank:]]*[[:digit:]]+[[:blank:]]+(http[^[:blank:]]+)[[:blank:]]'
+                        [[ $src =~ $uri_regex ]] && repo_uri=${BASH_REMATCH[1]} # case where src comes from apt policy, not parsed from config files
                         addRepo  "$shortname" "$repo_uri" "${missing_components[@]}" || return 1 # adds extra line with missing components
                         repos_changed=true
                         break
@@ -128,8 +135,8 @@ before running 'bl-welcome' again.
 }
 
 # Usage addRepo <name> [uri component [component]]
-# If no components passed, all (main contrib non-free) are added, using default mirror.
-# If uri and components are passed, components are added using uri as mirror.
+# If no components passed, all (main contrib non-free non-free-firmware) are added, using default mirror.
+# If uri and component(s) are passed, components are added using uri as mirror.
 addRepo() {
     local name missing components repo_msg repo_mirror repo_line sources_file
     sources_file='/etc/apt/sources.list'
@@ -139,7 +146,7 @@ addRepo() {
     missing=''
     if [[ -z "$*" ]]
     then
-        components=(main contrib non-free)
+        components=(main contrib non-free non-free-firmware)
     else
         missing=' with missing components' # extra comment
         repo_mirror=$1

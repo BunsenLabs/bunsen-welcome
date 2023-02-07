@@ -6,7 +6,7 @@ if triggerInstallPage "$DEBIAN_DEVENV_TITLE" "$DEBIAN_DEVENV_TEXT" 'bunsen-meta-
     say "configuring /etc/pbuilderrc..." 2
     sudo tee <<< "MIRRORSITE=${default_mirror}" '/etc/pbuilderrc'
     sudo tee <<< "DISTRIBUTION=${debian_base}" -a '/etc/pbuilderrc'
-    sudo tee <<< 'COMPONENTS="main contrib non-free"' -a '/etc/pbuilderrc'
+    sudo tee <<< 'COMPONENTS="main contrib non-free non-free-firmware"' -a '/etc/pbuilderrc'
     sleep 4
 
 #    prompt "  $DEBIAN_DEVENV_PBUILDER" && sudo pbuilder create

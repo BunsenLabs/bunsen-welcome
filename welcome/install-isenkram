@@ -13,7 +13,7 @@ You can also choose to run this command later instead."
         sudo isenkram-autoinstall-firmware
         say "
 If new firmware was installed, your computer may need to be \
-restarted to make sure all kernel modules are properly initialized." 3
+restarted to make sure all kernel modules are properly initialized." pause
     else
         say "Not running firmware check."
     fi

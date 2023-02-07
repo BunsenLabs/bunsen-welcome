@@ -77,8 +77,8 @@ fi
 
 # Debian release that this BunsenLabs system is based on (lowercase)
 debian_base=bookworm
-# set this too, it's used in a sanity test
-debian_version=12
+# set this too, it's used in a sanity test (no longer needed)
+#debian_version=12
 
 # (lowercase too)
 bunsen_codename=boron
@@ -99,10 +99,12 @@ bunsen_mirror='https://pkg.bunsenlabs.org/debian'
 
 # matches most mirrors
 # add (?=.*debian) at beginning to insist on 'debian' somewhere (needs PCRE)
-mirror_regex='https?://([[:alnum:]_-]+\.)+[[:alnum:]]+(/[[:alnum:]._-]+)*/?'
+# no longer used
+#mirror_regex='https?://([[:alnum:]_-]+\.)+[[:alnum:]]+(/[[:alnum:]._-]+)*/?'
 
 # matches BunsenLabs url, http or https
-bunsen_regex='https?://pkg.bunsenlabs.org/debian'
+# no longer used
+#bunsen_regex='https?://pkg.bunsenlabs.org/debian'
 
 # suffix for any backed-up files
 bkp_sfx=".$(date +"%Y%m%d-%H%M%S").welcome~"
@@ -321,20 +323,35 @@ usingDebStable() {
     return 1
 }
 
+# even if usingDebStable succeeds, system still might be using Debian Testing
+usingDebTesting(){
+    local debfile debver regex
+    debfile='/etc/debian_version'
+    [[ -r "$debfile" ]] || {
+        log "$debfile is unreadable"
+        return 1
+    }
+    debver=$( < "$debfile" )
+    regex='/[[:blank:]]*sid[[:blank:]]*$' # testing will have <release>/sid
+    [[ "$debver" =~ $regex ]] && return 0
+    return 1
+}
+
 # This function is used in 'apt-update-check-upgrade' and 'restart'.
 # https://manpages.debian.org/testing/apt/apt_preferences.5.en.html
 # generate global array repo_status based on state of 'apt-cache policy' at this point
 # generated repo_status keys are:
-# debian_{main,contrib,non-free} (each component is tested and recorded separately)
+# debian_{main,contrib,non-free,non-free-firmware} (each component is tested and recorded separately)
 # deb_sec_{"} (debian security)
 # deb_update_{"} (debian updates)
 # deb_prop_{"} (debian proposed updates)
 # deb_bkpt_{"} (debian backports)
 # bunsen_main (bunsenlabs)
-# Bunsen_bkpt_main (bunsenlabs backports)
+# bunsen_bkpt_main (bunsenlabs backports)
 # (bunsenlabs only provide "main" packages at the moment)
 # Any other repositories found are given keys of unknown_<some number>
 getRepoStatus() {
+    log 'Running getRepoStatus to check apt policy'
     unset repo_status
     declare -gA repo_status
     local -a policy
@@ -347,6 +364,7 @@ getRepoStatus() {
         src="${policy[i-1]}"
         line="${BASH_REMATCH[0]}"
         line="${line// /\\ }"
+        log "Processing line: $line"
         local v o a n l c b # version origin archive/suite codename label component architecture
         unset v o a n l c b
         eval "${line//,/ }"
@@ -360,53 +378,67 @@ getRepoStatus() {
                 case $l in # in Buster, security codename is "buster" so need to check label
                 Debian)
                     repo_status[debian_$c]=$src
+                    log "Found Debian ${debian_base} $c repository recognized by apt."
                     ;;
                 Debian-Security)
                     repo_status[deb_sec_$c]=$src
+                    log "Found Debian ${debian_base}-Security $c repository recognized by apt."
                     ;;
                 *)
                     repo_status[unknown_$i]=$src
+                    log "Found unknown repository $i recognized by apt, policy line: $src."
                     ;;
                 esac
                 ;;
             "${debian_base}-security") # in Bullseye, security codename is "bullseye-security"
                 repo_status[deb_sec_$c]=$src
+                log "Found Debian ${debian_base}-Security $c repository recognized by apt."
                 ;;
             "${debian_base}-updates")
                 repo_status[deb_update_$c]=$src
+                log "Found Debian ${debian_base}-Updates $c repository recognized by apt."
                 ;;
             "${debian_base}-proposed-updates")
                 repo_status[deb_prop_$c]=$src
+                log "Found Debian ${debian_base}-Proposed-Updates $c repository recognized by apt."
                 ;;
             *)
                 repo_status[unknown_$i]=$src
+                log "Found unknown repository $i recognized by apt, policy line: $src."
             esac
             ;;
         'Debian Backports')
             [[ $n = "${debian_base}-backports" ]] && {
                 repo_status[deb_bkpt_$c]=$src
+                log "Found Debian ${debian_base}-Backports $c repository recognized by apt."
             }
             ;;
         bunsenlabs)
             case $n in
             "${bunsen_codename}")
                 repo_status[bunsen_$c]=$src
+                log "Found BunsenLabs ${bunsen_codename} $c repository recognized by apt."
                 ;;
             "${debian_base}-backports")
                 repo_status[bunsen_bkpt_$c]=$src
+                log "Found BunsenLabs ${bunsen_codename} Backports $c repository recognized by apt."
                 ;;
             *)
                 repo_status[unknown_$i]=$src
+                log "Found unknown repository $i recognized by apt, policy line: $src."
                 ;;
             esac
             ;;
         *)
             repo_status[unknown_$i]=$src
+            log "Found unknown repository $i recognized by apt, policy line: $src."
             ;;
         esac
     done
+    getAptTargets # check configured repositories that apt might not have recognized because they are empty
 }
 
+# this function no longer used
 # regardless of debian repo status, check local user apt sources configuration for config or non-free
 # for now, only check Debian repos for contrib or non-free in user sources
 # pass source line (from eg ${repo_status[debian_main]}) as $1 and component to check for as $2
@@ -427,6 +459,67 @@ checkAptTargets() {
     }
     log "$release $component found in user apt sources"
 }
+
+# Fill out repo_status array with parsed data from sources files,
+# even if apt policy in getRepoStatus has not yet recognized the repos.
+# This happens when a repo is empty, as with security and backports
+# during the testing phase.
+# This data is not tested by an actual download of a Release file
+# so there is no check for typos etc.
+getAptTargets() {
+    log 'Running getAptTargets to check for possibly empty but configured repositories.'
+    local release component uri
+    # indextargets is global but unset after running checkRepos()
+    [[ -n ${indextargets-} ]] || indextargets=$(apt-get indextargets --no-release-info --format '$(RELEASE)|$(COMPONENT)|$(REPO_URI)' 'Identifier: Packages')
+    while IFS='|' read -r release component uri
+    do
+        case "$release" in
+        "${debian_base}")
+            [[ -z ${repo_status[debian_$component]-} ]] && {
+                repo_status[debian_$component]="$uri"
+                log "Debian $component not recognized by apt, but found in config files."
+            }
+            ;;
+        "${debian_base}-security")
+            [[ -z ${repo_status[deb_sec_$component]-} ]] && {
+                repo_status[deb_sec_$component]="$uri"
+                log "Debian ${debian_base}-Security $component not recognized by apt, but found in config files."
+            }
+            ;;
+        "${debian_base}-updates")
+            [[ -z ${repo_status[deb_update_$component]-} ]] && {
+                repo_status[deb_update_$component]="$uri"
+                log "Debian ${debian_base}-Updates $component not recognized by apt, but found in config files."
+            }
+            ;;
+        "${debian_base}-proposed-updates")
+            [[ -z ${repo_status[deb_prop_$component]-} ]] && {
+                repo_status[deb_prop_$component]="$uri"
+                log "Debian ${debian_base}-Proposed-Updates $component not recognized by apt, but found in config files."
+            }
+            ;;
+        "${debian_base}-backports")
+            [[ -z ${repo_status[deb_bkpt_$component]-} ]] && {
+                repo_status[deb_bkpt_$component]="$uri"
+                log "Debian ${debian_base}-Backports $component not recognized by apt, but found in config files."
+            }
+            ;;
+        "${bunsen_codename}")
+            [[ -z ${repo_status[bunsen_$component]-} ]] && {
+                repo_status[bunsen_$component]="$uri"
+                log "BunsenLabs ${bunsen_codename} $component not recognized by apt, but found in config files."
+            }
+            ;;
+        "${bunsen_codename}-backports")
+            [[ -z ${repo_status[bunsen_bkpt_$component]-} ]] && {
+                repo_status[bunsen_bkpt_$component]="$uri"
+                log "BunsenLabs ${bunsen_codename} Backports $component not recognized by apt, but found in config files."
+            }
+            ;;
+        esac
+    done <<< "$indextargets"$'\n' # final newline needed so read does not return error
+}
+
 
 ####### end functions #######
 
