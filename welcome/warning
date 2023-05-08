@@ -14,11 +14,11 @@ https://wiki.debian.org/DontBreakDebian
 
 (Right click the above link and choose "Open Link" to visit the page.)
 
-Please type "I understand" to continue with this script.
-(You will not be asked to do this again.)
+Please type "OK" to continue with this script.
+(You will not be shown this warning again.)
 
 '
-WARNING_PROMPT=$"  Enter \"I understand\" to continue. (Q to quit) "
-WARNING_EXTRA_ARG='I understand'
+WARNING_PROMPT=$"  Type OK to continue. (Q to quit) "
+WARNING_EXTRA_ARG='OK'
 setupPage "$WARNING_TITLE" "$WARNING_TEXT" "$WARNING_PROMPT" "$WARNING_EXTRA_ARG" || exit 0
 createFlag 'bl-welcome-understood'
