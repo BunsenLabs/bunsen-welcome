@@ -20,6 +20,8 @@ The main steps are:
 
     Offer to install a firmware checker and add necessary firmware.
 
+    Offer to install a package update checker.
+
     Offer to enable Debian and/or Bunsenlabs backport repositories.
 
     Offer to install various other software.
@@ -113,7 +115,7 @@ bkp_sfx=".$(date +"%Y%m%d-%H%M%S").welcome~"
 STEPS_FIRST=('intro' 'warning' 'apt-update-check-upgrade')
 STEPS_UNDERSTOOD=('intro' 'apt-update-check-upgrade')
 STEPS_RESTART=('restart')
-STEPS_BASIC=('system-tweaks' 'install-isenkram' 'install-images-extra' 'add-debian-backports' 'add-bunsen-backports' 'install-bluetooth' 'install-java-packages' 'devel')
+STEPS_BASIC=('system-tweaks' 'install-isenkram' 'install-apt-update-checker' 'install-images-extra' 'add-debian-backports' 'add-bunsen-backports' 'install-bluetooth' 'install-java-packages' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 log_dir="$HOME/.cache/bunsen-welcome"

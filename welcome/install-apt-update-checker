@@ -1,0 +1,10 @@
+triggerInstallPage $"Apt Update Checker" \
+    $"A package is available which will notify you of Debian packages which can be upgraded.\
+ When upgrades are available, an icon wil be added to the system tray which\
+ allows you to view the updates in a terminal window. You can then run any commands\
+ of your choice, eg 'sudo apt upgrade' if you want to upgrade.
+
+NOTE: No automatic package upgrades are done, but the Debian repository data is checked daily.
+
+Would you like to install the update checker now?" \
+    'bunsen-apt-update-checker'
