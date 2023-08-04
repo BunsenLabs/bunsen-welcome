@@ -69,14 +69,18 @@ if haveWork
 then
     if setupPage "$START_INSTALLS_TITLE" "$START_INSTALLS_TEXT" "$START_INSTALLS_PROMPT"
     then
-        doInstalls || { say "There was a problem somewhere. Check $logfile for possible hints, or ask on the BunsenLabs forum." pause; exit 1;}
+        doInstalls || {
+            say "There was a problem with package installation. Check $logfile for possible hints, or ask on the BunsenLabs forum." pause
+            say 'You can run this script any time later by entering:
+    bl-welcome
+Now closing this page...' 2
+            }
     else
         say 'Installations abandoned.
 
 You can run this script any time later by entering:
     bl-welcome
-Now exiting...' 3
-        exit 0
+Now closing this page...' 3
     fi
 else
     setupPage "$START_INSTALLS_TITLE" "$START_INSTALLS_TEXT_NONE"
