@@ -1,3 +1,10 @@
+bunsen-welcome (12.2.2-1) boron; urgency=medium
+
+  * Drop offer to install bunsen-image-archives.
+  * Bugfix testing for Debian or BL backports.
+
+ -- John Crawley <john@bunsenlabs.org>  Fri, 01 Sep 2023 16:52:39 +0900
+
 bunsen-welcome (12.2.1-1) boron; urgency=medium
 
   * Do not exit if package installation fails, but continue to next page.
