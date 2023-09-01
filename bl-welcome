@@ -500,11 +500,21 @@ getAptTargets() {
                 log "Debian ${debian_base}-Proposed-Updates $component not recognized by apt, but found in config files."
             }
             ;;
-        "${debian_base}-backports")
-            [[ -z ${repo_status[deb_bkpt_$component]-} ]] && {
-                repo_status[deb_bkpt_$component]="$uri"
-                log "Debian ${debian_base}-Backports $component not recognized by apt, but found in config files."
-            }
+        "${debian_base}-backports") # these entries could be BL or Debian
+            case "$uri" in
+                *pkg.bunsenlabs.org*)
+                    [[ -z ${repo_status[bunsen_bkpt_$component]-} ]] && {
+                        repo_status[deb_bkpt_$component]="$uri"
+                        log "Bunsenlabs ${debian_base}-Backports $component not recognized by apt, but found in config files."
+                    }
+                ;;
+                *)
+                    [[ -z ${repo_status[deb_bkpt_$component]-} ]] && {
+                        repo_status[deb_bkpt_$component]="$uri"
+                        log "Debian ${debian_base}-Backports $component not recognized by apt, but found in config files."
+                    }
+                ;;
+            esac
             ;;
         "${bunsen_codename}")
             [[ -z ${repo_status[bunsen_$component]-} ]] && {
@@ -512,7 +522,7 @@ getAptTargets() {
                 log "BunsenLabs ${bunsen_codename} $component not recognized by apt, but found in config files."
             }
             ;;
-        "${bunsen_codename}-backports")
+        "${bunsen_codename}-backports") # such entries do not exist atm
             [[ -z ${repo_status[bunsen_bkpt_$component]-} ]] && {
                 repo_status[bunsen_bkpt_$component]="$uri"
                 log "BunsenLabs ${bunsen_codename} Backports $component not recognized by apt, but found in config files."
