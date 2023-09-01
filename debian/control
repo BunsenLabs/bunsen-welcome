@@ -107,7 +107,7 @@ Recommends:
  ipp-usb,
  sane-airscan
 Description: BunsenLabs printer support meta package
- Installs various printer packages to enable printer support.
+ Installs various packages to enable printer and scanner support.
 
 Package: bunsen-meta-ssh
 Section: metapackages
