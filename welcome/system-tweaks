@@ -24,6 +24,8 @@ isCDInstall() {
     return 1
 }
 
+# FIXME if CD isos are ever built, the bunsen-meta-all offer must be edited or removed,
+# because bunsen-configs-lite must first be removed, and filezilla has no i386 candidate.
 if isCDInstall && ! allInstalled bunsen-meta-all && ! allInstalled bunsen-meta-lite
 then
     say $"
