@@ -532,6 +532,15 @@ getAptTargets() {
     done <<< "$indextargets"$'\n' # final newline needed so read does not return error
 }
 
+# see https://forums.bunsenlabs.org/viewtopic.php?pid=130964#p130964
+# and https://lists.debian.org/debian-user/2023/12/msg01267.html
+hasAptAbortBug() {
+    local termname
+    termname=$( readlink -f "$( command -v x-terminal-emulator )" )
+    [[ ${termname##*/} = urxvt ]] || return 1 # only urxvt suffers
+    # to check if use_pty is set in sudoers needs root permission, so assume it is
+    return 0
+}
 
 ####### end functions #######
 
@@ -541,13 +550,25 @@ if ! [[ -t 0 && -t 1 && -t 2 ]]
 then # not attached to terminal
     groups | grep -q 'sudo' || {
         echo "$0: This script can only be run by users with sudo access." >&2
+        log "This script can only be run by users with sudo access."
         createFlag 'bl-welcome'
         exit 0
+    }
+    hasAptAbortBug && {
+        log "There is an issue when using the terminal emulator urxvt with its output redirected.
+To work around this, a new terminal window will be opened, and the user asked to run 'bl-welcome' manually."
+        x-terminal-emulator -T 'WELCOME!' -e sh -c 'echo "    Please enter \"bl-welcome\" to start the BunsenLabs Welcome script:"; exec bash'
+        exit
     }
 fi
 
 if [[ $restart = true ]]
 then
+    ! [[ -t 0 && -t 1 && -t 2 ]] && {
+        echo "$0: This script has been restarted, but does not have a controlling terminal." >&2
+        log "This script has been restarted, but does not have a controlling terminal, exiting."
+        exit 1
+    }
     log "Restarting bl-welcome for $USER at $(date)"
 else
     terminalCheck -T 'WELCOME!'
