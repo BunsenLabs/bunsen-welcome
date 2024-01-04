@@ -241,14 +241,14 @@ triggerInstall() {
     else
         pkgs_to_install+=("$@")
     fi
-    say "$* has been added to the install list for installation later." 2
+    say "$* has been added to the install list for installation later." 3
 }
 
 # usage: triggerRemove <package> [<packages>]
 triggerRemove() {
     [[ -n ${1-} ]] || { echo "No package has been sent to triggerRemove()" >&2; return 1;}
     pkgs_to_remove+=("$@")
-    say "$* has been added to the removal list for execution later." 2
+    say "$* has been added to the removal list for execution later." 3
 }
 
 # usage: triggerRunPreFunction <function> [<functions>]
@@ -256,7 +256,7 @@ triggerRemove() {
 triggerRunPreFunction(){
     [[ -n ${1-} ]] || { echo "No function passed to triggerRunPreFunction()" >&2; return 1;}
     pre_functions_to_execute+=("$@")
-    say "function(s) $* will be run later, before installing packages." 2
+    say "function(s) $* will be run later, before installing packages." 3
 }
 
 # no arguments used - adds Apt_Update (wrapper round safeUpdate) to beginning of pre_functions_to_execute
@@ -264,7 +264,7 @@ triggerAptUpdate(){
     [[ "${pre_functions_to_execute[0]-}" = Apt_Update ]] || {
         pre_functions_to_execute=(Apt_Update "${pre_functions_to_execute[@]}")
     }
-    say 'Apt_Update will be run later, before installing packages.' 2
+    say 'Apt_Update will be run later, before installing packages.' 3
 }
 
 # cosmetic wrapper round safeUpdate
@@ -277,7 +277,7 @@ Apt_Update(){
 triggerRunPostFunction(){
     [[ -n ${1-} ]] || { echo "No function passed to triggerRunPostFunction()" >&2; return 1;}
     post_functions_to_execute+=("$@")
-    say "function(s) $* will be run later, after installing packages." 2
+    say "function(s) $* will be run later, after installing packages." 3
 }
 
 # Usage: promptTriggerInstall name description [--apt-get-option] package [package...]
