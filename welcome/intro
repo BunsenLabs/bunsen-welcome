@@ -22,6 +22,16 @@ Remember that BunsenLabs Linux and its component parts are released under the GN
 
 prompt $"  Hit \"Enter\" to continue, or \"q\" to quit..." Q && exit 0
 
+[[ $aptbug = true ]] && {
+    say '
+There is an issue with the terminal emulator urxvt.
+To work around it, a new terminal window will now be opened - please enter "bl-welcome" (without the quotes) there, to restart the welcome script.' pause
+    exec >/dev/tty 2>&1
+    tput clear
+    x-terminal-emulator -T 'WELCOME!' -e sh -c 'echo "    Please enter \"bl-welcome\" to start the BunsenLabs Welcome script:"; exec bash'
+    exit
+}
+
 say '
 Please enter your password now and it will be stored for a while.
 (You may need to enter it again later.)'
