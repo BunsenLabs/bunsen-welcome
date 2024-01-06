@@ -1,3 +1,10 @@
+bunsen-welcome (12.3-1) boron; urgency=medium
+
+  * Add workaround for issue with urxvt and sudo apt prompts.
+     (see https://forums.bunsenlabs.org/viewtopic.php?pid=130964#p130964 )
+
+ -- John Crawley <john@bunsenlabs.org>  Sat, 06 Jan 2024 15:16:40 +0900
+
 bunsen-welcome (12.2.2-1) boron; urgency=medium
 
   * Drop offer to install bunsen-image-archives.
