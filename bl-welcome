@@ -74,11 +74,6 @@ do
     esac
 done
 
-if ! [[ -t 0 && -t 1 && -t 2 ]]
-then # not attached to terminal
-    groups | grep -q 'sudo' || { echo "$0: This script can only be run by users with sudo access." >&2; exit 0;}
-fi
-
 #TEXTDOMAIN=bl-welcome # might be used in future for translations
 
 BL_COMMON_LIBDIR='/usr/lib/bunsen/common'
@@ -134,7 +129,7 @@ log_dir="$HOME/.cache/bunsen-welcome"
 mkdir -p "$log_dir"
 logfile="$log_dir"/bl-welcome.log
 
-####### functions #######
+####### log functions #######
 
 log() {
     echo "
@@ -147,6 +142,20 @@ warnlog() {
 ${1-}
 ------------------------------------------------" >> "$logfile"
 }
+
+# inhibit the popup terminal for non-sudo users
+# they can still try to run the script with 'bl-welcome'
+if ! [[ -t 0 && -t 1 && -t 2 ]]
+then # not attached to terminal
+    groups | grep -q 'sudo' || {
+        echo "$0: This script can only be run by users with sudo access." >&2
+        log "This script can only be run by users with sudo access."
+        createFlag 'bl-welcome'
+        exit 0
+    }
+fi
+
+####### functions #######
 
 sourcePage() {
     if [[ ! -r "$BL_WELCOME_LIBDIR/$1" ]]; then
@@ -544,9 +553,9 @@ getAptTargets() {
     done <<< "$indextargets"$'\n' # final newline needed so read does not return error
 }
 
-# See note above, near 'aptbug=false'.
-# See https://forums.bunsenlabs.org/viewtopic.php?pid=130964#p130964
-# and https://lists.debian.org/debian-user/2023/12/msg01267.html
+# See note at top, near 'aptbug=false'.
+# https://forums.bunsenlabs.org/viewtopic.php?pid=130964#p130964
+# https://lists.debian.org/debian-user/2023/12/msg01267.html
 hasAptAbortBug() {
     local termname
     [[ -t 0 && -t 1 && -t 2 ]] && return 1 # bug does not appear if terminal is already open
@@ -559,25 +568,8 @@ hasAptAbortBug() {
 
 ####### end functions #######
 
-# inhibit the popup terminal for non-sudo users
-# they can still try to run the script with 'bl-welcome'
-if ! [[ -t 0 && -t 1 && -t 2 ]]
-then # not attached to terminal
-    groups | grep -q 'sudo' || {
-        echo "$0: This script can only be run by users with sudo access." >&2
-        log "This script can only be run by users with sudo access."
-        createFlag 'bl-welcome'
-        exit 0
-    }
-fi
-
 if [[ $restart = true ]]
 then
-    ! [[ -t 0 && -t 1 && -t 2 ]] && {
-        echo "$0: This script has been restarted, but does not have a controlling terminal." >&2
-        log "This script has been restarted, but does not have a controlling terminal, exiting."
-        exit 1
-    }
     log "Restarting bl-welcome for $USER at $(date)"
 else
     if hasAptAbortBug
