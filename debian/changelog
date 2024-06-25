@@ -1,3 +1,11 @@
+bunsen-welcome (13.0-1) carbon; urgency=medium
+
+  * Migrate for Debian Trixie
+    - debian/control: Bump Standards-Version to 4.6.2 - no changes required.
+  * bunsen-meta-packaging: add debmake, piuparts, dpkg-dev and distro-info.
+
+ -- John Crawley <john@bunsenlabs.org>  Tue, 25 Jun 2024 16:25:31 +0900
+
 bunsen-welcome (12.3.1-1) boron; urgency=medium
 
   * Fix bug when restarting after package upgrade.
