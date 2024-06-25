@@ -79,6 +79,7 @@ Depends:
  ${misc:Depends},
  build-essential,
  debhelper,
+ debmake,
  cdbs,
  dh-make,
  diffutils,
@@ -89,7 +90,10 @@ Depends:
  devscripts,
  pbuilder,
  dput,
- quilt
+ quilt,
+ piuparts,
+ dpkg-dev,
+ distro-info
 Description: BunsenLabs packaging meta package
  Installs various Debian packaging tools.
 
