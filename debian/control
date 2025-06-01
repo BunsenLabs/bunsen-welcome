@@ -29,7 +29,7 @@ Depends:
  ${misc:Depends},
  bluez,
  blueman,
- pulseaudio-module-bluetooth,
+ libspa-0.2-bluetooth,
  bluez-cups,
  bluez-meshd,
  bluez-obexd,
