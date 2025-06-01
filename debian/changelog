@@ -1,6 +1,6 @@
 bunsen-welcome (13.1-2) carbon; urgency=medium
 
-  * bunsen-meta-bluetooth: replace pulseaudio-module-bluetooth 
+  * bunsen-meta-bluetooth: replace pulseaudio-module-bluetooth
   *  with libspa-0.2-bluetooth for pipewire compatibility.
 
  -- John Crawley <john@bunsenlabs.org>  Sun, 01 Jun 2025 14:20:48 +0900
