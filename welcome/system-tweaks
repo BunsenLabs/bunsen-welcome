@@ -1,22 +1,23 @@
 setupPage $"system tweaks" $"Checking your system for possible improvements..."
 
-say 'checking for PAE...'
-if ! grep -wq pae /proc/cpuinfo
-then
-    say $"Your processor does not support PAE." 2
-elif dpkg -l | grep -Eq '^ *(h|i)i +linux-image-[^ ]*(amd64|pae) '
-then
-    say $"You already have a PAE enabled kernel installed." 2
-else
-    say $"Your processor supports PAE, but you do not have a PAE enabled kernel installed.\
- Depending on your hardware, a PAE kernel might, or might not, improve performance."
-    if  prompt "Would you like to install one now?"
-    then
-        promptTriggerInstall 'PAE Kernel' 'This script will install a linux kernel that supports PAE.' 'linux-image-686-pae' || say 'Continuing in spite of install problem...' 2
-    else
-        say 'continuing...' 2
-    fi
-fi
+# This section was only relevant for 32-bit systems:
+#say 'checking for PAE...'
+#if ! grep -wq pae /proc/cpuinfo
+#then
+#    say $"Your processor does not support PAE." 2
+#elif dpkg -l | grep -Eq '^ *(h|i)i +linux-image-[^ ]*(amd64|pae) '
+#then
+#    say $"You already have a PAE enabled kernel installed." 2
+#else
+#    say $"Your processor supports PAE, but you do not have a PAE enabled kernel installed.\
+# Depending on your hardware, a PAE kernel might, or might not, improve performance."
+#    if  prompt "Would you like to install one now?"
+#    then
+#        promptTriggerInstall 'PAE Kernel' 'This script will install a linux kernel that supports PAE.' 'linux-image-686-pae' || say 'Continuing in spite of install problem...' 2
+#    else
+#        say 'continuing...' 2
+#    fi
+#fi
 
 isCDInstall() {
     [[ -r /etc/bunsen/bunsen_install ]] || return 1
@@ -24,8 +25,9 @@ isCDInstall() {
     return 1
 }
 
-# FIXME if CD isos are ever built, the bunsen-meta-all offer must be edited or removed,
-# because bunsen-configs-lite must first be removed, and filezilla has no i386 candidate.
+# FIXME there will be no more CD-sized iso files.
+# OTOH we should look at what to do with "lite" or "base" installs, if anything.
+
 if isCDInstall && ! allInstalled bunsen-meta-all && ! allInstalled bunsen-meta-lite
 then
     say $"
