@@ -1,3 +1,21 @@
+bunsen-welcome (13.2-1) carbon; urgency=medium
+
+  * Add signed-by entry for BunsenLabs apt sources
+     and Debian backports when adding to sources.
+     ('apt modernize-sources' cannot handle debian backports signing key.) 
+  * Skip "system tweaks" step which is currently empty.
+  * Add dependency on bunsen-archive-keyring (>= 2025.07.21+bl13.1-1)
+     (needed to support signed-by).
+  * Add bugfixes and slightly improve readability of scripts.
+
+ -- John Crawley <john@bunsenlabs.org>  Thu, 23 Oct 2025 16:12:48 +0900
+
+bunsen-welcome (13.2-1~test1) carbon; urgency=medium
+
+  * Add apt deb822 modernize-sources offer.
+
+ -- John Crawley <john@bunsenlabs.org>  Wed, 22 Oct 2025 15:49:48 +0900
+
 bunsen-welcome (13.1-3) carbon; urgency=medium
 
   * bunsen-meta-vcs: bzr, bzrtools -> brz
