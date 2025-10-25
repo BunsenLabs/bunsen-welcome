@@ -7,7 +7,7 @@ However, backports cannot be tested as extensively as Debian stable, and are pro
 
 This will add the line:
 
- deb $default_mirror ${debian_base}-backports main contrib non-free non-free-firmware
+ deb [signed-by=\"$debian_apt_key\"] $debian_mirror ${debian_base}-backports main contrib non-free non-free-firmware
 
 to /etc/apt/sources.list.d/debian-${debian_base}-backports.list,
 allowing you to upgrade or install packages using that repository."
@@ -30,14 +30,14 @@ addDebianBackports() {
         bp_repo_msg='# added by bl-welcome
 # Debian backports
 '
-        bp_repo_line="deb $default_mirror ${debian_base}-backports main contrib non-free non-free-firmware"
+        bp_repo_line="deb [signed-by=\"$debian_apt_key\"] $debian_mirror ${debian_base}-backports main contrib non-free non-free-firmware"
         bp_repo_file="/etc/apt/sources.list.d/debian-${debian_base}-backports.list"
         sudo tee <<< "${bp_repo_msg}${bp_repo_line}"$'\n' "$bp_repo_file" >/dev/null
-        grep -q "^${bp_repo_line}\$" "$bp_repo_file" || {
+        grep -qFx "${bp_repo_line}" "$bp_repo_file" || {
             say 'Failed to add Debian backports to apt sources.' pause >&2
             return 1
         }
-        if grep -q "${debian_base}-backports" /etc/apt/sources.list
+        if grep -qs "${debian_base}-backports" /etc/apt/sources.list
         then
             say $'\ncommenting out obsolete backports entries in /etc/apt/sources.list...'
             local bkp_list=/etc/apt/sources.list"$bkp_sfx"

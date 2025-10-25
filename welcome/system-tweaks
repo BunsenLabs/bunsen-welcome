@@ -70,5 +70,4 @@ any other key to cancel.
     else
         say 'continuing...' 2
     fi
-
 fi

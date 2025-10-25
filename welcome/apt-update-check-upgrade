@@ -120,10 +120,10 @@ Alternatively you might want to continue with free software only.
     then
         said=true
         say "
-I did not recognize some repositories which you have enabled:
+This script did not recognize some repositories which you have enabled:
 $unknown_list
 If you are aware of these and want to go on using them, you can continue.
-Otherwise, you might want to exit this script now and investigate
+Otherwise, you might want to exit now and investigate
 /etc/apt/sources.list and /etc/apt/sources.list.d
 before running 'bl-welcome' again.
 "
@@ -159,7 +159,7 @@ addRepo() {
 "
     case $name in
     'Debian main')
-        repo_line="deb ${repo_mirror:-${default_mirror}} ${debian_base} ${components[*]}
+        repo_line="deb ${repo_mirror:-${debian_mirror}} ${debian_base} ${components[*]}
 "
         ;;
     'Debian Security')
@@ -167,14 +167,14 @@ addRepo() {
 "
         ;;
     'Debian Updates')
-        repo_line="deb ${repo_mirror:-${default_mirror}} ${debian_base}-updates ${components[*]}
+        repo_line="deb ${repo_mirror:-${debian_mirror}} ${debian_base}-updates ${components[*]}
 "
         ;;
     'BunsenLabs')
         sources_file='/etc/apt/sources.list.d/bunsen.list'
         sudo touch "$sources_file"
         components=('main')
-        repo_line="deb ${bunsen_mirror} ${bunsen_codename} ${components[*]}
+        repo_line="deb [signed-by=\"$bunsen_apt_key\"] ${bunsen_mirror} ${bunsen_codename} ${components[*]}
 "
         ;;
     *)
