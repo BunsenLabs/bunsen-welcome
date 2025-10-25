@@ -1,0 +1,35 @@
+MODERNIZE_SOURCES_TITLE=$"Modernize Apt Sources"
+MODERNIZE_SOURCES_TEXT=$"For some time the \"DEB822\" format for apt sources has been supported by apt and most other package handling software.
+From Debian Trixie, this is the recommended format.
+
+You can choose to check your apt sources and, if necessary, automatically convert them to the new deb822 format.
+
+If you choose not to do the conversion, you can run this command any time later:
+\"sudo apt modernize-sources\""
+MODERNIZE_SOURCES_PROMPT=$"Would you like to check your apt sources format now?"
+MODERNIZE_SOURCES_EXTRA_ARG='N'
+
+haveOldSources() {
+    grep -rIEq "^[[:blank:]]*(deb|deb-src) " /etc/apt/sources.list /etc/apt/sources.list.d/*.list 2>/dev/null && return 0
+    return 1
+}
+
+if haveOldSources
+then
+    if setupPage "$MODERNIZE_SOURCES_TITLE" "$MODERNIZE_SOURCES_TEXT" "$MODERNIZE_SOURCES_PROMPT" "$MODERNIZE_SOURCES_EXTRA_ARG"
+    then
+        sudo apt modernize-sources || {
+            say "There was an error modernizing sources. Please investigate the contents of /etc/apt/ before running 'bl-welcome' again."
+            exit 1
+        }
+        triggerAptUpdate
+    else
+        say "continuing..."
+    fi
+else
+    setupPage "$MODERNIZE_SOURCES_TITLE" "No legacy apt sources were found, nothing to do."
+    sudo apt modernize-sources || { # Let the m-s script check anyway. It should just print "All sources are modern".
+        say "There was an error checking sources. Please investigate the contents of /etc/apt/ before running 'bl-welcome' again."
+        exit 1
+    }
+fi
