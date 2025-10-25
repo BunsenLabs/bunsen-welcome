@@ -24,6 +24,8 @@ The main steps are:
 
     Offer to enable Debian and/or Bunsenlabs backport repositories.
 
+    Offer to modernize apt sources to deb822 format.
+
     Offer to install various other software.
 
     Apply the chosen changes to the system.
@@ -31,12 +33,34 @@ The main steps are:
 
 grep -q '\<boot=live\>' /proc/cmdline && { echo "$0: This script is not meant to be run in a live session." >&2; exit 0;}
 
-# Contents of these arrays will be executed at the "deferred-actions" page.
-pkgs_to_install=()
-pkgs_to_install_norecs=()
-pkgs_to_remove=()
-pre_functions_to_execute=() # executed before package installs
-post_functions_to_execute=() # executed after package installs
+## CHECK THESE SETTINGS ##
+
+# Debian release that this BunsenLabs system is based on (lowercase)
+debian_base=trixie
+
+# (lowercase)
+bunsen_codename=carbon
+
+# default url for added Debian backports etc.
+debian_mirror='https://deb.debian.org/debian'
+# location of Debian apt signing key
+# only needed when adding backports, as modernize-sources can auto-detect the others
+debian_apt_key='/usr/share/keyrings/debian-archive-keyring.gpg'
+
+# used when restoring missing repos
+default_deb_sec_mirror="https://deb.debian.org/debian-security"
+deb_sec_suite="${debian_base}-security"
+# NOTE buster used this:
+#deb_security_source="https://deb.debian.org/debian-security ${debian_base}/updates"
+# so a Lithium backport would need:
+#deb_sec_suite="${debian_base}/updates"
+
+# url for added BunsenLabs backports
+bunsen_mirror="https://pkg.bunsenlabs.org/debian"
+# location of BunsenLabs apt signing key
+bunsen_apt_key='/usr/share/keyrings/bunsen-release.pgp'
+
+####
 
 restart=false
 aptbug=false # There is an issue with urxvt when it is launched with an -e option
@@ -84,45 +108,21 @@ if ! . "$BL_COMMON_LIBDIR/bl-includes" 2> /dev/null; then
     exit 1
 fi
 
-# Debian release that this BunsenLabs system is based on (lowercase)
-debian_base=trixie
-# set this too, it's used in a sanity test (no longer needed)
-#debian_version=13
-
-# (lowercase too)
-bunsen_codename=carbon
-
-# default url for added Debian backports etc.
-default_mirror='https://deb.debian.org/debian'
-
-# used when restoring missing repos
-default_deb_sec_mirror="https://deb.debian.org/debian-security"
-deb_sec_suite="${debian_base}-security"
-# NOTE buster used this:
-#deb_security_source="https://deb.debian.org/debian-security ${debian_base}/updates"
-# so a Lithium backport would need:
-#deb_sec_suite="${debian_base}/updates"
-
-# url for added BunsenLabs backports
-bunsen_mirror='https://pkg.bunsenlabs.org/debian'
-
-# matches most mirrors
-# add (?=.*debian) at beginning to insist on 'debian' somewhere (needs PCRE)
-# no longer used
-#mirror_regex='https?://([[:alnum:]_-]+\.)+[[:alnum:]]+(/[[:alnum:]._-]+)*/?'
-
-# matches BunsenLabs url, http or https
-# no longer used
-#bunsen_regex='https?://pkg.bunsenlabs.org/debian'
-
 # suffix for any backed-up files
 bkp_sfx=".$(date +"%Y%m%d-%H%M%S").welcome~"
+
+# Contents of these arrays will be executed at the "deferred-actions" page.
+pkgs_to_install=()
+pkgs_to_install_norecs=()
+pkgs_to_remove=()
+pre_functions_to_execute=() # executed before package installs
+post_functions_to_execute=() # executed after package installs
 
 # pages (in BL_WELCOME_LIBDIR) that bl-welcome will run through
 STEPS_FIRST=('intro' 'warning' 'apt-update-check-upgrade')
 STEPS_UNDERSTOOD=('intro' 'apt-update-check-upgrade')
 STEPS_RESTART=('restart')
-STEPS_BASIC=('system-tweaks' 'install-isenkram' 'install-apt-update-checker' 'add-debian-backports' 'add-bunsen-backports' 'install-bluetooth' 'install-java-packages' 'devel')
+STEPS_BASIC=('install-isenkram' 'install-apt-update-checker' 'add-debian-backports' 'add-bunsen-backports' 'modernize-sources' 'install-bluetooth' 'install-java-packages' 'devel')
 STEPS_DEVEL=('devel-install-version-control-tools' 'devel-install-lamp-stack' 'devel-install-packaging-tools')
 
 log_dir="$HOME/.cache/bunsen-welcome"
@@ -525,7 +525,7 @@ getAptTargets() {
             case "$uri" in
                 *pkg.bunsenlabs.org*)
                     [[ -z ${repo_status[bunsen_bkpt_$component]-} ]] && {
-                        repo_status[deb_bkpt_$component]="$uri"
+                        repo_status[bunsen_bkpt_$component]="$uri"
                         log "Bunsenlabs ${debian_base}-Backports $component not recognized by apt, but found in config files."
                     }
                 ;;
