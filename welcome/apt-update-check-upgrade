@@ -183,7 +183,7 @@ addRepo() {
         ;;
     esac
     sudo tee -a <<< "${repo_msg}${repo_line}" "$sources_file" >/dev/null
-    grep -q "^${repo_line}\$" "$sources_file" || { echo "Failed to add $name to apt sources." >&2; return 1;}
+    grep -qFx "${repo_line}" "$sources_file" || { echo "Failed to add $name to apt sources." >&2; return 1;}
 }
 
 if setupPage "$UPDATEGRADE_TITLE" "$UPDATEGRADE_TEXT" "$UPDATEGRADE_PROMPT"
