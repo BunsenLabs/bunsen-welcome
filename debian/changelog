@@ -1,3 +1,9 @@
+bunsen-welcome (13.2.1-1) carbon; urgency=medium
+
+  * Bugfix when adding missing BunsenLabs sources.
+
+ -- John Crawley <john@bunsenlabs.org>  Tue, 28 Oct 2025 10:14:48 +0900
+
 bunsen-welcome (13.2-1) carbon; urgency=medium
 
   * Add signed-by entry for BunsenLabs apt sources
