@@ -14,7 +14,7 @@ bunsen-welcome (13.2-1) carbon; urgency=medium
 
   * Add signed-by entry for BunsenLabs apt sources
      and Debian backports when adding to sources.
-     ('apt modernize-sources' cannot handle debian backports signing key.) 
+     ('apt modernize-sources' cannot handle debian backports signing key.)
   * Skip "system tweaks" step which is currently empty.
   * Add dependency on bunsen-archive-keyring (>= 2025.07.21+bl13.1-1)
      (needed to support signed-by).
